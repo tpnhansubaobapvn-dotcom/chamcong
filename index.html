@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chấm công CAPVINA</title>
+</head>
+<body style="font-family:system-ui,sans-serif;text-align:center;padding-top:40vh;color:#5E6E7A">
+Đang mở app chấm công…
+<script>
+fetch('https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web')
+  .then(function (r) { return r.text(); })
+  .then(function (h) { document.open(); document.write(h); document.close(); })
+  .catch(function () { document.body.textContent = 'Không tải được app. Kiểm tra mạng rồi tải lại trang.'; });
+</script>
+</body>
+</html>
