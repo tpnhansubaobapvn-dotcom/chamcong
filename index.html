@@ -6,21 +6,26 @@
 <title>Chấm công CAPVINA</title>
 <link rel="manifest" href="manifest.webmanifest">
 </head>
-<body style="font-family:system-ui,sans-serif;text-align:center;padding-top:40vh;color:#5E6E7A">
-Đang mở app chấm công…
+<body style="margin:0;font-family:system-ui,sans-serif;color:#5E6E7A">
+<p style="text-align:center;margin-top:40vh">Đang mở app chấm công…</p>
 <script>
 (function () {
   var URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
-  var cu = null;
+  var cu = null, daViet = false;
   try { cu = localStorage.getItem('ccHTML'); } catch (e) {}
+  function viet(h) {
+    if (daViet || !h) return; daViet = true;
+    setTimeout(function () { document.open(); document.write(h); document.close(); }, 0);
+  }
   var tai = fetch(URL, { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (h) {
     if (h && h.indexOf('<html') >= 0) { try { localStorage.setItem('ccHTML', h); } catch (e) {} }
     return h;
   });
-  function viet(h) { document.open(); document.write(h); document.close(); }
-  if (cu) { viet(cu); }
-  else {
-    tai.then(viet).catch(function () { document.body.textContent = 'Không tải được app. Kiểm tra mạng rồi tải lại trang.'; });
+  if (cu) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { viet(cu); });
+    else viet(cu);
+  } else {
+    tai.then(viet).catch(function () { document.body.innerHTML = '<p style="text-align:center;margin-top:40vh">Không tải được app. Kiểm tra mạng rồi tải lại trang.</p>'; });
   }
 })();
 </script>
