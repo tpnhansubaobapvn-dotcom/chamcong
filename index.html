@@ -4,14 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chấm công CAPVINA</title>
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body style="font-family:system-ui,sans-serif;text-align:center;padding-top:40vh;color:#5E6E7A">
 Đang mở app chấm công…
 <script>
-fetch('https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web')
-  .then(function (r) { return r.text(); })
-  .then(function (h) { document.open(); document.write(h); document.close(); })
-  .catch(function () { document.body.textContent = 'Không tải được app. Kiểm tra mạng rồi tải lại trang.'; });
+(function () {
+  var URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+  var cu = null;
+  try { cu = localStorage.getItem('ccHTML'); } catch (e) {}
+  var tai = fetch(URL, { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (h) {
+    if (h && h.indexOf('<html') >= 0) { try { localStorage.setItem('ccHTML', h); } catch (e) {} }
+    return h;
+  });
+  function viet(h) { document.open(); document.write(h); document.close(); }
+  if (cu) { viet(cu); }
+  else {
+    tai.then(viet).catch(function () { document.body.textContent = 'Không tải được app. Kiểm tra mạng rồi tải lại trang.'; });
+  }
+})();
 </script>
 </body>
 </html>
