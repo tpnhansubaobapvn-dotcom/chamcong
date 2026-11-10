@@ -186,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 71, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 72, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1137,9 +1137,9 @@ function vBangLuong(){
   return '<h2>Lập bảng lương</h2><div class="box">' +
     '<label for="blT">Tháng</label><input type="month" id="blT" value="' + thangTruoc() + '">' +
     '<div class="grid2" style="margin-top:10px"><button class="main" onclick="lapBL()">Lập bảng lương</button>' +
-    (D.nv.vaiTro === 'GD' ? '<button onclick="congBo()">Công bố phiếu lương</button>' : '<span></span>') + '</div>' +
+    (D.nv.vaiTro === 'GD' ? '<button onclick="congBo()">Giám đốc duyệt, chi lương (công bố phiếu)</button>' : '<span></span>') + '</div>' +
     '<div id="blKQ"></div></div>' +
-    '<p class="note">Tính theo Quy chế Lương – Thưởng – Phụ cấp: lương theo ngày công; ăn giữa ca, xăng xe theo ngày làm thực tế; chuyên cần theo điểm vi phạm; KPI; hoa hồng theo Phụ lục 01; tăng ca 150/200/300%; thử việc 85%; thâm niên; BHXH-BHYT-BHTN trên lương cơ bản; trừ tạm ứng. Thuế TNCN kế toán nhập trong sheet, thực lĩnh tự tính lại. Lập lại bao nhiêu lần cũng được cho đến khi Giám đốc công bố.</p>' + lsBL();
+    '<p class="note">Tính theo Quy chế Lương – Thưởng – Phụ cấp: lương theo ngày công; ăn giữa ca, xăng xe theo ngày làm thực tế; chuyên cần theo điểm vi phạm; KPI; hoa hồng theo Phụ lục 01; tăng ca 150/200/300%; thử việc 85%; thâm niên; BHXH-BHYT-BHTN trên lương cơ bản; trừ tạm ứng. Thuế TNCN kế toán nhập trong sheet, thực lĩnh tự tính lại. Lập lại bao nhiêu lần cũng được cho đến khi Giám đốc duyệt. Trình tự: kế toán lập, đối chiếu với phần mềm → Giám đốc duyệt → phiếu lương tự hiện trong mục Lương của tôi của từng người.</p>' + lsBL();
 }
 function lapBL(){
   var th = $('blT').value; if (!th) return;
@@ -1515,6 +1515,32 @@ function xemAnh(id){
 function vViec(){
   return '<h2>Kế hoạch công việc tháng</h2><div class="box"><p style="margin:0">Phần nộp kế hoạch tháng và tự chấm điểm cuối tháng sẽ mở ở giai đoạn 2.</p></div>';
 }
+function hopTamTinh(){
+  var th = (typeof thangKD === 'function') ? thangKD() : D.homNayISO.slice(0, 7);
+  var s = '<h2>Lương tạm tính tháng ' + esc(th.slice(5) + '/' + th.slice(0, 4)) + '</h2>';
+  var cc = D.chuyenCan || {tyLe: 100, diem: 0}, k = D.coCau, bh = k && k.bhxh ? k.bhxh : 0;
+  var dong = function(t, v, dam, mau){ return '<div class="row"' + (dam ? ' style="font-weight:800' + (mau ? ';color:#D7262E;font-size:17px' : '') + '"' : '') + '><span>' + t + '</span><span>' + v + '</span></div>'; };
+  if (D.kd) {
+    if (KDD === undefined) taiKD();
+    if (!KDD) return s + '<div class="box muted">Đang tính…</div>';
+    var t = KDD.tinh;
+    if (!t) return s + '<div class="box muted">' + esc(KDD.loi || 'Chưa có số liệu tháng này.') + '</div>';
+    var ccTam = Math.round((t.cc || 0) * (cc.tyLe || 0) / 100);
+    var tong = (t.luong || 0) + (t.pc || 0) + ccTam + (t.thuongHQ || 0) + (t.hoaHong || 0);
+    var vp = (KDD.viPham || []).length;
+    return s + '<div class="box">' + dong('Lương cơ bản', tien(t.luong) + ' đ') + dong('Phụ cấp', tien(t.pc) + ' đ') + dong('Chuyên cần (' + (cc.tyLe || 0) + '% theo ' + (cc.diem || 0) + ' điểm vi phạm giờ giấc)', tien(ccTam) + ' đ') +
+      dong('Thưởng hiệu quả' + (t.kpi !== '' && t.kpi != null ? ' (KPI ' + esc(t.kpi) + ' điểm)' : ''), tien(t.thuongHQ) + ' đ') + dong('Hoa hồng ' + t.tyLe + '% × ' + tien(t.dsTinh) + ' đ doanh số' + (t.ql ? ' đội' : ''), tien(t.hoaHong) + ' đ') +
+      '<div style="border-top:2px solid var(--line);margin:8px 0"></div>' + dong('TỔNG THU NHẬP TẠM TÍNH', tien(tong) + ' đ', true, true) + (bh ? dong('Trừ BHXH, BHYT, BHTN (10,5%)', '−' + tien(bh) + ' đ') + dong('THỰC NHẬN TẠM TÍNH', tien(tong - bh) + ' đ', true, true) : '') +
+      (vp ? '<p class="err" style="margin:6px 0 0">Tháng này có ' + vp + ' vi phạm kinh doanh, đã tính vào thưởng hiệu quả' + (t.phongToa ? '; đang phong tỏa ' + tien(t.tamGiu) + ' đ' : '') + '.</p>' : '') +
+      '<p class="note" style="margin:6px 0 0">Tính theo phiếu doanh số bạn đã nhập và Phụ lục 01 Quy chế lương; thuế TNCN, tạm ứng, ngày công thực tế kế toán trừ khi chốt. Số chính thức sau khi trưởng phòng, kế toán đối chiếu và Giám đốc duyệt.</p></div>';
+  }
+  if (!k) return '';
+  var ccTam2 = Math.round((k.cc || 0) * (cc.tyLe || 0) / 100);
+  var tong2 = (k.lcb || 0) + (k.an || 0) + (k.nhom === 'C' ? 0 : (k.xang || 0)) + (k.kpi || 0) + ccTam2;
+  return s + '<div class="box">' + dong('Lương cơ bản', tien(k.lcb) + ' đ') + dong('Phụ cấp', tien((k.an || 0) + (k.nhom === 'C' ? 0 : (k.xang || 0))) + ' đ') + dong('Thưởng hiệu quả (nếu đạt 100%)', tien(k.kpi) + ' đ') + dong('Chuyên cần (' + (cc.tyLe || 0) + '% theo ' + (cc.diem || 0) + ' điểm vi phạm giờ giấc)', tien(ccTam2) + ' đ') +
+    '<div style="border-top:2px solid var(--line);margin:8px 0"></div>' + dong('TỔNG THU NHẬP TẠM TÍNH', tien(tong2) + ' đ', true, true) + (bh ? dong('Trừ BHXH, BHYT, BHTN (10,5%)', '−' + tien(bh) + ' đ') + dong('THỰC NHẬN TẠM TÍNH', tien(tong2 - bh) + ' đ', true, true) : '') +
+    '<p class="note" style="margin:6px 0 0">Tạm tính khi đủ ngày công và đạt điểm hiệu quả tối đa; thực tế theo ngày công, điểm đánh giá, tăng ca, thuế TNCN, tạm ứng. Số chính thức sau khi kế toán đối chiếu và Giám đốc duyệt.</p></div>';
+}
 function hopPhieuLuong(){
   var s = '<h2>Phiếu lương từng tháng</h2>';
   if (PL === undefined) {
@@ -1534,7 +1560,7 @@ function hopPhieuLuong(){
 }
 function vLuong(){
   var c = D.chuyenCan;
-  var k = D.coCau, cc0 = hopPhieuLuong() + '<h2>Cơ cấu lương theo quy chế và thỏa thuận công việc</h2>';
+  var k = D.coCau, cc0 = hopTamTinh() + hopPhieuLuong() + '<h2>Cơ cấu lương theo quy chế và thỏa thuận công việc</h2>';
   if (!k) cc0 += '<div class="box muted">' + (D.coCauAn ? 'Cơ cấu lương theo quy chế mới sẽ hiện ở đây khi Giám đốc chốt bậc lương. Lương hiện tại vẫn trả như bảng lương tháng trước.' : 'Chưa xếp bậc lương trong hồ sơ. HCNS cập nhật bậc để hiện cơ cấu lương.') + '</div>';
   else {
     var dong = function(t, v, dam){ return '<div class="row"' + (dam ? ' style="font-weight:600"' : '') + '><span>' + t + '</span><span>' + v + '</span></div>'; };
@@ -2293,7 +2319,7 @@ function thangKD(){ if (!KDT) KDT = Number(D.homNayISO.slice(8, 10)) <= 5 ? than
 function ttKD(t){ var c = t === 'Đã duyệt' ? 'p-ok' : t === 'Trả lại' ? 'p-bad' : t === 'Nháp' || t === 'Chưa nộp' || t === 'Chưa có' ? '' : 'p-wait'; return '<span class="pill ' + c + '"' + (c ? '' : ' style="background:var(--zinc);color:var(--muted)"') + '>' + esc(t) + '</span>'; }
 function taiKD(){
   KDD = null;
-  google.script.run.withSuccessHandler(function(r){ KDD = r; if (TAB === 'kpi') render(); })
+  google.script.run.withSuccessHandler(function(r){ KDD = r; if (TAB === 'kpi' || TAB === 'luong') render(); })
     .withFailureHandler(function(e){ KDD = {loi: (e && e.message) || String(e)}; if (TAB === 'kpi') render(); }).taiBaoCaoKD(TK, thangKD(), '');
 }
 function dsDonKD(d, hs){
