@@ -186,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 70, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 71, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -936,7 +936,7 @@ function segBar(){
 }
 function menuNhom(){
   var g = [];
-  g.push(['Cá nhân', [['cong','Chấm công'], ['don','Đơn từ, tăng ca'], ['luong','Lương, chuyên cần'], ['kpi','Hiệu quả công việc'], ['toi','Tài khoản của tôi'], ['huongdan','Hướng dẫn sử dụng']]]);
+  g.push(['Cá nhân', [['cong','Chấm công'], ['don','Đơn từ, tăng ca'], ['luong','Lương của tôi'], ['kpi','Hiệu quả công việc'], ['toi','Tài khoản của tôi'], ['huongdan','Hướng dẫn sử dụng']]]);
   var ql = [];
   if (laQT()) ql.push(['quantri','Quản trị nhân sự']); else if (D.nv.vaiTro === 'TP') ql.push(['quantri','Phòng của tôi']);
   if (laQL()) ql.push(['homnay','Hôm nay']);
@@ -1515,9 +1515,26 @@ function xemAnh(id){
 function vViec(){
   return '<h2>Kế hoạch công việc tháng</h2><div class="box"><p style="margin:0">Phần nộp kế hoạch tháng và tự chấm điểm cuối tháng sẽ mở ở giai đoạn 2.</p></div>';
 }
+function hopPhieuLuong(){
+  var s = '<h2>Phiếu lương từng tháng</h2>';
+  if (PL === undefined) {
+    google.script.run.withSuccessHandler(function(r){ PL = r || []; if (TAB === 'luong') render(); }).withFailureHandler(function(){ PL = []; }).phieuLuong(TK);
+    return s + '<div class="box muted">Đang tải…</div>';
+  }
+  if (!PL.length) return s + '<div class="box"><b>Chưa có phiếu lương nào được công bố.</b><p class="muted" style="margin:4px 0 0">Phiếu lương từng tháng (tháng 8, 9, 10, 11, 12…) hiện ở đây sau khi kế toán lập bảng lương và Giám đốc bấm công bố, thường vào đầu tháng sau. Trong lúc chờ, xem cơ cấu lương và chuyên cần tạm tính bên dưới.</p></div>';
+  s += PL.map(function(p, i){
+    var tl = p.dong.filter(function(d){ return String(d[0]) === 'THỰC LĨNH'; })[0];
+    return '<details class="box"' + (i === 0 ? ' open' : '') + ' style="padding:0"><summary style="cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;gap:10px;font-weight:700"><span>Lương tháng ' + esc(p.thang.slice(5) + '/' + p.thang.slice(0, 4)) + '</span><span style="color:#D7262E">' + (tl ? 'Thực lĩnh ' + tien(tl[1]) + ' đ' : 'Xem chi tiết') + '</span></summary><div style="padding:0 16px 14px">' + p.dong.map(function(d){
+      var k = String(d[0]), big = k === 'THỰC LĨNH' || k === 'TỔNG THU NHẬP';
+      var v = (typeof d[1] === 'number' && k.indexOf('Ngày') < 0) ? tien(d[1]) : esc(d[1]);
+      return '<div class="row"' + (big ? ' style="font-weight:700"' : '') + '><span>' + esc(k) + '</span><span>' + v + '</span></div>';
+    }).join('') + '</div></details>';
+  }).join('');
+  return s + '<p class="note">Có sai sót, phản hồi HCNS trong 3 ngày làm việc kể từ ngày nhận phiếu lương (Điều 17.4).</p>';
+}
 function vLuong(){
   var c = D.chuyenCan;
-  var k = D.coCau, cc0 = '<h2>Lương theo quy chế và thỏa thuận công việc</h2>';
+  var k = D.coCau, cc0 = hopPhieuLuong() + '<h2>Cơ cấu lương theo quy chế và thỏa thuận công việc</h2>';
   if (!k) cc0 += '<div class="box muted">' + (D.coCauAn ? 'Cơ cấu lương theo quy chế mới sẽ hiện ở đây khi Giám đốc chốt bậc lương. Lương hiện tại vẫn trả như bảng lương tháng trước.' : 'Chưa xếp bậc lương trong hồ sơ. HCNS cập nhật bậc để hiện cơ cấu lương.') + '</div>';
   else {
     var dong = function(t, v, dam){ return '<div class="row"' + (dam ? ' style="font-weight:600"' : '') + '><span>' + t + '</span><span>' + v + '</span></div>'; };
@@ -1546,21 +1563,6 @@ function vLuong(){
     return '<div class="box"><div class="row"><span>' + esc(k.ngay) + ' · ' + esc(k.loai) + (k.phut ? ' ' + k.phut + ' phút' : '') + '</span><b>' + k.diem + ' điểm</b></div></div>';
   }).join('') : '<div class="box muted">Chưa có vi phạm thời giờ làm việc trong tháng.</div>');
   s += '<p class="note">Tính theo Điều 7 Quy chế lương: đến 5 phút 0 điểm (từ lần thứ 4 trong tháng 0,5 điểm); trên 5–15 phút 1 điểm; trên 15–30 phút 2 điểm; trên 30–60 phút 3 điểm; trên 60 phút hoặc thiếu giờ ra 4 điểm. Đây là số tạm tính, HCNS rà các trường hợp được miễn trừ trước khi chốt.</p>';
-  if (PL === undefined) {
-    google.script.run.withSuccessHandler(function(r){ PL = r || []; if (TAB === 'luong') render(); }).withFailureHandler(function(){ PL = []; }).phieuLuong(TK);
-    s += '<h2>Phiếu lương</h2><div class="box muted">Đang tải…</div>';
-  } else if (!PL.length) {
-    s += '<h2>Phiếu lương</h2><div class="box muted">Chưa có phiếu lương nào được công bố.</div>';
-  } else {
-    PL.forEach(function(p){
-      s += '<h2>Phiếu lương tháng ' + esc(p.thang.slice(5) + '/' + p.thang.slice(0, 4)) + '</h2><div class="box">' + p.dong.map(function(d){
-        var k = String(d[0]), big = k === 'THỰC LĨNH' || k === 'TỔNG THU NHẬP';
-        var v = (typeof d[1] === 'number' && k.indexOf('Ngày') < 0) ? tien(d[1]) : esc(d[1]);
-        return '<div class="row"' + (big ? ' style="font-weight:600"' : '') + '><span>' + esc(k) + '</span><span>' + v + '</span></div>';
-      }).join('') + '</div>';
-    });
-    s += '<p class="note">Có sai sót, phản hồi HCNS trong 3 ngày làm việc kể từ ngày nhận phiếu lương (Điều 17.4).</p>';
-  }
   return s;
 }
 
