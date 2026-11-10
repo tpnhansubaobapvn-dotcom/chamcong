@@ -186,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 69, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 70, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2261,9 +2261,12 @@ function hopTongKD(ds){
   ds.forEach(function(x){ var p = x.phong || 'Kinh doanh'; if (!nhom[p]) { nhom[p] = {phong: p, tp: '', nv: 0, nop: 0, tong: 0, ck: 0, ds: 0, no: 0}; thu.push(p); } var g = nhom[p]; g.nv++; if (x.ql && !g.tp) g.tp = x.ten; if (x.trangThai !== 'Chưa nộp' && x.trangThai !== 'Nháp') g.nop++; g.tong += x.tong || 0; g.ck += x.ck || 0; g.ds += x.dsGhiNhan || 0; g.no += x.conNo || 0; });
   var t = {tong: 0, ck: 0, ds: 0, no: 0, nv: 0, nop: 0};
   thu.forEach(function(p){ var g = nhom[p]; t.tong += g.tong; t.ck += g.ck; t.ds += g.ds; t.no += g.no; t.nv += g.nv; t.nop += g.nop; });
-  var dong = function(ten, sub, g, dam){ return '<tr' + (dam ? ' style="font-weight:800;background:color-mix(in srgb,#D7262E 7%,transparent)"' : '') + '><td>' + ten + (sub ? '<br><span class="muted" style="font-size:12px;font-weight:400">' + sub + '</span>' : '') + '</td><td class="r">' + g.nop + '/' + g.nv + '</td><td class="r">' + tien(g.tong) + '</td><td class="r">' + tien(g.ck) + '</td><td class="r">' + tien(g.ds) + '</td><td class="r">' + tien(g.no) + '</td></tr>'; };
-  return '<div class="kdbang" style="margin-top:10px"><table><tr><th>Phòng</th><th class="r">Đã nộp</th><th class="r">Giá trị đơn (chưa VAT)</th><th class="r">Chiết khấu</th><th class="r">Doanh số ghi nhận</th><th class="r">Còn phải thu</th></tr>' +
-    thu.map(function(p){ var g = nhom[p]; return dong(esc(p), g.tp ? 'Trưởng phòng ' + esc(g.tp) : '', g); }).join('') + (thu.length > 1 ? dong('TỔNG CÁC PHÒNG KINH DOANH', '', t, true) : '') + '</table></div>';
+  var bang = '<div style="background:#C8102E;color:#fff;border-radius:16px;padding:18px 20px;margin-top:10px"><div style="font-size:12.5px;font-weight:800;letter-spacing:1px;opacity:.9">DOANH SỐ GHI NHẬN SAU CHIẾT KHẤU · TOÀN BỘ PHÒNG KINH DOANH</div><div style="font-size:clamp(28px,6vw,40px);font-weight:900;line-height:1.15;margin:4px 0 8px">' + tien(t.ds) + ' đ</div>' +
+    '<div style="font-size:14px;line-height:1.6">Tổng giá trị đơn (chưa VAT): <b>' + tien(t.tong) + ' đ</b><br>Trừ do chiết khấu ' + tien(t.ck) + ' đ × hệ số 8,67 và đơn chưa đủ chứng từ, bán dưới giá sàn: <b>− ' + tien(t.tong - t.ds) + ' đ</b></div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">' + thu.map(function(p){ var g = nhom[p]; return '<span style="background:rgba(255,255,255,.16);border-radius:10px;padding:6px 10px;font-size:13.5px">' + esc(p) + ': <b>' + tien(g.ds) + ' đ</b></span>'; }).join('') + '</div></div>';
+  var dong = function(ten, sub, g, dam){ return '<tr' + (dam ? ' style="font-weight:800;background:color-mix(in srgb,#D7262E 7%,transparent)"' : '') + '><td>' + ten + (sub ? '<br><span class="muted" style="font-size:12px;font-weight:400">' + sub + '</span>' : '') + '</td><td class="r">' + g.nop + '/' + g.nv + '</td><td class="r">' + tien(g.tong) + '</td><td class="r">' + tien(g.ck) + '</td><td class="r">− ' + tien(g.tong - g.ds) + '</td><td class="r"><b>' + tien(g.ds) + '</b></td><td class="r">' + tien(g.no) + '</td></tr>'; };
+  return bang + '<div class="kdbang" style="margin-top:10px"><table><tr><th>Phòng</th><th class="r">Đã nộp</th><th class="r">Giá trị đơn (chưa VAT)</th><th class="r">Chiết khấu</th><th class="r">Trừ (chiết khấu × 8,67…)</th><th class="r">Doanh số ghi nhận</th><th class="r">Còn phải thu</th></tr>' +
+    thu.map(function(p){ var g = nhom[p]; return dong(esc(p), g.tp ? 'Trưởng phòng ' + esc(g.tp) : '', g); }).join('') + (thu.length > 1 ? dong('TỔNG CÁC PHÒNG KINH DOANH', '', t, true) : '') + '</table></div><p class="note" style="margin:6px 0 0">Công thức theo Phụ lục 01 Quy chế lương, tính từng đơn: Doanh số ghi nhận = (Giá trị đơn chưa VAT − Chiết khấu × 8,67) × tỷ lệ giá sàn. Bán đúng giá sàn trở lên: 100%; dưới sàn dưới 5%: 70%; 5–10%: 60%; 10–15%: 50%; từ 15%: 40%. Đơn chưa đủ chứng từ: tạm tính 0 (treo) đến khi bổ sung.</p>';
 }
 var KDSUM = undefined, KDSUM_T = '';
 function vTongKDNhanh(){
