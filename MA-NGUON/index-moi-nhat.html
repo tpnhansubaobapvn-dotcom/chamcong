@@ -178,6 +178,7 @@ button:disabled{opacity:.6}
 .cv-ung{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin-top:10px;padding:12px 16px 12px 40px;position:relative;border:2px solid #D7262E;border-radius:12px;background:#FFF5F5;color:#B3101E;text-align:left;cursor:pointer;width:auto}.cv-ung b{font-size:15px;letter-spacing:.3px}.cv-ung span{font-size:13px;color:#5b6b73}.cv-ung .cham{position:absolute;left:14px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;border:3px solid #D7262E;background:#fff}.cv-ung.nhay{animation:nhayCV 1.1s ease-in-out infinite}.cv-ung.nhay .cham{background:#D7262E}@keyframes nhayCV{0%,100%{box-shadow:0 0 0 0 rgba(215,38,46,.45)}50%{box-shadow:0 0 0 8px rgba(215,38,46,0)}}
 .kd3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.kd3 div{border:1.5px solid var(--line,#e3e6e8);border-radius:12px;padding:10px 12px}.kd3 i{font-style:normal;font-size:11.5px;font-weight:800;color:#D7262E;letter-spacing:.4px}.kd3 b{display:block;font-size:19px;margin-top:3px}.kd3 span{font-size:11.5px;color:var(--muted,#6b7280)}@media(max-width:560px){.kd3{grid-template-columns:1fr}}.kdh{display:block;font-size:16px;margin-bottom:6px}.kdbang{overflow-x:auto}.kdbang table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}.kdbang th,.kdbang td{padding:7px 6px;border-bottom:1px solid var(--line,#e3e6e8);text-align:left;vertical-align:top}.kdbang th{font-size:12px;color:var(--muted,#6b7280);font-weight:600}.kdbang .r{text-align:right;white-space:nowrap}.kdvp{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line,#e3e6e8);font-size:14px}.kdvp em{font-style:normal;font-size:12px;color:var(--muted,#6b7280)}.kdk{border:1.5px dashed var(--line,#d6dadd);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:14px}.kdtong{display:flex;justify-content:space-between;border-top:2px solid currentColor;margin-top:6px;padding-top:9px;font-size:17px;font-weight:800;color:#D7262E}
 .hdn{border:1px solid var(--line,#e3e6e8);border-radius:10px;margin:8px 0;padding:0 12px;text-align:left}.hdn summary{cursor:pointer;font-weight:700;padding:10px 0}.hdn div{padding:0 0 10px;font-size:14px;line-height:1.55}.hdn ol,.hdn ul{margin:0;padding-left:20px}.hdn p{margin:6px 0 0}
+.matmk{position:relative;display:block}.matmk input{padding-right:46px!important}.matbt{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:auto!important;margin:0!important;padding:4px 8px!important;background:transparent!important;border:0!important;font-size:18px;cursor:pointer;line-height:1;box-shadow:none!important}
 </style>
 </head>
 <body>
@@ -186,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 72, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 73, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -3119,6 +3120,19 @@ function kiemBanMoi(){
 setTimeout(kiemBanMoi, 6000); setTimeout(kiemBanMoi, 15000); setInterval(kiemBanMoi, 300000);
 TK = load('tk');
 if (TK) refresh(); else showLogin();
+
+(function(){
+  function gan(i){
+    if (i.dataset.mat) return; i.dataset.mat = '1';
+    var w = document.createElement('span'); w.className = 'matmk'; i.parentNode.insertBefore(w, i); w.appendChild(i);
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'matbt'; b.setAttribute('aria-label', 'Hiện mật khẩu'); b.textContent = '👁';
+    b.onclick = function(){ var an = i.type === 'password'; i.type = an ? 'text' : 'password'; b.textContent = an ? '🙈' : '👁'; b.setAttribute('aria-label', an ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'); i.focus(); };
+    w.appendChild(b);
+  }
+  function quet(){ document.querySelectorAll('input[type="password"]').forEach(gan); }
+  new MutationObserver(quet).observe(document.documentElement, {childList: true, subtree: true});
+  document.addEventListener('DOMContentLoaded', quet); quet();
+})();
 </script>
 </body>
 </html>
