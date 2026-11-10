@@ -186,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 67, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 68, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1165,7 +1165,7 @@ function vKpi(){
   var ds = D.dons.filter(function(d){ return d.loai === 'Đánh giá KPI'; });
   if (GVDS === undefined) taiGV();
   var vgv = '<h2>Việc được giao</h2>' + (!GVDS ? '<div class="box muted">Đang tải…</div>' : GVDS.cuaToi.length ? GVDS.cuaToi.map(function(x){ return theGV(x, false); }).join('') : '<div class="box muted">Chưa có việc được giao.</div>');
-  return '<h2>Hiệu quả công việc</h2>' + (D.kd ? hopKD() : (/kinh doanh/i.test(D.nv.phong || '') ? '<h2>Báo cáo doanh số tháng</h2><div class="box" style="border-left:4px solid #D7262E"><b>Bạn chưa được xếp nhóm lương kinh doanh</b><p class="muted" style="margin:4px 0 0">Báo trưởng phòng hoặc Giám đốc vào <b>KPI, giao việc → Xếp nhóm lương kinh doanh</b> chọn nhóm cho bạn. Xếp xong, mục nạp doanh số, chiết khấu, công nợ hiện ở đây.</p></div>' : '')) + vgv + '<h2>Nộp tự đánh giá tháng</h2><div class="box">' +
+  return '<h2>Hiệu quả công việc</h2>' + vTongKDNhanh() + (D.kd ? hopKD() : (/kinh doanh/i.test(D.nv.phong || '') ? '<h2>Báo cáo doanh số tháng</h2><div class="box" style="border-left:4px solid #D7262E"><b>Bạn chưa được xếp nhóm lương kinh doanh</b><p class="muted" style="margin:4px 0 0">Báo trưởng phòng hoặc Giám đốc vào <b>KPI, giao việc → Xếp nhóm lương kinh doanh</b> chọn nhóm cho bạn. Xếp xong, mục nạp doanh số, chiết khấu, công nợ hiện ở đây.</p></div>' : '')) + vgv + '<h2>Nộp tự đánh giá tháng</h2><div class="box">' +
     '<label for="kT">Tháng đánh giá</label><input type="month" id="kT" value="' + thangTruoc() + '">' +
     '<label for="kF">Nạp file tự đánh giá và kế hoạch tháng mới (ảnh hoặc PDF, số liệu xuất từ AMIS/CRM)</label><input type="file" id="kF" accept="image/*,application/pdf">' +
     '<label for="kD">Điểm tự đánh giá (0–100)</label><input type="number" id="kD" min="0" max="100">' +
@@ -2256,13 +2256,34 @@ function xuLyVX(ma, hd){
 
 /* ---------- BÁO CÁO DOANH SỐ KINH DOANH ---------- */
 var KDT = '', KDD = undefined, KDDS = undefined, KDT2 = '';
+function hopTongKD(ds){
+  var nhom = {}, thu = [];
+  ds.forEach(function(x){ var p = x.phong || 'Kinh doanh'; if (!nhom[p]) { nhom[p] = {phong: p, tp: '', nv: 0, nop: 0, tong: 0, ck: 0, ds: 0, no: 0}; thu.push(p); } var g = nhom[p]; g.nv++; if (x.ql && !g.tp) g.tp = x.ten; if (x.trangThai !== 'Chưa nộp' && x.trangThai !== 'Nháp') g.nop++; g.tong += x.tong || 0; g.ck += x.ck || 0; g.ds += x.dsGhiNhan || 0; g.no += x.conNo || 0; });
+  var t = {tong: 0, ck: 0, ds: 0, no: 0, nv: 0, nop: 0};
+  thu.forEach(function(p){ var g = nhom[p]; t.tong += g.tong; t.ck += g.ck; t.ds += g.ds; t.no += g.no; t.nv += g.nv; t.nop += g.nop; });
+  var dong = function(ten, sub, g, dam){ return '<tr' + (dam ? ' style="font-weight:800;background:color-mix(in srgb,#D7262E 7%,transparent)"' : '') + '><td>' + ten + (sub ? '<br><span class="muted" style="font-size:12px;font-weight:400">' + sub + '</span>' : '') + '</td><td class="r">' + g.nop + '/' + g.nv + '</td><td class="r">' + tien(g.tong) + '</td><td class="r">' + tien(g.ck) + '</td><td class="r">' + tien(g.ds) + '</td><td class="r">' + tien(g.no) + '</td></tr>'; };
+  return '<div class="kdbang" style="margin-top:10px"><table><tr><th>Phòng</th><th class="r">Đã nộp</th><th class="r">Giá trị đơn (chưa VAT)</th><th class="r">Chiết khấu</th><th class="r">Doanh số ghi nhận</th><th class="r">Còn phải thu</th></tr>' +
+    thu.map(function(p){ var g = nhom[p]; return dong(esc(p), g.tp ? 'Trưởng phòng ' + esc(g.tp) : '', g); }).join('') + (thu.length > 1 ? dong('TỔNG CÁC PHÒNG KINH DOANH', '', t, true) : '') + '</table></div>';
+}
+var KDSUM = undefined, KDSUM_T = '';
+function vTongKDNhanh(){
+  if (['TP', 'GD', 'HCNS', 'KT'].indexOf(D.nv.vaiTro) < 0) return '';
+  var th = thangKD();
+  if (KDSUM === undefined || KDSUM_T !== th) { KDSUM = null; KDSUM_T = th; google.script.run.withSuccessHandler(function(r){ KDSUM = r || []; if (TAB === 'kpi') render(); }).withFailureHandler(function(){ KDSUM = []; }).dsBaoCaoKD(TK, th); }
+  var s = '<h2>Doanh số các phòng kinh doanh · tháng ' + esc(th.slice(5) + '/' + th.slice(0, 4)) + '</h2><div class="box">';
+  if (!KDSUM) return s + '<p class="muted">Đang tải…</p></div>';
+  if (!KDSUM.length) return s + '<p class="muted">Chưa có số liệu.</p></div>';
+  return s + hopTongKD(KDSUM) + '<p class="note" style="margin:8px 0 0">Số liệu theo phiếu nhân viên đã nhập (kể cả chưa duyệt), để đối chiếu với phần mềm bán hàng. Đổi tháng ở ô Tháng của phiếu doanh số.</p>' +
+    (D.nv.vaiTro === 'TP' || laLuong() ? '<button class="nutTo main" style="margin-top:8px" onclick="KDT2 = \'' + th + '\'; KDDS = undefined; go(\'solieu\')">Mở Chốt tháng kinh doanh để duyệt</button>' : '') + '</div>';
+}
+
 var VP_KD = {KHAC: 'Vi phạm khác (ghi rõ nội dung)', D19: 'Không theo dõi đơn hàng (Điều 19): trừ 50% thưởng hiệu quả', D234: 'Đổi trả xử lý không đúng hạn (Điều 23.4): trừ 50% thưởng hiệu quả',
   D17: 'Thiệt hại do làm sai quy trình (Điều 17): nhân viên 35%, quản lý 35%', D18: 'Nợ xấu (Điều 18): phong tỏa thu nhập có điều kiện', D22: 'Đang xác minh gian lận (Điều 22): tạm giữ thưởng, hoa hồng'};
 var NHOM_KD = {KD_CAO: 'Kinh doanh kinh nghiệm cao', KD_MOI: 'Kinh doanh dưới 3 năm', QL45: 'Quản lý 4–5 người', QL6: 'Quản lý trên 6 người'};
 var LOAI_TEP_KD = ['Ảnh Giám đốc duyệt chiết khấu', 'Đơn đặt hàng ký, đóng dấu', 'Biên bản giao nhận', 'Biên bản nghiệm thu', 'Ảnh giao nhận thực tế', 'Ảnh hàng hóa đã giao', 'Khác'];
 var HD_KD = '<b>Nhân viên kinh doanh</b><ol><li>Chọn tháng, bấm <b>+ Thêm đơn hàng</b> cho từng đơn đã giao trong tháng.</li><li>Ghi số đơn, khách, ngày giao, giá trị <b>chưa VAT</b>, chiết khấu (nếu có, kèm ảnh Giám đốc duyệt), mức thấp hơn giá sàn (nếu có), số tiền đã thu.</li><li>Tích đủ 6 chứng từ theo Điều 11.8 và đính kèm ảnh. <b>Thiếu chứng từ thì đơn bị treo</b>, chưa tính doanh số.</li><li>Xong hết đơn, bấm <b>Ký PIN và nộp</b> trước cuộc họp đầu tháng.</li></ol>' +
   '<b>App tự tính:</b> doanh số bị trừ = chiết khấu × 8,67 (Điều 8); thấp hơn giá sàn ghi nhận 70%, 60%, 50%, 40% (Điều 7); hoa hồng theo Phụ lục 01. Duyệt lần lượt: trưởng phòng, kế toán, Giám đốc.<br>';
-function thangKD(){ if (!KDT) KDT = thangTruoc(); return KDT; }
+function thangKD(){ if (!KDT) KDT = Number(D.homNayISO.slice(8, 10)) <= 5 ? thangTruoc() : thangNay(); return KDT; }
 function ttKD(t){ var c = t === 'Đã duyệt' ? 'p-ok' : t === 'Trả lại' ? 'p-bad' : t === 'Nháp' || t === 'Chưa nộp' || t === 'Chưa có' ? '' : 'p-wait'; return '<span class="pill ' + c + '"' + (c ? '' : ' style="background:var(--zinc);color:var(--muted)"') + '>' + esc(t) + '</span>'; }
 function taiKD(){
   KDD = null;
@@ -2422,11 +2443,11 @@ function vChotKD(){
   if (!KDDS) return s + '<p class="muted">Đang tải…</p></div>';
   if (!KDDS.length) return s + '<p class="muted">Chưa có ai được xếp nhóm lương kinh doanh. Xếp nhóm ở phần bên dưới.</p></div>' + vXepNhomKD();
   var cho = KDDS.filter(function(x){ return x.duocDuyet; });
-  var tongDS = KDDS.filter(function(x){ return !x.ql; }).reduce(function(a, x){ return a + x.dsGhiNhan; }, 0), tongHH = KDDS.reduce(function(a, x){ return a + x.hoaHong; }, 0);
+  var tongDS = KDDS.reduce(function(a, x){ return a + x.dsGhiNhan; }, 0), tongHH = KDDS.reduce(function(a, x){ return a + x.hoaHong; }, 0);
   var tongNo = KDDS.reduce(function(a, x){ return a + (x.conNo || 0); }, 0), tongXau = KDDS.reduce(function(a, x){ return a + (x.noXau || 0); }, 0), tongQH = KDDS.reduce(function(a, x){ return a + (x.noQuaHan || 0); }, 0);
   s += '<div class="luoi4" style="margin-top:10px">' + so('Đã nộp', KDDS.filter(function(x){ return x.trangThai !== 'Chưa nộp' && x.trangThai !== 'Nháp'; }).length + '/' + KDDS.length) +
     so('Đã duyệt xong', KDDS.filter(function(x){ return x.trangThai === 'Đã duyệt'; }).length) + so('Doanh số ghi nhận', tien(tongDS)) + so('Hoa hồng tạm tính', tien(tongHH)) + '</div>' +
-    '<div class="luoi4">' + so('Công nợ còn phải thu', tien(tongNo)) + so('Quá hạn', '<span style="color:var(--bad)">' + tien(tongQH) + '</span>') + so('Nợ xấu', '<span style="color:var(--bad)">' + tien(tongXau) + '</span>') + so('Chờ tôi duyệt', cho.length) + '</div>' + '<div class="luoi4">' + so('Tổng giá trị đơn (chưa VAT)', tien(KDDS.reduce(function(a, x){ return a + (x.tong || 0); }, 0))) + so('Tổng chiết khấu', tien(KDDS.reduce(function(a, x){ return a + (x.ck || 0); }, 0))) + '</div>';
+    '<div class="luoi4">' + so('Công nợ còn phải thu', tien(tongNo)) + so('Quá hạn', '<span style="color:var(--bad)">' + tien(tongQH) + '</span>') + so('Nợ xấu', '<span style="color:var(--bad)">' + tien(tongXau) + '</span>') + so('Chờ tôi duyệt', cho.length) + '</div>' + '<div class="luoi4">' + so('Tổng giá trị đơn (chưa VAT)', tien(KDDS.reduce(function(a, x){ return a + (x.tong || 0); }, 0))) + so('Tổng chiết khấu', tien(KDDS.reduce(function(a, x){ return a + (x.ck || 0); }, 0))) + '</div>' + hopTongKD(KDDS);
   s += KDDS.map(function(x){
     return '<div style="border-top:1px solid var(--line);padding:8px 0"><div class="row"><b>' + esc(x.ten) + '</b>' + ttKD(x.trangThai) + '</div>' +
       '<div class="muted" style="font-size:13px">' + esc(x.nhom) + ' · ' + x.soDon + ' đơn · ' + (x.ql ? 'doanh số đội ' + tien(x.dsTinh) : 'ghi nhận ' + tien(x.dsGhiNhan)) + ' đ' + (x.ck ? ' · chiết khấu ' + tien(x.ck) + ' đ' : '') + ' · hoa hồng ' + x.tyLe + '% = ' + tien(x.hoaHong) + ' đ · thưởng hiệu quả ' + tien(x.thuongHQ) + ' đ' +
