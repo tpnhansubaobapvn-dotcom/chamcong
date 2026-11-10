@@ -186,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 66, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 67, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2426,10 +2426,10 @@ function vChotKD(){
   var tongNo = KDDS.reduce(function(a, x){ return a + (x.conNo || 0); }, 0), tongXau = KDDS.reduce(function(a, x){ return a + (x.noXau || 0); }, 0), tongQH = KDDS.reduce(function(a, x){ return a + (x.noQuaHan || 0); }, 0);
   s += '<div class="luoi4" style="margin-top:10px">' + so('Đã nộp', KDDS.filter(function(x){ return x.trangThai !== 'Chưa nộp' && x.trangThai !== 'Nháp'; }).length + '/' + KDDS.length) +
     so('Đã duyệt xong', KDDS.filter(function(x){ return x.trangThai === 'Đã duyệt'; }).length) + so('Doanh số ghi nhận', tien(tongDS)) + so('Hoa hồng tạm tính', tien(tongHH)) + '</div>' +
-    '<div class="luoi4">' + so('Công nợ còn phải thu', tien(tongNo)) + so('Quá hạn', '<span style="color:var(--bad)">' + tien(tongQH) + '</span>') + so('Nợ xấu', '<span style="color:var(--bad)">' + tien(tongXau) + '</span>') + so('Chờ tôi duyệt', cho.length) + '</div>';
+    '<div class="luoi4">' + so('Công nợ còn phải thu', tien(tongNo)) + so('Quá hạn', '<span style="color:var(--bad)">' + tien(tongQH) + '</span>') + so('Nợ xấu', '<span style="color:var(--bad)">' + tien(tongXau) + '</span>') + so('Chờ tôi duyệt', cho.length) + '</div>' + '<div class="luoi4">' + so('Tổng giá trị đơn (chưa VAT)', tien(KDDS.reduce(function(a, x){ return a + (x.tong || 0); }, 0))) + so('Tổng chiết khấu', tien(KDDS.reduce(function(a, x){ return a + (x.ck || 0); }, 0))) + '</div>';
   s += KDDS.map(function(x){
     return '<div style="border-top:1px solid var(--line);padding:8px 0"><div class="row"><b>' + esc(x.ten) + '</b>' + ttKD(x.trangThai) + '</div>' +
-      '<div class="muted" style="font-size:13px">' + esc(x.nhom) + ' · ' + x.soDon + ' đơn · ' + (x.ql ? 'doanh số đội ' + tien(x.dsTinh) : 'ghi nhận ' + tien(x.dsGhiNhan)) + ' đ · hoa hồng ' + x.tyLe + '% = ' + tien(x.hoaHong) + ' đ · thưởng hiệu quả ' + tien(x.thuongHQ) + ' đ' +
+      '<div class="muted" style="font-size:13px">' + esc(x.nhom) + ' · ' + x.soDon + ' đơn · ' + (x.ql ? 'doanh số đội ' + tien(x.dsTinh) : 'ghi nhận ' + tien(x.dsGhiNhan)) + ' đ' + (x.ck ? ' · chiết khấu ' + tien(x.ck) + ' đ' : '') + ' · hoa hồng ' + x.tyLe + '% = ' + tien(x.hoaHong) + ' đ · thưởng hiệu quả ' + tien(x.thuongHQ) + ' đ' +
       (x.conNo ? ' · còn nợ ' + tien(x.conNo) + ' đ' : '') + (x.noXau ? ' · <b style="color:var(--bad)">NỢ XẤU ' + tien(x.noXau) + ' đ: ghi vi phạm Điều 18 để phong tỏa</b>' : x.noQuaHan ? ' · <span style="color:var(--bad)">quá hạn ' + tien(x.noQuaHan) + ' đ</span>' : '') + (x.soViPham ? ' · <span style="color:var(--bad)">' + x.soViPham + ' vi phạm</span>' : '') + (x.phongToa ? ' · <span style="color:var(--bad)">đang phong tỏa</span>' : '') + '</div>' +
       '<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="small" onclick="moBCKD(\'' + x.maNV + '\')">Xem chi tiết, chứng từ</button>' +
       (x.duocDuyet ? '<button class="small" onclick="traBCKD(\'' + x.maNV + '\')">Trả lại</button><button class="small main" onclick="duyetBCKD([\'' + x.maNV + '\'])">Duyệt</button>' : '') + '</div></div>';

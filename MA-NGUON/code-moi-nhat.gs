@@ -1,5 +1,5 @@
 /**
- * APP CHẤM CÔNG VÀ ĐƠN TỪ - GIAI ĐOẠN 1 - PHIÊN BẢN SỬA LẦN 51 (sơ vấn bỏ câu thứ 7, thêm lương cứng mong muốn; sơ vấn online khi nộp CV, tự chấm điểm và gắn nhãn; phiếu doanh số kinh doanh gọn theo quy chế, thêm vi phạm khác; trưởng phòng xem sơ đồ phòng mình, ô CV ứng tuyển nhấp nháy theo phòng; nhận CV từ tuyendung.capvina.vn, khung CV mới cho trưởng phòng; giao việc đính kèm hình ảnh, tài liệu; báo xong kèm tệp kết quả; sửa bài đào tạo, gỡ hoặc thêm tệp; đào tạo: nhiều tệp ảnh, video, tài liệu mỗi bài, nhiều link, đánh giá sao và bình luận; đào tạo gom theo khối: Kho, Kế toán, Vật tư mua hàng, Kinh doanh, Hành chính nhân sự; toàn công ty là nội quy, quy chế lương, thông báo; lương thỏa thuận tự gợi ý bậc, thử việc 1 hoặc 2 tháng tự hết hạn và tự tính 85% theo ngày; chỉ chấm công thành công trong phạm vi 30 m của điểm chấm công, ngoài phạm vi báo không thành công; chỉ Gmail công ty cấp mới có tài khoản; đào tạo theo sơ đồ chủ đề từng phòng ban, bài kiểm tra, nộp bài, chấm điểm, đề xuất đào tạo; đào tạo chuyên môn: bài học, tài liệu theo phòng ban, người học xác nhận đã học; nội quy, quy chế lương cho toàn công ty, quy chế bán hàng cho Phòng Kinh doanh; vai trò, mô tả công việc, trách nhiệm, quyền hạn trong hồ sơ từng người: quản trị ghi, nhân viên chỉ xem; công nợ từng đơn: còn phải thu, quá hạn, nợ xấu theo Điều 14; báo cáo doanh số kinh doanh theo Quy chế bán hàng 04/2026 và Phụ lục 01: nhân viên nạp, trưởng phòng, kế toán, giám đốc duyệt; vi phạm quy chế bán hàng; tự tính hoa hồng, thưởng hiệu quả vào bảng lương; việc giao đột xuất: giao bằng giọng nói, nhận việc ký PIN, tóm tắt bên phải; đăng nhập bằng tên đăng nhập và mật khẩu, nút đăng xuất; tài sản, công cụ, tài khoản được cấp có ký PIN và lịch sử thay đổi; tạm ẩn cơ cấu lương bậc mới; tăng tốc tải dữ liệu, thông báo trên máy; sao lưu dữ liệu tự động hằng đêm; HCNS trình duyệt bảng lương trước khi Giám đốc duyệt; số điện thoại trong hồ sơ; tài khoản phụ không hiện trên sơ đồ, nhiều người duyệt cùng lúc; thêm người ngay trên sơ đồ tổ chức; trang hồ sơ riêng từng nhân viên, nạp hồ sơ, sửa thông tin; biên bản bàn giao khi nghỉ việc, in và nạp bản đã ký; đơn xin nghỉ việc duyệt 2 bước, in đơn lưu hồ sơ; duyệt chi lương và tạm ứng 2 cấp theo từng công ty; lưu hợp đồng thử việc, hợp đồng lao động từng người, cảnh báo hết hạn; sinh nhật sắp tới, vinh danh nhân viên xuất sắc tháng; trang quản trị nhân sự toàn công ty theo sơ đồ tổ chức; bắt buộc định vị chính xác khi chấm công; nạp bản mô tả công việc theo chức danh, nhận file Word; trang tài khoản chuyên nghiệp, túi lịch sử mọi mục, đề nghị cập nhật hồ sơ; cơ cấu lương theo bậc hiện trong app; đơn hàng bị trả, treo, lỗi trong tháng; kế thừa phép tồn từ bảng lương tháng 9, công ty trả lương; giao việc tháng có nạp tài liệu, lịch sử, ảnh chấm công đóng dấu giờ và vị trí; nộp và đánh giá KPI hằng tháng, vi phạm nhắc nhở và văn bản; trình duyệt có tệp đã ký, ghi chú duyệt, tiền tăng ca tạm tính; bậc lương, tạm ứng, thưởng, KPI, doanh số, lập bảng lương, phiếu lương; ảnh đại diện, menu trái, tăng ca, chuyên cần, vai trò; giao diện web riêng qua GitHub, chấm công chụp ảnh trên máy tính/điện thoại, bảng theo dõi hôm nay, báo cáo sáng)
+ * APP CHẤM CÔNG VÀ ĐƠN TỪ - GIAI ĐOẠN 1 - PHIÊN BẢN SỬA LẦN 52 (nhân viên phòng kinh doanh chưa xếp nhóm được tự gán nhóm tạm để nhập doanh số ngay, chốt tháng có tổng chiết khấu; sơ vấn bỏ câu thứ 7, thêm lương cứng mong muốn; sơ vấn online khi nộp CV, tự chấm điểm và gắn nhãn; phiếu doanh số kinh doanh gọn theo quy chế, thêm vi phạm khác; trưởng phòng xem sơ đồ phòng mình, ô CV ứng tuyển nhấp nháy theo phòng; nhận CV từ tuyendung.capvina.vn, khung CV mới cho trưởng phòng; giao việc đính kèm hình ảnh, tài liệu; báo xong kèm tệp kết quả; sửa bài đào tạo, gỡ hoặc thêm tệp; đào tạo: nhiều tệp ảnh, video, tài liệu mỗi bài, nhiều link, đánh giá sao và bình luận; đào tạo gom theo khối: Kho, Kế toán, Vật tư mua hàng, Kinh doanh, Hành chính nhân sự; toàn công ty là nội quy, quy chế lương, thông báo; lương thỏa thuận tự gợi ý bậc, thử việc 1 hoặc 2 tháng tự hết hạn và tự tính 85% theo ngày; chỉ chấm công thành công trong phạm vi 30 m của điểm chấm công, ngoài phạm vi báo không thành công; chỉ Gmail công ty cấp mới có tài khoản; đào tạo theo sơ đồ chủ đề từng phòng ban, bài kiểm tra, nộp bài, chấm điểm, đề xuất đào tạo; đào tạo chuyên môn: bài học, tài liệu theo phòng ban, người học xác nhận đã học; nội quy, quy chế lương cho toàn công ty, quy chế bán hàng cho Phòng Kinh doanh; vai trò, mô tả công việc, trách nhiệm, quyền hạn trong hồ sơ từng người: quản trị ghi, nhân viên chỉ xem; công nợ từng đơn: còn phải thu, quá hạn, nợ xấu theo Điều 14; báo cáo doanh số kinh doanh theo Quy chế bán hàng 04/2026 và Phụ lục 01: nhân viên nạp, trưởng phòng, kế toán, giám đốc duyệt; vi phạm quy chế bán hàng; tự tính hoa hồng, thưởng hiệu quả vào bảng lương; việc giao đột xuất: giao bằng giọng nói, nhận việc ký PIN, tóm tắt bên phải; đăng nhập bằng tên đăng nhập và mật khẩu, nút đăng xuất; tài sản, công cụ, tài khoản được cấp có ký PIN và lịch sử thay đổi; tạm ẩn cơ cấu lương bậc mới; tăng tốc tải dữ liệu, thông báo trên máy; sao lưu dữ liệu tự động hằng đêm; HCNS trình duyệt bảng lương trước khi Giám đốc duyệt; số điện thoại trong hồ sơ; tài khoản phụ không hiện trên sơ đồ, nhiều người duyệt cùng lúc; thêm người ngay trên sơ đồ tổ chức; trang hồ sơ riêng từng nhân viên, nạp hồ sơ, sửa thông tin; biên bản bàn giao khi nghỉ việc, in và nạp bản đã ký; đơn xin nghỉ việc duyệt 2 bước, in đơn lưu hồ sơ; duyệt chi lương và tạm ứng 2 cấp theo từng công ty; lưu hợp đồng thử việc, hợp đồng lao động từng người, cảnh báo hết hạn; sinh nhật sắp tới, vinh danh nhân viên xuất sắc tháng; trang quản trị nhân sự toàn công ty theo sơ đồ tổ chức; bắt buộc định vị chính xác khi chấm công; nạp bản mô tả công việc theo chức danh, nhận file Word; trang tài khoản chuyên nghiệp, túi lịch sử mọi mục, đề nghị cập nhật hồ sơ; cơ cấu lương theo bậc hiện trong app; đơn hàng bị trả, treo, lỗi trong tháng; kế thừa phép tồn từ bảng lương tháng 9, công ty trả lương; giao việc tháng có nạp tài liệu, lịch sử, ảnh chấm công đóng dấu giờ và vị trí; nộp và đánh giá KPI hằng tháng, vi phạm nhắc nhở và văn bản; trình duyệt có tệp đã ký, ghi chú duyệt, tiền tăng ca tạm tính; bậc lương, tạm ứng, thưởng, KPI, doanh số, lập bảng lương, phiếu lương; ảnh đại diện, menu trái, tăng ca, chuyên cần, vai trò; giao diện web riêng qua GitHub, chấm công chụp ảnh trên máy tính/điện thoại, bảng theo dõi hôm nay, báo cáo sáng)
  * Dán toàn bộ nội dung này vào file Code.gs trong Apps Script.
  * Lần đầu: chọn hàm CAI_DAT_LAN_DAU rồi bấm Chạy.
  */
@@ -2111,7 +2111,7 @@ function lapBangLuong_(token, thang) {
   let tong = 0;
   rows_(SH.NV).filter(function (r) { return String(r.MaNV).trim() && String(r.TrangThai).trim() !== 'Nghỉ việc'; }).forEach(function (nv) {
     const kdNhom = thang >= kdTu ? nhomKD_(nv) : null;
-    const b = kdNhom ? { Bac: String(nv.NhomKD), Nhom: 'C', LuongCB: kdNhom.luong, AnTrua: kdNhom.pc, XangXe: 0, KPIToiDa: kdNhom.hq, CCToiDa: kdNhom.cc }
+    const b = kdNhom ? { Bac: maNhomKD_(nv), Nhom: 'C', LuongCB: kdNhom.luong, AnTrua: kdNhom.pc, XangXe: 0, KPIToiDa: kdNhom.hq, CCToiDa: kdNhom.cc }
       : bl.find(function (x) { return String(x.Bac).trim().toUpperCase() === String(nv.Bac || '').trim().toUpperCase(); });
     if (!b) { canhBao.push(nv.HoTen + ': chưa nhập Bậc lương'); return; }
     const bac = String(b.Bac).trim().toUpperCase(), nhom = String(b.Nhom).trim().toUpperCase();
@@ -2542,7 +2542,19 @@ const VP_KD = {
 };
 const TT_KD = ['Nháp', 'Chờ trưởng phòng', 'Chờ kế toán', 'Chờ giám đốc', 'Đã duyệt', 'Trả lại'];
 
-function nhomKD_(nv) { return NHOM_KD[String(nv.NhomKD || '').trim()] || null; }
+function maNhomKD_(nv) {
+  const c = String(nv.NhomKD || '').trim();
+  if (NHOM_KD[c]) return c;
+  if (String(nv.TrangThai || '').trim() === 'Nghỉ việc') return '';
+  if (/kinh doanh/i.test(String(nv.PhongBan || ''))) return String(nv.VaiTro || '').trim() === 'TP' ? 'QL45' : 'KD_MOI';
+  return '';
+}
+function nhomKD_(nv) {
+  const c = maNhomKD_(nv);
+  if (!c) return null;
+  const n = NHOM_KD[c];
+  return String(nv.NhomKD || '').trim() === c ? n : Object.assign({}, n, { ten: n.ten + ' (tạm, chờ xếp nhóm)', tam: true });
+}
 function nacHH_(ds, chuoi) {
   const k = String(chuoi || '400:1,800:1.2,1000:1.4,2000:1.6,4000:1.8,8000:2').split(',').map(function (x) { const p = x.split(':'); return [Number(p[0]) * 1e6, Number(p[1])]; })
     .filter(function (p) { return p[0] >= 0 && p[1] >= 0; }).sort(function (a, b) { return a[0] - b[0]; });
@@ -2680,7 +2692,7 @@ function taiBaoCaoKD(token, thang, ma) {
     if (!tg) throw new Error('Không tìm thấy nhân viên.');
     if (String(tg.MaNV) !== String(nv.MaNV) && !quyenVoiNV_(nv, tg) && !quyenLuong_(nv)) throw new Error('Bạn không có quyền xem báo cáo này.');
     const vp = vpKDCua_(tg.MaNV, thang).map(function (x) { return { ma: String(x.MaVP), loai: String(x.Loai), ten: VP_KD[x.Loai] || x.Loai, soTien: Number(x.SoTien) || 0, noiDung: String(x.NoiDung || ''), nguoi: String(x.NguoiGhi || ''), luc: fmtDT_(x.ThoiGian) }; });
-    return { nhom: nhomKD_(tg) ? String(tg.NhomKD) : '', bc: bcView_(bcKDRow_(tg.MaNV, thang)), tinh: tinhKD_(tg, thang, false, ds), viPham: vp,
+    return { nhom: maNhomKD_(tg), bc: bcView_(bcKDRow_(tg.MaNV, thang)), tinh: tinhKD_(tg, thang, false, ds), viPham: vp,
       ct: CT_KD, heSo: heSoCK_(ts_()), apDungTu: String(ts_().KD_ApDungTu || '2026-11') };
   });
 }
@@ -2756,7 +2768,7 @@ function dsBaoCaoKD(token, thang) {
     return kd.map(function (x) {
       const r = bcKDRow_(x.MaNV, thang), k = tinhKD_(x, thang, false, ds), cn = tongNo_(donCuaBC_(r), ymd_(new Date()));
       return { conNo: cn.no, noQuaHan: cn.quaHan, noXau: cn.noXau, maNV: String(x.MaNV), ten: x.HoTen, phong: String(x.PhongBan || ''), nhom: k.tenNhom, ql: k.ql, trangThai: r ? String(r.TrangThai) : 'Chưa nộp',
-        soDon: r ? donCuaBC_(r).length : 0, tong: r ? Number(r.TongGiaTri) || 0 : 0, dsGhiNhan: r ? Number(r.DSGhiNhan) || 0 : 0, dsTinh: k.dsTinh, tyLe: k.tyLe,
+        soDon: r ? donCuaBC_(r).length : 0, ck: r ? donCuaBC_(r).reduce(function (a, d) { return a + (Number(d.ck) || 0); }, 0) : 0, tong: r ? Number(r.TongGiaTri) || 0 : 0, dsGhiNhan: r ? Number(r.DSGhiNhan) || 0 : 0, dsTinh: k.dsTinh, tyLe: k.tyLe,
         hoaHong: k.hoaHong, thuongHQ: k.thuongHQ, phongToa: k.phongToa, soViPham: vpKDCua_(x.MaNV, thang).length, duocDuyet: r ? nguoiDuyetKD_(r, nv, ds) : false };
     });
   });
