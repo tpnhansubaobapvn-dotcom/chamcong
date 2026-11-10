@@ -186,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 68, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 69, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2273,7 +2273,8 @@ function vTongKDNhanh(){
   var s = '<h2>Doanh số các phòng kinh doanh · tháng ' + esc(th.slice(5) + '/' + th.slice(0, 4)) + '</h2><div class="box">';
   if (!KDSUM) return s + '<p class="muted">Đang tải…</p></div>';
   if (!KDSUM.length) return s + '<p class="muted">Chưa có số liệu.</p></div>';
-  return s + hopTongKD(KDSUM) + '<p class="note" style="margin:8px 0 0">Số liệu theo phiếu nhân viên đã nhập (kể cả chưa duyệt), để đối chiếu với phần mềm bán hàng. Đổi tháng ở ô Tháng của phiếu doanh số.</p>' +
+  var ct = KDSUM.slice().sort(function(a, b){ return (a.phong || '').localeCompare(b.phong || '') || (b.ql ? 1 : 0) - (a.ql ? 1 : 0); }).map(function(x){ return '<div class="kdvp"><span><b>' + esc(x.ten) + '</b>' + (x.ql ? ' <span class="pill">Trưởng phòng</span>' : '') + '<br><em>' + esc(x.phong || '') + ' · ' + x.soDon + ' đơn · ' + tien(x.tong) + ' đ' + (x.ck ? ' · chiết khấu ' + tien(x.ck) + ' đ' : '') + (x.soViPham ? ' · ' + x.soViPham + ' vi phạm' : '') + '</em></span><span style="display:flex;gap:6px;align-items:center">' + ttKD(x.trangThai) + '<button class="small" onclick="KDT2 = \'' + th + '\'; moBCKD(\'' + x.maNV + '\')">Xem phiếu</button></span></div>'; }).join('');
+  return s + hopTongKD(KDSUM) + (D.kd ? '<button class="small main" style="margin-top:10px" onclick="var e = document.getElementById(\'phieuKD\'); if (e) e.scrollIntoView({behavior: \'smooth\'})">↓ Nhập doanh số của tôi</button>' : '') + '<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Từng người (' + KDSUM.length + '): trạng thái, xem phiếu</summary>' + ct + '</details><p class="note" style="margin:8px 0 0">Số liệu theo phiếu nhân viên đã nhập (kể cả chưa duyệt), để đối chiếu với phần mềm bán hàng. Đổi tháng ở ô Tháng của phiếu doanh số.</p>' +
     (D.nv.vaiTro === 'TP' || laLuong() ? '<button class="nutTo main" style="margin-top:8px" onclick="KDT2 = \'' + th + '\'; KDDS = undefined; go(\'solieu\')">Mở Chốt tháng kinh doanh để duyệt</button>' : '') + '</div>';
 }
 
@@ -2326,7 +2327,7 @@ function dsVPKD(vp, coGo){
 }
 function hopKD(){
   if (KDD === undefined) taiKD();
-  var s = '<h2>Phiếu doanh số tháng</h2><div class="box">' + nutHD('hdkd', HD_KD) +
+  var s = '<h2 id="phieuKD">Phiếu doanh số tháng của tôi</h2><p class="muted" style="margin:-4px 0 8px;font-size:13px">Nhập từng đơn hàng, xem vi phạm, rồi bấm Ký PIN và nộp ở cuối phiếu.</p><div class="box">' + nutHD('hdkd', HD_KD) +
     '<label for="kdT">Tháng</label><input type="month" id="kdT" value="' + thangKD() + '" onchange="KDT = this.value; KDD = undefined; render()" style="max-width:220px">';
   if (!KDD) return s + '<p class="muted">Đang tải…</p></div>';
   if (KDD.loi) return s + '<p class="err">' + esc(KDD.loi) + '</p></div>';
