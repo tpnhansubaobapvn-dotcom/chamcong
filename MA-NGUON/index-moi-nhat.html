@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 73, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 74, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2856,15 +2856,16 @@ function tuChoi(ma){
 /* ---------- PIN ---------- */
 
 function askPin(title, cb, mustSet){
+  if (!mustSet) title = String(title).replace(/mã PIN|PIN/g, 'mật khẩu đăng nhập');
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><p style="margin:0 0 6px">' + esc(title) + '</p>' +
-    '<input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin" autocomplete="off">' +
+    (mustSet ? '<input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin" autocomplete="off">' : '<input id="pin" type="password" class="pin" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">') +
     (mustSet ? '<label for="pin2">Nhập lại mã PIN</label><input id="pin2" type="password" inputmode="numeric" maxlength="4" class="pin">' : '') +
     '<p id="pe" class="err"></p><div class="grid2">' + (mustSet ? '<span></span>' : '<button onclick="closeLayer()">Hủy</button>') +
     '<button class="main" id="okb">Xác nhận</button></div></div></div>';
   $('pin').focus();
   $('okb').onclick = function(){
     var p = $('pin').value.trim();
-    if (!/^\d{4}$/.test(p)) { $('pe').textContent = 'PIN gồm đúng 4 chữ số.'; return; }
+    if (mustSet ? !/^\d{4}$/.test(p) : !p) { $('pe').textContent = mustSet ? 'PIN gồm đúng 4 chữ số.' : 'Nhập mật khẩu đăng nhập.'; return; }
     if (mustSet && p !== $('pin2').value.trim()) { $('pe').textContent = 'Hai lần nhập chưa khớp.'; return; }
     $('pe').textContent = ''; $('okb').textContent = 'Đang xử lý…';
     cb(p);
