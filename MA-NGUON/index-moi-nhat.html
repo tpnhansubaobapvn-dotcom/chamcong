@@ -177,6 +177,7 @@ button:disabled{opacity:.6}
 @media (prefers-reduced-motion:no-preference){.punch:active{transform:scale(.97)}}
 .cv-ung{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin-top:10px;padding:12px 16px 12px 40px;position:relative;border:2px solid #D7262E;border-radius:12px;background:#FFF5F5;color:#B3101E;text-align:left;cursor:pointer;width:auto}.cv-ung b{font-size:15px;letter-spacing:.3px}.cv-ung span{font-size:13px;color:#5b6b73}.cv-ung .cham{position:absolute;left:14px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;border:3px solid #D7262E;background:#fff}.cv-ung.nhay{animation:nhayCV 1.1s ease-in-out infinite}.cv-ung.nhay .cham{background:#D7262E}@keyframes nhayCV{0%,100%{box-shadow:0 0 0 0 rgba(215,38,46,.45)}50%{box-shadow:0 0 0 8px rgba(215,38,46,0)}}
 .kd3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.kd3 div{border:1.5px solid var(--line,#e3e6e8);border-radius:12px;padding:10px 12px}.kd3 i{font-style:normal;font-size:11.5px;font-weight:800;color:#D7262E;letter-spacing:.4px}.kd3 b{display:block;font-size:19px;margin-top:3px}.kd3 span{font-size:11.5px;color:var(--muted,#6b7280)}@media(max-width:560px){.kd3{grid-template-columns:1fr}}.kdh{display:block;font-size:16px;margin-bottom:6px}.kdbang{overflow-x:auto}.kdbang table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}.kdbang th,.kdbang td{padding:7px 6px;border-bottom:1px solid var(--line,#e3e6e8);text-align:left;vertical-align:top}.kdbang th{font-size:12px;color:var(--muted,#6b7280);font-weight:600}.kdbang .r{text-align:right;white-space:nowrap}.kdvp{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line,#e3e6e8);font-size:14px}.kdvp em{font-style:normal;font-size:12px;color:var(--muted,#6b7280)}.kdk{border:1.5px dashed var(--line,#d6dadd);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:14px}.kdtong{display:flex;justify-content:space-between;border-top:2px solid currentColor;margin-top:6px;padding-top:9px;font-size:17px;font-weight:800;color:#D7262E}
+.hdn{border:1px solid var(--line,#e3e6e8);border-radius:10px;margin:8px 0;padding:0 12px;text-align:left}.hdn summary{cursor:pointer;font-weight:700;padding:10px 0}.hdn div{padding:0 0 10px;font-size:14px;line-height:1.55}.hdn ol,.hdn ul{margin:0;padding-left:20px}.hdn p{margin:6px 0 0}
 </style>
 </head>
 <body>
@@ -185,7 +186,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 65, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 66, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -242,6 +243,22 @@ function khungDN(noi){
     '<p class="slogan">Cáp thép của người Việt</p>' + noi +
     '</div><p class="login-foot">Công ty CP SX Dây Cáp Thép Việt Nam</p></div>';
 }
+function huongDanDN(){
+  var muc = [
+    ['Đăng nhập lần đầu', '<ol><li>Bấm <b>Đăng ký lần đầu</b>.</li><li>Nhập <b>Gmail công ty cấp</b>, bấm <b>Gửi mã xác minh</b>.</li><li>Mở Gmail, tìm thư <b>"Mã đăng nhập app chấm công"</b>, nhập <b>mã 6 số</b>, bấm <b>Xác minh</b>.</li><li><b>Đặt mật khẩu app</b> (tự chọn, nhớ kỹ).</li></ol>'],
+    ['Quên mật khẩu app', '<ol><li>Bấm <b>Quên mật khẩu?</b> ở màn hình đăng nhập.</li><li>Nhập Gmail công ty, bấm <b>Gửi mã xác minh</b>.</li><li>Lấy <b>mã 6 số</b> trong Gmail, nhập vào, bấm <b>Xác minh</b>.</li><li>Đặt <b>mật khẩu mới</b>.</li></ol><p>Mã có hiệu lực <b>10 phút</b>. Gửi xong đợi <b>1 phút</b> mới gửi lại được. Nhập sai 5 lần thì gửi mã mới.</p>'],
+    ['Không thấy thư có mã', '<ul><li>Xem mục <b>Thư rác</b>, <b>Quảng cáo</b>, <b>Tất cả thư</b> trong Gmail.</li><li>Kiểm tra đã gõ <b>đúng Gmail công ty</b> chưa.</li><li>Chờ 1 phút rồi bấm <b>Gửi lại mã</b>.</li></ul>'],
+    ['Phân biệt 2 loại mật khẩu', '<ul><li><b>Mật khẩu Gmail</b>: để mở hộp thư Gmail công ty.</li><li><b>Mật khẩu app chấm công</b>: do bạn <b>tự đặt</b> trong app, khác mật khẩu Gmail.</li></ul>'],
+    ['Cài Gmail công ty lên điện thoại', '<ol><li>Mở ứng dụng <b>Gmail</b>, bấm <b>ảnh đại diện</b> góc phải trên.</li><li><b>Thêm tài khoản khác</b>, chọn <b>Google</b>.</li><li>Nhập Gmail và <b>mật khẩu Gmail</b> công ty cấp.</li></ol><p>Từ đó mỗi lần app gửi mã, bạn mở Gmail trên điện thoại là thấy ngay.</p>'],
+    ['Quên mật khẩu Gmail', '<ul><li>Ở màn hình đăng nhập Gmail, bấm <b>Bạn quên mật khẩu?</b>, làm theo hướng dẫn của Google (nhận mã qua số điện thoại hoặc email khôi phục).</li><li>Không lấy lại được: báo <b>trưởng phòng</b> hoặc <b>Hành chính nhân sự</b>.</li></ul>'],
+    ['Bị đăng xuất ("văng ra")', '<ul><li>Khi đăng nhập nhớ tick <b>Ghi nhớ đăng nhập</b>.</li><li>Không dùng <b>tab ẩn danh</b>, không xóa dữ liệu trình duyệt.</li><li>Mỗi người chỉ đăng nhập trên <b>điện thoại của mình</b>.</li><li>Bấm <b>⋮ hoặc nút chia sẻ</b> của trình duyệt, chọn <b>Thêm vào màn hình chính</b>, lần sau mở app từ biểu tượng đó.</li></ul>'],
+    ['Báo "Gmail chưa được công ty cấp tài khoản"', '<p>Bạn gõ sai Gmail, hoặc Gmail chưa được cấp quyền. Kiểm tra lại, nếu đúng thì báo <b>trưởng phòng</b> hoặc <b>Hành chính nhân sự</b>.</p>']
+  ];
+  khungDN('<h2>Hướng dẫn đăng nhập</h2><p class="muted" style="margin-top:-6px">Chọn tình huống bạn đang gặp.</p>' +
+    muc.map(function(m, i){ return '<details class="hdn"' + (i === 1 ? ' open' : '') + '><summary>' + m[0] + '</summary><div>' + m[1] + '</div></details>'; }).join('') +
+    '<p class="note" style="margin-top:12px">Không đưa mã 6 số, mật khẩu cho bất kỳ ai, kể cả đồng nghiệp.</p>' +
+    '<div style="display:flex;gap:8px;margin-top:12px"><button class="small" style="flex:1" onclick="showLogin()">← Đăng nhập</button><button class="main" style="flex:1;margin:0" onclick="showMa(\'quen\')">Quên mật khẩu</button></div>');
+}
 function showLogin(){
   var nho = load('nho') !== '0';
   khungDN('<h2>Đăng nhập hệ thống chấm công</h2>' +
@@ -252,7 +269,7 @@ function showLogin(){
     '<p id="e0" class="err"></p><button class="main" id="b0" type="submit">Đăng nhập</button></form>' +
     '<div style="display:flex;justify-content:space-between;gap:8px;margin-top:14px;font-size:13px">' +
     '<a href="javascript:void(0)" style="color:var(--steel);font-weight:600" onclick="showMa(\'dk\')">Đăng ký lần đầu</a>' +
-    '<a href="javascript:void(0)" style="color:#D7262E;font-weight:600" onclick="showMa(\'quen\')">Quên mật khẩu?</a></div>');
+    '<a href="javascript:void(0)" style="color:#D7262E;font-weight:600" onclick="showMa(\'quen\')">Quên mật khẩu?</a></div>' + '<button type="button" class="small" style="width:100%;margin-top:12px" onclick="huongDanDN()">📘 Hướng dẫn đăng nhập, quên mật khẩu</button>');
   var tdn = load('tdn') || load('em'); if (tdn) { $('tdn').value = tdn; $('mkd').focus(); }
 }
 function showMa(kieu){
@@ -266,7 +283,7 @@ function showMa(kieu){
     '<div id="otpBox" style="display:none"><label for="otp">Mã 6 số trong Gmail</label>' +
     '<input id="otp" inputmode="numeric" maxlength="6" class="pin" autocomplete="one-time-code">' +
     '<p id="e2" class="err"></p><button class="main" onclick="verifyOtp()">Xác minh</button></div></div>' +
-    '<p style="text-align:center;margin:14px 0 0;font-size:13px"><a href="javascript:void(0)" style="color:var(--steel);font-weight:600" onclick="showLogin()">← Quay lại đăng nhập</a></p>');
+    '<p style="text-align:center;margin:14px 0 0;font-size:13px"><a href="javascript:void(0)" style="color:var(--steel);font-weight:600" onclick="showLogin()">← Quay lại đăng nhập</a> · <a href="javascript:void(0)" style="color:var(--steel);font-weight:600" onclick="huongDanDN()">📘 Hướng dẫn</a></p>');
   var last = load('em') || load('tdn'); if (last && last.indexOf('@') > 0) $('em').value = last;
 }
 
