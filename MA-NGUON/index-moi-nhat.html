@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 75, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 76, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1139,8 +1139,45 @@ function vBangLuong(){
     '<label for="blT">Tháng</label><input type="month" id="blT" value="' + thangTruoc() + '">' +
     '<div class="grid2" style="margin-top:10px"><button class="main" onclick="lapBL()">Lập bảng lương</button>' +
     (D.nv.vaiTro === 'GD' ? '<button onclick="congBo()">Giám đốc duyệt, chi lương (công bố phiếu)</button>' : '<span></span>') + '</div>' +
-    '<div id="blKQ"></div></div>' +
+    '<div id="blKQ"></div>' + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="main" onclick="xemBL()">Xem bảng lương từng người</button><button onclick="khoaBL(true)">🔒 Khóa bảng tháng này</button><button onclick="khoaBL(false)">Mở khóa</button></div><div id="blXem"></div></div>' +
     '<p class="note">Tính theo Quy chế Lương – Thưởng – Phụ cấp: lương theo ngày công; ăn giữa ca, xăng xe theo ngày làm thực tế; chuyên cần theo điểm vi phạm; KPI; hoa hồng theo Phụ lục 01; tăng ca 150/200/300%; thử việc 85%; thâm niên; BHXH-BHYT-BHTN trên lương cơ bản; trừ tạm ứng. Thuế TNCN kế toán nhập trong sheet, thực lĩnh tự tính lại. Lập lại bao nhiêu lần cũng được cho đến khi Giám đốc duyệt. Trình tự: kế toán lập, đối chiếu với phần mềm → Giám đốc duyệt → phiếu lương tự hiện trong mục Lương của tôi của từng người.</p>' + lsBL();
+}
+function xemBL(){
+  var th = $('blT').value; if (!th) return;
+  $('blXem').innerHTML = '<p class="note">Đang tải bảng lương…</p>';
+  call('xemBangLuong', [TK, th], function(r){ BLX = r; BLX.th = th; veBLX(); }, function(m){ $('blXem').innerHTML = '<p class="err">' + esc(m) + '</p>'; });
+}
+var BLX = null;
+function veBLX(){
+  var r = BLX; if (!r || !$('blXem')) return;
+  var thang = r.th.slice(5) + '/' + r.th.slice(0, 4);
+  var dau = '<div class="row" style="margin-top:10px"><b>Bảng lương tháng ' + esc(thang) + '</b><span><span class="pill ' + (r.trangThai === 'Đã công bố' ? 'p-ok' : 'p-wait') + '">' + esc(r.trangThai || 'Chưa công bố') + '</span> ' + (r.khoa ? '<span class="pill p-wait">🔒 Đã khóa</span>' : '') + '</span></div>';
+  if (!r.co) { $('blXem').innerHTML = dau + '<p class="muted">Chưa có bảng lương tháng này.</p>'; return; }
+  var muon = ['Họ tên', 'Chức vụ', 'Công ty', 'Ngày công thực tế', 'Lương cơ bản', 'Phụ cấp tiền ăn', 'Phụ cấp chức vụ', 'Thưởng hiệu quả công việc', 'Thu nhập theo ngày công', 'Thưởng doanh số', 'Thưởng khác', 'Tiền tăng ca', 'Tiền phép', 'Lễ, tết', 'TỔNG THU NHẬP', 'BHXH, BHYT, BHTN (người lao động)', 'Thuế TNCN', 'Tạm ứng', 'Truy thu, truy lãnh', 'THỰC LĨNH', 'Ghi chú'];
+  var cot = muon.filter(function(c){ return r.cot.indexOf(c) >= 0; });
+  if (cot.length < 5) cot = r.cot.filter(function(c){ return c && c !== 'MaNV'; });
+  var chu = {'Họ tên': 1, 'Chức vụ': 1, 'Công ty': 1, 'Ghi chú': 1, 'Ngày công thực tế': 2};
+  var loc = $('blLoc') ? $('blLoc').value : '';
+  var ds = r.dong.filter(function(x){ return !loc || String(x['Công ty']) === loc; });
+  var nhom = {}, thu = [];
+  ds.forEach(function(x){ var p = x._phong || 'Chưa xếp phòng'; if (!nhom[p]) { nhom[p] = []; thu.push(p); } nhom[p].push(x); });
+  var o = function(c, v){ if (chu[c] === 1) return '<td>' + esc(v == null ? '' : v) + '</td>'; if (chu[c] === 2) return '<td class="r">' + esc(v == null ? '' : v) + '</td>'; return '<td class="r">' + (typeof v === 'number' ? tien(v) : esc(v == null ? '' : v)) + '</td>'; };
+  var tong = function(arr, nhan, nen){ return '<tr style="font-weight:800;background:' + nen + '">' + cot.map(function(c, i){ if (i === 0) return '<td>' + nhan + ' (' + arr.length + ' người)</td>'; if (chu[c]) return '<td></td>'; var t = arr.reduce(function(a, x){ return a + (typeof x[c] === 'number' ? x[c] : 0); }, 0); return '<td class="r">' + tien(t) + '</td>'; }).join('') + '</tr>'; };
+  var s = dau + '<div class="row" style="margin-top:6px"><span>Lọc công ty</span><select id="blLoc" onchange="veBLX()" style="max-width:200px"><option value="">Tất cả</option><option value="CAP"' + (loc === 'CAP' ? ' selected' : '') + '>Dây Cáp Thép (CAP)</option><option value="BB"' + (loc === 'BB' ? ' selected' : '') + '>Bao Báp (BB)</option></select></div>' +
+    '<div class="kdbang" style="margin-top:8px"><table style="min-width:1400px;font-size:13px"><tr>' + cot.map(function(c){ return '<th' + (chu[c] === 1 ? '' : ' class="r"') + '>' + esc(c) + '</th>'; }).join('') + '</tr>';
+  thu.forEach(function(p){
+    s += '<tr><td colspan="' + cot.length + '" style="background:#C8102E;color:#fff;font-weight:800">' + esc(p.toUpperCase()) + '</td></tr>';
+    nhom[p].forEach(function(x){ s += '<tr>' + cot.map(function(c){ return o(c, x[c]); }).join('') + '</tr>'; });
+    if (thu.length > 1) s += tong(nhom[p], 'Cộng ' + esc(p), 'color-mix(in srgb,#D7262E 7%,transparent)');
+  });
+  s += tong(ds, 'TỔNG CỘNG', 'color-mix(in srgb,#D7262E 14%,transparent)') + '</table></div>' +
+    '<p class="note" style="margin:6px 0 0">Kéo ngang để xem đủ cột. Sửa số thì sửa trực tiếp trong <a class="link" href="' + esc(r.url) + '" target="_blank">Google Sheet</a>, rồi bấm Xem lại.</p>';
+  $('blXem').innerHTML = s;
+}
+function khoaBL(k){
+  var th = $('blT').value; if (!th) return;
+  if (!k && !confirm('Mở khóa bảng lương tháng ' + th + '? Sau khi mở khóa, bấm Lập bảng lương sẽ tính lại và GHI ĐÈ các số nhập tay.')) return;
+  call('khoaBangLuong', [TK, th, k], function(r){ toast(r.khoa ? 'Đã khóa bảng lương tháng ' + th : 'Đã mở khóa bảng lương tháng ' + th); xemBL(); }, function(m){ toast(m, true); });
 }
 function lapBL(){
   var th = $('blT').value; if (!th) return;
