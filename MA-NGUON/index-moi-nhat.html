@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 74, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 75, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2297,6 +2297,35 @@ function hopTongKD(ds){
   return bang + '<div class="kdbang" style="margin-top:10px"><table><tr><th>Phòng</th><th class="r">Đã nộp</th><th class="r">Giá trị đơn (chưa VAT)</th><th class="r">Chiết khấu</th><th class="r">Trừ (chiết khấu × 8,67…)</th><th class="r">Doanh số ghi nhận</th><th class="r">Còn phải thu</th></tr>' +
     thu.map(function(p){ var g = nhom[p]; return dong(esc(p), g.tp ? 'Trưởng phòng ' + esc(g.tp) : '', g); }).join('') + (thu.length > 1 ? dong('TỔNG CÁC PHÒNG KINH DOANH', '', t, true) : '') + '</table></div><p class="note" style="margin:6px 0 0">Công thức theo Phụ lục 01 Quy chế lương, tính từng đơn: Doanh số ghi nhận = (Giá trị đơn chưa VAT − Chiết khấu × 8,67) × tỷ lệ giá sàn. Bán đúng giá sàn trở lên: 100%; dưới sàn dưới 5%: 70%; 5–10%: 60%; 10–15%: 50%; từ 15%: 40%. Đơn chưa đủ chứng từ: tạm tính 0 (treo) đến khi bổ sung.</p>';
 }
+function bangNganhKD(ds){
+  var nganh = function(p){ return /x[ií]ch/i.test(p || '') ? 'NGÀNH XÍCH NEO' : 'NGÀNH CÁP THÉP'; };
+  var nhom = {}, thu = [];
+  ds.forEach(function(x){ var k = nganh(x.phong); if (!nhom[k]) { nhom[k] = []; thu.push(k); } nhom[k].push(x); });
+  thu.sort(function(a, b){ return a.indexOf('XÍCH') >= 0 ? -1 : b.indexOf('XÍCH') >= 0 ? 1 : 0; });
+  var cong = function(arr, f){ return arr.reduce(function(a, x){ return a + (Number(f(x)) || 0); }, 0); };
+  var ngay = function(s){ return s ? s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(0, 4) : ''; };
+  var mau = function(tt){ return tt === 'Nợ xấu' ? 'color:var(--bad);font-weight:800' : tt === 'Quá hạn' ? 'color:#b45309;font-weight:700' : 'color:var(--muted)'; };
+  var td = function(v, st){ return '<td class="r"' + (st ? ' style="' + st + '"' : '') + '>' + v + '</td>'; };
+  var tongDong = function(nhan, arr, nen){ return '<tr style="font-weight:800;background:' + nen + '"><td>' + nhan + '</td>' + td(cong(arr, function(x){ return x.soDon; })) + td(tien(cong(arr, function(x){ return x.tong; })))
+    + td(tien(cong(arr, function(x){ return x.ck; }))) + td(tien(cong(arr, function(x){ return x.dsGhiNhan; }))) + td(cong(arr, function(x){ return x.soViPham; })) + td(tien(cong(arr, function(x){ return x.noXau; })), 'color:var(--bad)')
+    + td(tien(cong(arr, function(x){ return x.conNo; }))) + '<td></td><td></td></tr>'; };
+  var s = '<div class="kdbang" style="margin-top:10px"><table style="min-width:980px;font-size:13.5px"><tr><th>Họ tên</th><th class="r">Tổng đơn</th><th class="r">Doanh số chưa VAT</th><th class="r">Chiết khấu</th><th class="r">Còn lại (ghi nhận)</th><th class="r">Vi phạm</th><th class="r">Nợ xấu</th><th class="r">Số tiền còn nợ</th><th class="r">Ngày giao</th><th class="r">Hạn thanh toán</th></tr>';
+  thu.forEach(function(k){
+    var arr = nhom[k];
+    s += '<tr><td colspan="10" style="background:#C8102E;color:#fff;font-weight:800;letter-spacing:.5px">' + k + '</td></tr>';
+    arr.forEach(function(x){
+      s += '<tr style="font-weight:700"><td>' + esc(x.ten) + '<br><span class="muted" style="font-size:12px;font-weight:400">' + esc(x.trangThai) + '</span></td>' + td(x.soDon) + td(tien(x.tong)) + td(tien(x.ck)) + td(tien(x.dsGhiNhan))
+        + td(x.soViPham ? x.soViPham + (x.tienViPham ? '<br>' + tien(x.tienViPham) : '') : '0', x.soViPham ? 'color:var(--bad)' : '') + td(tien(x.noXau || 0), x.noXau ? 'color:var(--bad)' : '') + td(tien(x.conNo || 0)) + '<td></td><td></td></tr>';
+      (x.don || []).forEach(function(d){
+        s += '<tr style="font-size:12.5px"><td style="padding-left:16px">· ' + esc(d.soDon) + ' <span class="muted">' + esc(String(d.khach).slice(0, 38)) + '</span></td><td></td>' + td(tien(d.giaTri)) + td(d.ck ? tien(d.ck) : '') + td(tien(d.ghiNhan)) + '<td></td>'
+          + td(d.tt === 'Nợ xấu' ? tien(d.conNo) : '', 'color:var(--bad)') + td(d.conNo ? tien(d.conNo) : '0') + td(ngay(d.ngayGiao) || '<span class="muted">chưa ghi</span>') + td((ngay(d.han) || '') + (d.tt ? '<br><span style="' + mau(d.tt) + '">' + esc(d.tt) + '</span>' : ''), '') + '</tr>';
+      });
+    });
+    s += tongDong('TỔNG ' + k, arr, 'color-mix(in srgb,#D7262E 7%,transparent)');
+  });
+  if (thu.length > 1) s += tongDong('TỔNG TOÀN PHÒNG KINH DOANH', ds, 'color-mix(in srgb,#D7262E 14%,transparent)');
+  return s + '</table></div><p class="note" style="margin:6px 0 0">Hạn thanh toán = ngày giao + 20 ngày (Điều 10 Quy chế bán hàng). Quá hạn từ ngày thứ 21, nợ xấu từ ngày thứ 40 kể từ ngày giao. Kéo ngang bảng để xem đủ cột trên điện thoại.</p>';
+}
 var KDSUM = undefined, KDSUM_T = '';
 function vTongKDNhanh(){
   if (['TP', 'GD', 'HCNS', 'KT'].indexOf(D.nv.vaiTro) < 0) return '';
@@ -2480,7 +2509,7 @@ function vChotKD(){
   var tongNo = KDDS.reduce(function(a, x){ return a + (x.conNo || 0); }, 0), tongXau = KDDS.reduce(function(a, x){ return a + (x.noXau || 0); }, 0), tongQH = KDDS.reduce(function(a, x){ return a + (x.noQuaHan || 0); }, 0);
   s += '<div class="luoi4" style="margin-top:10px">' + so('Đã nộp', KDDS.filter(function(x){ return x.trangThai !== 'Chưa nộp' && x.trangThai !== 'Nháp'; }).length + '/' + KDDS.length) +
     so('Đã duyệt xong', KDDS.filter(function(x){ return x.trangThai === 'Đã duyệt'; }).length) + so('Doanh số ghi nhận', tien(tongDS)) + so('Hoa hồng tạm tính', tien(tongHH)) + '</div>' +
-    '<div class="luoi4">' + so('Công nợ còn phải thu', tien(tongNo)) + so('Quá hạn', '<span style="color:var(--bad)">' + tien(tongQH) + '</span>') + so('Nợ xấu', '<span style="color:var(--bad)">' + tien(tongXau) + '</span>') + so('Chờ tôi duyệt', cho.length) + '</div>' + '<div class="luoi4">' + so('Tổng giá trị đơn (chưa VAT)', tien(KDDS.reduce(function(a, x){ return a + (x.tong || 0); }, 0))) + so('Tổng chiết khấu', tien(KDDS.reduce(function(a, x){ return a + (x.ck || 0); }, 0))) + '</div>' + hopTongKD(KDDS);
+    '<div class="luoi4">' + so('Công nợ còn phải thu', tien(tongNo)) + so('Quá hạn', '<span style="color:var(--bad)">' + tien(tongQH) + '</span>') + so('Nợ xấu', '<span style="color:var(--bad)">' + tien(tongXau) + '</span>') + so('Chờ tôi duyệt', cho.length) + '</div>' + '<div class="luoi4">' + so('Tổng giá trị đơn (chưa VAT)', tien(KDDS.reduce(function(a, x){ return a + (x.tong || 0); }, 0))) + so('Tổng chiết khấu', tien(KDDS.reduce(function(a, x){ return a + (x.ck || 0); }, 0))) + '</div>' + hopTongKD(KDDS) + '<h3 style="margin:16px 0 0">Bảng doanh số, công nợ theo ngành</h3>' + bangNganhKD(KDDS);
   s += KDDS.map(function(x){
     return '<div style="border-top:1px solid var(--line);padding:8px 0"><div class="row"><b>' + esc(x.ten) + '</b>' + ttKD(x.trangThai) + '</div>' +
       '<div class="muted" style="font-size:13px">' + esc(x.nhom) + ' · ' + x.soDon + ' đơn · ' + (x.ql ? 'doanh số đội ' + tien(x.dsTinh) : 'ghi nhận ' + tien(x.dsGhiNhan)) + ' đ' + (x.ck ? ' · chiết khấu ' + tien(x.ck) + ' đ' : '') + ' · hoa hồng ' + x.tyLe + '% = ' + tien(x.hoaHong) + ' đ · thưởng hiệu quả ' + tien(x.thuongHQ) + ' đ' +
