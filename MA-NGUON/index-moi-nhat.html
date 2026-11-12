@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 76, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 77, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -472,7 +472,7 @@ function vCong(){
   var label = !h.vao ? 'Chấm công vào' : 'Chấm công ra';
   var sub = !h.vao ? 'Giờ vào ' + D.gioVao : (h.ra ? 'Bấm lại nếu về muộn hơn' : 'Đã vào lúc ' + h.vao);
   var duyet = D.choDuyet.length ? '<div class="box" style="background:var(--waitbg);border-color:var(--waitbg);color:var(--wait);cursor:pointer" onclick="go(\'don\')">' + D.choDuyet.length + ' đơn đang chờ bạn duyệt</div>' : '';
-  return viecCanLam() + bannerTB() + hdNhanh() +
+  return canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
     '<button class="punch' + (done ? ' done' : '') + '" id="pb" onclick="punch()"><b>' + label + '</b><span>' + esc(sub) + '</span></button>' +
     '<div class="box"><div class="row"><span>Giờ vào</span><b>' + (h.vao || '--:--') + '</b></div>' +
     '<div class="row"><span>Giờ ra</span><b>' + (h.ra || '--:--') + '</b></div>' +
@@ -527,6 +527,7 @@ function vQuanTri(){
   s += '<div class="luoi5">' + so('Tổng nhân sự', ds.length) + so('Có mặt', dem(function(x){ return x.tt && (x.tt.tt === 'dung' || x.tt.tt === 'tre'); })) +
     so('Đi trễ', dem(function(x){ return x.tt && x.tt.tt === 'tre'; })) + so('Chưa chấm công', dem(function(x){ return x.tt && x.tt.tt === 'vang'; })) +
     so('Nghỉ có đơn', dem(function(x){ return x.tt && x.tt.tt === 'nghi'; })) + '</div>';
+  if (!laTP) s += khungTSTH();
   var nhom = {}; SO_DO.forEach(function(p){ nhom[p.id] = []; }); nhom.khac = [];
   ds.forEach(function(x){
     var id = 'khac';
@@ -742,7 +743,7 @@ function napHS(){
 }
 
 /* ---------- TÀI SẢN, CÔNG CỤ, TÀI KHOẢN ĐƯỢC CẤP ---------- */
-var LOAI_TS = ['Máy tính', 'Điện thoại', 'SIM', 'Chìa khóa, thẻ', 'Đồng phục, bảo hộ', 'Dụng cụ kho', 'Xe, phương tiện', 'Tài khoản phần mềm', 'Khác'];
+var LOAI_TS = ['Điện thoại', 'SIM', 'Máy tính', 'Máy tính bảng', 'Email công ty', 'Zalo công việc', 'Tài khoản phần mềm', 'Chìa khóa, thẻ', 'Đồng phục, bảo hộ', 'Dụng cụ kho', 'Xe, phương tiện', 'Khác'];
 var TT_TS = ['Đang dùng tốt', 'Hỏng, cần sửa', 'Mất', 'Đã thu hồi', 'Đã đổi mật khẩu'];
 var TS_DS = {};
 function pillTS(t){ var c = t === 'Đang dùng tốt' || t === 'Đã đổi mật khẩu' ? 'p-ok' : t === 'Đã thu hồi' ? '' : 'p-bad'; return '<span class="pill ' + c + '"' + (c ? '' : ' style="background:var(--zinc);color:var(--muted)"') + '>' + esc(t || 'Đang dùng tốt') + '</span>'; }
@@ -750,41 +751,95 @@ function nutHD(id, noiDung){
   return '<button class="hd-link" onclick="var e=document.getElementById(\'' + id + '\');e.hidden=!e.hidden;this.textContent=e.hidden?\'Hướng dẫn\':\'Ẩn hướng dẫn\'">Hướng dẫn</button>' +
     '<div class="hd-box" id="' + id + '" hidden>' + noiDung + '<button class="small" onclick="this.parentNode.hidden=true;var b=this.parentNode.previousElementSibling;if(b)b.textContent=\'Hướng dẫn\'">Đã hiểu, đóng lại</button></div>';
 }
-var HD_TS = '<b>Nhân viên tự cập nhật</b> (báo hỏng, mất, tự đổi mật khẩu):<ol><li>Bấm <b>+ Thêm tài sản, tài khoản</b> hoặc <b>Cập nhật</b> ở dòng cần sửa.</li><li>Chọn loại, tình trạng; ghi tên, mã hoặc số seri; tài khoản thì ghi tên đăng nhập, mật khẩu (để trống nếu không đổi).</li><li>Nhập <b>mã PIN của chính bạn</b> → <b>Lưu</b>.</li></ol>' +
-  '<b>Quản trị cấp hoặc đổi cho nhân viên:</b><ol><li>Đăng nhập <b>tài khoản quản trị của anh</b>, không dùng máy đang đăng nhập tài khoản nhân viên.</li><li>Vào <b>Quản trị nhân sự</b> → bấm tên nhân viên → mục <b>Tài sản, công cụ, tài khoản được cấp</b>.</li><li>Bấm <b>Thêm</b> hoặc <b>Cập nhật</b>, nhập <b>PIN của anh</b> → Lưu.</li></ol>' +
-  '<b>Lưu ý:</b> mã PIN luôn là PIN của <b>người đang đăng nhập</b> (tên ở cuối menu trái). Mỗi lần lưu, app ghi ngày giờ và người thay đổi. Mật khẩu chỉ người giữ tài khoản và Giám đốc xem được.<br>';
+var HD_TS = '<b>Nhân viên tự cập nhật</b> (báo hỏng, mất, tự đổi mật khẩu):<ol><li>Bấm <b>+ Thêm tài sản, tài khoản</b> hoặc <b>Cập nhật</b> ở dòng cần sửa.</li><li>Chọn loại, tình trạng; ghi tên, mã hoặc số seri; tài khoản thì ghi tên đăng nhập, mật khẩu (để trống nếu không đổi).</li><li>Nhập <b>mật khẩu đăng nhập của chính bạn</b> → <b>Lưu</b>.</li><li>Khai xong tất cả, bấm <b>Ký xác nhận đã nhận đúng</b>.</li></ol>' +
+  '<b>Quản trị cấp hoặc đổi cho nhân viên:</b><ol><li>Đăng nhập <b>tài khoản quản trị của anh</b>, không dùng máy đang đăng nhập tài khoản nhân viên.</li><li>Vào <b>Quản trị nhân sự</b> → bấm tên nhân viên → mục <b>Tài sản, công cụ, tài khoản được cấp</b>.</li><li>Bấm <b>Thêm</b> hoặc <b>Cập nhật</b>, nhập <b>mật khẩu đăng nhập của anh</b> → Lưu.</li></ol>' +
+  '<b>Lưu ý:</b> mật khẩu để ký luôn là của <b>người đang đăng nhập</b> (tên ở cuối menu trái). Mỗi lần lưu, app ghi ngày giờ và người thay đổi. Mật khẩu chỉ người giữ tài khoản và Giám đốc xem được.<br>';
+var TS_TRUONG = {Hang: 'Hãng', Model: 'Đời máy (model)', MaSo: 'Số seri (S/N), mã, biển số', IMEI: 'Số IMEI (bấm *#06# trên máy để xem)', SoThueBao: 'Số thuê bao, số điện thoại', NhaMang: 'Nhà mạng', CauHinh: 'Cấu hình (CPU, RAM, ổ cứng)', PhuKien: 'Phụ kiện kèm theo (sạc, cáp, ốp, chuột…)', TenDangNhap: 'Tên đăng nhập, địa chỉ email, tên Zalo'};
+var TS_KEY = {Hang: 'hang', Model: 'model', MaSo: 'maSo', IMEI: 'imei', SoThueBao: 'soTB', NhaMang: 'nhaMang', CauHinh: 'cauHinh', PhuKien: 'phuKien', TenDangNhap: 'tenDN'};
+var TS_BB = {'Điện thoại': ['Hang', 'Model', 'IMEI', 'PhuKien'], 'Máy tính': ['Hang', 'Model', 'MaSo', 'CauHinh', 'PhuKien'], 'Máy tính bảng': ['Hang', 'Model', 'MaSo', 'PhuKien'], 'SIM': ['SoThueBao', 'NhaMang'], 'Email công ty': ['TenDangNhap', 'SoThueBao'], 'Zalo công việc': ['SoThueBao', 'TenDangNhap'], 'Tài khoản phần mềm': ['TenDangNhap'], 'Xe, phương tiện': ['Hang', 'Model', 'MaSo'], _khac: ['MaSo']};
+var TS_HIEN = {'Điện thoại': ['Hang', 'Model', 'IMEI', 'SoThueBao', 'PhuKien'], 'Máy tính': ['Hang', 'Model', 'MaSo', 'CauHinh', 'PhuKien'], 'Máy tính bảng': ['Hang', 'Model', 'MaSo', 'IMEI', 'PhuKien'], 'SIM': ['SoThueBao', 'NhaMang', 'MaSo'], 'Email công ty': ['TenDangNhap', 'SoThueBao'], 'Zalo công việc': ['SoThueBao', 'TenDangNhap'], 'Tài khoản phần mềm': ['TenDangNhap'], 'Xe, phương tiện': ['Hang', 'Model', 'MaSo'], _khac: ['MaSo']};
+var TS_TK = ['Email công ty', 'Zalo công việc', 'Tài khoản phần mềm'];
 function dsTSan(a, ma, cuaToi){
   TS_DS[ma] = a;
-  var s = a.length ? a.map(function(t){
-    return '<div style="border-top:1px solid var(--line);padding:8px 0"><div class="row"><b style="font-weight:600">' + esc((t.loai ? t.loai + ' · ' : '') + t.ten) + '</b>' + pillTS(t.tinhTrang) + '</div>' +
-      '<div class="muted" style="font-size:13px">' + (t.maSo ? 'Mã, seri: ' + esc(t.maSo) + ' · ' : '') + (t.ngayCap ? 'cấp ' + esc(t.ngayCap.split('-').reverse().join('/')) + ' · ' : '') + (t.capNhat ? 'cập nhật ' + esc(t.capNhat) + ' bởi ' + esc(t.nguoi) : '') + '</div>' +
+  var hd = a.filter(function(t){ return t.tinhTrang !== 'Đã thu hồi'; });
+  var thieu = hd.filter(function(t){ return (t.thieu || []).length; }).length, chuaKy = hd.filter(function(t){ return !t.xacNhan; }).length;
+  var bao = '';
+  if (!hd.length) bao = 'Chưa khai báo tài sản, công cụ, tài khoản nào. Bắt buộc khai đủ những gì công ty đã cấp (điện thoại, SIM, máy tính, email, Zalo công việc, phần mềm…), rồi ký xác nhận. Không được cấp gì thì bấm "Tôi không được cấp tài sản nào".';
+  else if (thieu) bao = 'Có ' + thieu + ' mục còn thiếu thông tin bắt buộc (ô đỏ bên dưới). Bấm "Cập nhật" để điền đúng hãng, đời máy, số seri, IMEI…, rồi ký xác nhận.';
+  else if (chuaKy) bao = 'Có ' + chuaKy + ' mục chưa ký xác nhận. Kiểm tra đúng rồi bấm "Ký xác nhận đã nhận đúng" và nhập mật khẩu đăng nhập.';
+  var s = bao ? '<div class="box" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:600;margin:6px 0">⚠ ' + esc(bao) + '</div>' : (hd.length ? '<div class="box" style="border-color:var(--ok);color:var(--ok);margin:6px 0">✓ Đã khai đủ và ký xác nhận.</div>' : '');
+  s += a.length ? a.map(function(t){
+    var ct = ['Hang', 'Model', 'MaSo', 'IMEI', 'SoThueBao', 'NhaMang', 'CauHinh', 'PhuKien'].filter(function(k){ return t[TS_KEY[k]]; }).map(function(k){ return '<span class="muted">' + esc(TS_TRUONG[k].split(' (')[0]) + ':</span> <b style="font-weight:600">' + esc(t[TS_KEY[k]]) + '</b>'; }).join(' · ');
+    var th = (t.thieu || []).length ? '<div style="color:var(--bad);font-weight:600;font-size:13px">Thiếu bắt buộc: ' + esc(t.thieu.join(', ')) + '</div>' : '';
+    var ky = t.tinhTrang === 'Đã thu hồi' ? '' : (t.xacNhan ? '<div class="muted" style="font-size:12px">Đã ký xác nhận: ' + esc(t.xacNhan) + '</div>' : '<div style="color:var(--bad);font-size:12px;font-weight:600">Chưa ký xác nhận</div>');
+    return '<div style="border-top:1px solid var(--line);padding:8px 0' + ((t.thieu || []).length ? ';background:color-mix(in srgb,var(--bad) 6%,transparent)' : '') + '"><div class="row"><b style="font-weight:600">' + esc((t.loai ? t.loai + ' · ' : '') + t.ten) + '</b>' + pillTS(t.tinhTrang) + '</div>' +
+      (ct ? '<div style="font-size:13px">' + ct + '</div>' : '') +
+      '<div class="muted" style="font-size:13px">' + (t.ngayCap ? 'cấp ' + esc(t.ngayCap.split('-').reverse().join('/')) + ' · ' : '') + (t.capNhat ? 'cập nhật ' + esc(t.capNhat) + ' bởi ' + esc(t.nguoi) : '') + '</div>' +
       (t.tenDN ? '<div style="font-size:14px">Đăng nhập: <b>' + esc(t.tenDN) + '</b>' + (t.coMK ? ' · Mật khẩu: <span id="mk-' + t.ma + '">••••••</span>' + (t.mk ? ' <button class="small" onclick="hienMK(\'' + ma + '\',\'' + t.ma + '\')">Hiện</button>' : '') : '') + '</div>' : '') +
-      (t.ghiChu ? '<div class="muted" style="font-size:13px">' + esc(t.ghiChu) + '</div>' : '') +
-      '<div style="display:flex;gap:6px;margin-top:6px"><button class="small" onclick="suaTS(\'' + ma + '\',\'' + t.ma + '\')">Cập nhật</button><button class="small" onclick="lsTS(\'' + t.ma + '\')">Lịch sử thay đổi</button></div></div>';
-  }).join('') : '<p class="muted" style="margin:0">Chưa ghi nhận tài sản, công cụ, tài khoản nào.</p>';
-  return nutHD('hdts-' + ma, HD_TS) + s + '<button class="small main" style="margin-top:8px" onclick="suaTS(\'' + ma + '\',\'\')">+ Thêm tài sản, tài khoản</button>' +
-    '<p class="note" style="margin:8px 0 0">Mỗi lần thêm, đổi tình trạng, đổi mật khẩu phải ký mã PIN; app tự ghi ngày giờ và người thay đổi.</p>';
+      (t.ghiChu ? '<div class="muted" style="font-size:13px">' + esc(t.ghiChu) + '</div>' : '') + th + ky +
+      (t.loai === 'Không được cấp' ? '' : '<div style="display:flex;gap:6px;margin-top:6px"><button class="small" onclick="suaTS(\'' + ma + '\',\'' + t.ma + '\')">Cập nhật</button><button class="small" onclick="lsTS(\'' + t.ma + '\')">Lịch sử thay đổi</button></div>') + '</div>';
+  }).join('') : '';
+  s += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="small main" onclick="suaTS(\'' + ma + '\',\'\')">+ Khai báo tài sản, tài khoản</button>' +
+    (cuaToi && hd.length && !thieu && chuaKy ? '<button class="small" style="border-color:var(--bad);color:var(--bad);font-weight:700" onclick="kyTS(false)">Ký xác nhận đã nhận đúng</button>' : '') +
+    (cuaToi && !hd.length ? '<button class="small" onclick="kyTS(true)">Tôi không được cấp tài sản nào</button>' : '') + '</div>' +
+    '<p class="note" style="margin:8px 0 0">Bắt buộc ghi đúng hãng, đời máy, số seri (S/N), IMEI, số SIM, phụ kiện. Mỗi lần thêm, sửa phải ký bằng mật khẩu đăng nhập; app tự ghi ngày giờ, người thay đổi. Sửa xong phải ký xác nhận lại. Thông tin này là chứng cứ khi giao nhận, thu hồi tài sản.</p>';
+  return nutHD('hdts-' + ma, HD_TS) + s;
 }
-function hienMK(ma, maTS){ var t = (TS_DS[ma] || []).filter(function(x){ return x.ma === maTS; })[0]; var e = $('mk-' + maTS); if (t && e) e.textContent = e.textContent === t.mk ? '••••••' : t.mk; }
-function suaTS(ma, maTS){
-  var t = (TS_DS[ma] || []).filter(function(x){ return x.ma === maTS; })[0] || {loai: 'Máy tính', tinhTrang: 'Đang dùng tốt', ngayCap: D.homNayISO};
-  var o = function(arr, v){ return arr.map(function(x){ return '<option' + (x === v ? ' selected' : '') + '>' + x + '</option>'; }).join(''); };
-  $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><h2 style="margin-top:0">' + (maTS ? 'Cập nhật tài sản, tài khoản' : 'Thêm tài sản, tài khoản') + '</h2>' +
-    '<div class="grid2"><div><label for="tsL">Loại</label><select id="tsL">' + o(LOAI_TS, t.loai) + '</select></div><div><label for="tsT">Tình trạng</label><select id="tsT">' + o(TT_TS, t.tinhTrang) + '</select></div></div>' +
-    '<label for="tsN">Tên tài sản hoặc tài khoản</label><input type="text" id="tsN" value="' + esc(t.ten || '') + '" placeholder="Ví dụ: Laptop Dell Latitude, Email công ty, MISA AMIS">' +
-    '<div class="grid2"><div><label for="tsM">Mã tài sản, số seri, số SIM</label><input type="text" id="tsM" value="' + esc(t.maSo || '') + '"></div><div><label for="tsC">Ngày cấp</label><input type="date" id="tsC" value="' + esc(t.ngayCap || '') + '"></div></div>' +
-    '<div class="grid2"><div><label for="tsD">Tên đăng nhập (nếu là tài khoản)</label><input type="text" id="tsD" value="' + esc(t.tenDN || '') + '"></div><div><label for="tsP">Mật khẩu ' + (t.coMK ? '(để trống nếu không đổi)' : '') + '</label><input type="text" id="tsP" autocomplete="off"></div></div>' +
-    '<label for="tsG">Ghi chú</label><input type="text" id="tsG" value="' + esc(t.ghiChu || '') + '" placeholder="Ví dụ: màn hình trầy, đã báo sửa">' +
-    '<label for="pin">Mã PIN của người đang đăng nhập: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin"><p id="pe" class="err"></p>' +
-    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Lưu</button></div></div></div>';
+function kyTS(khongCo){
+  $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">' + (khongCo ? 'Xác nhận không được cấp tài sản' : 'Ký xác nhận tài sản đã nhận') + '</h2>' +
+    '<p>' + (khongCo ? 'Tôi xác nhận công ty <b>không cấp</b> cho tôi điện thoại, SIM, máy tính, tài khoản hay công cụ nào. Nếu sau này được cấp, tôi sẽ khai báo ngay.' : 'Tôi xác nhận đã nhận đúng, đủ các tài sản, công cụ, tài khoản đã khai báo, với đúng hãng, đời máy, số seri, IMEI, tình trạng như trên; cam kết sử dụng, bảo quản theo Phụ lục bảo mật và Nội quy lao động.') + '</p>' +
+    '<label for="pin">Mật khẩu đăng nhập của <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" autocomplete="current-password"><p id="pe" class="err"></p>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Ký xác nhận</button></div></div></div>';
   $('okb').onclick = function(){
-    var pin = $('pin').value.trim();
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
-    var f = {ma: ma, maTS: maTS, loai: $('tsL').value, tinhTrang: $('tsT').value, ten: $('tsN').value.trim(), maSo: $('tsM').value.trim(), ngayCap: $('tsC').value, tenDN: $('tsD').value.trim(), matKhau: $('tsP').value, ghiChu: $('tsG').value.trim()};
-    if (!f.ten) { $('pe').textContent = 'Nhập tên tài sản hoặc tài khoản.'; return; }
-    $('okb').textContent = 'Đang lưu…';
-    call('luuTaiSan', [TK, f, pin], function(r){ closeLayer(); toast(r.soThayDoi ? 'Đã lưu, đã ghi lịch sử thay đổi' : 'Không có gì thay đổi'); HSD = undefined; refresh(); }, pinErr);
+    var pin = $('pin').value; if (pin.length < 4) { $('pe').textContent = 'Nhập mật khẩu đăng nhập.'; return; }
+    $('okb').textContent = 'Đang ký…';
+    call('xacNhanTaiSan', [TK, pin, !!khongCo], function(){ closeLayer(); toast('Đã ký xác nhận'); refresh(); }, pinErr);
   };
+}
+function suaTS(ma, maTS){
+  var t = (TS_DS[ma] || []).filter(function(x){ return x.ma === maTS; })[0] || {loai: 'Điện thoại', tinhTrang: 'Đang dùng tốt', ngayCap: D.homNayISO};
+  var o = function(arr, v){ return arr.map(function(x){ return '<option' + (x === v ? ' selected' : '') + '>' + x + '</option>'; }).join(''); };
+  var o2 = function(k){ return '<div id="w' + k + '"><label for="ts' + k + '" id="l' + k + '">' + esc(TS_TRUONG[k]) + '</label><input type="text" id="ts' + k + '" value="' + esc(t[TS_KEY[k]] || '') + '"' + (k === 'IMEI' || k === 'SoThueBao' ? ' inputmode="numeric"' : '') + '></div>'; };
+  $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><h2 style="margin-top:0">' + (maTS ? 'Cập nhật tài sản, tài khoản' : 'Khai báo tài sản, tài khoản') + '</h2>' +
+    '<p class="note" style="margin-top:0">Ô có dấu <b style="color:var(--bad)">*</b> là bắt buộc. Điện thoại: bấm <b>*#06#</b> để xem IMEI. Máy tính: số seri (S/N) in trên tem dưới đáy máy.</p>' +
+    '<div class="grid2"><div><label for="tsL">Loại</label><select id="tsL" onchange="tsHien()">' + o(LOAI_TS, t.loai) + '</select></div><div><label for="tsT">Tình trạng</label><select id="tsT">' + o(TT_TS, t.tinhTrang) + '</select></div></div>' +
+    ['Hang', 'Model', 'MaSo', 'IMEI', 'SoThueBao', 'NhaMang', 'CauHinh', 'PhuKien', 'TenDangNhap'].map(o2).join('') +
+    '<div id="wMK"><label for="tsP">Mật khẩu ' + (t.coMK ? '(để trống nếu không đổi)' : '(nếu là tài khoản)') + '</label><input type="text" id="tsP" autocomplete="off"></div>' +
+    '<div class="grid2"><div><label for="tsN">Tên gọi (không bắt buộc)</label><input type="text" id="tsN" value="' + esc(t.ten || '') + '" placeholder="Tự ghép từ hãng, model"></div><div><label for="tsC">Ngày cấp</label><input type="date" id="tsC" value="' + esc(t.ngayCap || '') + '"></div></div>' +
+    '<label for="tsG">Ghi chú tình trạng</label><input type="text" id="tsG" value="' + esc(t.ghiChu || '') + '" placeholder="Ví dụ: màn hình trầy góc phải, pin 85%">' +
+    '<label for="pin">Mật khẩu đăng nhập của người đang khai: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" autocomplete="current-password"><p id="pe" class="err"></p>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Lưu</button></div></div></div>';
+  tsHien();
+  $('okb').onclick = function(){
+    var pin = $('pin').value;
+    var loai = $('tsL').value, bb = TS_BB[loai] || TS_BB._khac, thieu = [];
+    var f = {ma: ma, maTS: maTS, loai: loai, tinhTrang: $('tsT').value, ten: $('tsN').value.trim(), ngayCap: $('tsC').value, matKhau: $('tsP').value, ghiChu: $('tsG').value.trim()};
+    Object.keys(TS_KEY).forEach(function(k){ f[TS_KEY[k]] = (TS_HIEN[loai] || TS_HIEN._khac).indexOf(k) >= 0 ? $('ts' + k).value.trim() : ''; });
+    if (f.tinhTrang !== 'Đã thu hồi') bb.forEach(function(k){ if (!f[TS_KEY[k]]) thieu.push(TS_TRUONG[k].split(' (')[0]); });
+    if (loai === 'Điện thoại' && f.imei && !/^\d{15}([\/,;]\d{15})?$/.test(f.imei.replace(/\s/g, ''))) thieu.push('IMEI phải đủ 15 chữ số');
+    if (thieu.length) { $('pe').textContent = 'Bắt buộc điền: ' + thieu.join(', '); return; }
+    if (pin.length < 4) { $('pe').textContent = 'Nhập mật khẩu đăng nhập để ký.'; return; }
+    $('okb').textContent = 'Đang lưu…';
+    call('luuTaiSan', [TK, f, pin], function(r){ closeLayer(); toast(r.soThayDoi ? 'Đã lưu, đã ghi lịch sử. Nhớ ký xác nhận.' : 'Không có gì thay đổi'); HSD = undefined; refresh(); }, pinErr);
+  };
+}
+function tsHien(){
+  var loai = $('tsL') ? $('tsL').value : '', hien = TS_HIEN[loai] || TS_HIEN._khac, bb = TS_BB[loai] || TS_BB._khac;
+  Object.keys(TS_KEY).forEach(function(k){ var w = $('w' + k); if (!w) return; w.style.display = hien.indexOf(k) >= 0 ? '' : 'none'; $('l' + k).innerHTML = esc(TS_TRUONG[k]) + (bb.indexOf(k) >= 0 ? ' <b style="color:var(--bad)">*</b>' : ''); });
+  if ($('wMK')) $('wMK').style.display = TS_TK.indexOf(loai) >= 0 ? '' : 'none';
+}
+function canhBaoTSHome(){
+  var c = D.tsCB; if (!c || !(c.chuaKhai || c.thieu || c.chuaKy)) return '';
+  var t = c.chuaKhai ? 'Bạn chưa khai báo tài sản, tài khoản công ty cấp (điện thoại, SIM, máy tính, email, Zalo…). Bắt buộc khai và ký xác nhận.' : c.thieu ? 'Có ' + c.thieu + ' tài sản khai thiếu thông tin bắt buộc (hãng, đời máy, số seri, IMEI…). Bấm để điền đúng.' : 'Có ' + c.chuaKy + ' tài sản chưa ký xác nhận. Bấm để kiểm tra và ký.';
+  return '<div class="box" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:700;cursor:pointer" onclick="go(\'toi\')">⚠ ' + esc(t) + '</div>';
+}
+var TSTH;
+function khungTSTH(){
+  if (TSTH === undefined) { TSTH = null; google.script.run.withSuccessHandler(function(r){ TSTH = r; if (TAB === 'quantri') render(); }).withFailureHandler(function(){ TSTH = []; }).tongHopTaiSan(TK); }
+  if (!TSTH) return '<div class="box muted" style="margin-top:10px">Đang tải tình trạng khai báo tài sản…</div>';
+  var chua = TSTH.filter(function(x){ return x.chuaKhai || x.thieu || x.chuaKy; });
+  return '<div class="box" style="margin-top:10px' + (chua.length ? ';border:2px solid var(--bad)' : '') + '"><div class="row"><b>Khai báo tài sản, tài khoản công ty cấp</b><span class="pill ' + (chua.length ? 'p-bad' : 'p-ok') + '">' + (TSTH.length - chua.length) + '/' + TSTH.length + ' đã đủ, đã ký</span></div>' +
+    (chua.length ? chua.map(function(x){ return '<div class="row" style="border-top:1px solid var(--line);padding:6px 0"><span>' + esc(x.ten) + ' <span class="muted" style="font-size:12px">' + esc(x.phong) + '</span></span><b style="color:var(--bad);font-size:13px">' + (x.chuaKhai ? 'Chưa khai báo' : (x.thieu ? x.thieu + ' mục thiếu thông tin' : '') + (x.thieu && x.chuaKy ? ' · ' : '') + (x.chuaKy ? x.chuaKy + ' mục chưa ký' : '')) + '</b></div>'; }).join('') : '<p class="muted" style="margin:6px 0 0">Tất cả nhân viên đã khai đủ và ký xác nhận.</p>') + '</div>';
 }
 function lsTS(maTS){
   $('layer').innerHTML = '<div class="veil"><div class="sheet center"><p class="muted">Đang tải…</p></div></div>';
