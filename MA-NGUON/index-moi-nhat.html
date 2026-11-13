@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 82, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 83, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -385,7 +385,7 @@ function refresh(){
     render();
   }).taiDuLieu(TK);
 }
-function capNhatDL(){ HN = null; QT = undefined; HSD = undefined; KDD = undefined; KDDS = undefined; DT = undefined; PL = undefined; VPDS = undefined; GVDS = undefined; MT = undefined; QC = null; NVQL = null; NVALL = null; refresh(); }
+function capNhatDL(){ LV = undefined; VBDS = undefined; HN = null; QT = undefined; HSD = undefined; KDD = undefined; KDDS = undefined; DT = undefined; PL = undefined; VPDS = undefined; GVDS = undefined; MT = undefined; QC = null; NVQL = null; NVALL = null; refresh(); }
 function anToan(){ var a = document.activeElement; return !document.querySelector('#layer .veil') && !document.querySelector('.toantrang') && !(a && /INPUT|TEXTAREA|SELECT/.test(a.tagName)); }
 document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible' && TK && D && Date.now() - LUC_TAI > 60000 && anToan()) capNhatNen(); });
 setInterval(function(){ if (document.visibilityState === 'visible' && TK && D && Date.now() - LUC_TAI > 240000 && anToan()) capNhatNen(); }, 60000);
@@ -420,7 +420,7 @@ function laLuong(){ return !!D && ['GD','HCNS','KT'].indexOf(D.nv.vaiTro) >= 0; 
 function tien(n){ return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 function laQL(){ return !!D && ['TP','GD','HCNS'].indexOf(D.nv.vaiTro) >= 0; }
 
-function go(t){ TAB = t; render(); window.scrollTo(0,0); }
+function go(t){ TAB = t; window.TAB_LUOT = (window.TAB_LUOT || 0) + 1; render(); window.scrollTo(0,0); }
 
 function render(){
   if (!D) return;
@@ -2541,16 +2541,18 @@ function inXacNhanVB(ma){
   var w = window.open('', '_blank'); if (!w) { toast('Trình duyệt chặn cửa sổ mới. Cho phép cửa sổ bật lên rồi bấm lại.', true); return; }
   w.document.open(); w.document.write(html); w.document.close();
 }
-var LV = undefined, LV_LOC = 'chua';
+var LV = undefined, LV_LOC = 'chua', LV_LOI = '';
 function canhBaoLVHome(){
   var c = D.lvCB; if (!c || !(c.quaHan || c.sapHan)) return '';
-  return '<div class="box nhay" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:700;cursor:pointer" onclick="go(\'lichviec\')">⚠ Lịch việc nhân sự: ' + (c.quaHan ? c.quaHan + ' việc QUÁ HẠN' : '') + (c.quaHan && c.sapHan ? ', ' : '') + (c.sapHan ? c.sapHan + ' việc đến hạn trong 7 ngày' : '') + '. Bấm để xem.</div>';
+  return '<div class="box nhay" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:700;cursor:pointer" onclick="LV = undefined; go(\'lichviec\')">⚠ Lịch việc nhân sự: ' + (c.quaHan ? c.quaHan + ' việc QUÁ HẠN' : '') + (c.quaHan && c.sapHan ? ', ' : '') + (c.sapHan ? c.sapHan + ' việc đến hạn trong 7 ngày' : '') + '. Bấm để xem.</div>';
 }
 function vLichViec(){
   if (!laQT()) return '<div class="box muted">Chỉ Giám đốc, HCNS xem trang này.</div>';
-  if (LV === undefined) { LV = null; google.script.run.withSuccessHandler(function(r){ LV = r; if (TAB === 'lichviec') render(); }).withFailureHandler(function(e){ LV = []; toast((e && e.message) || String(e), true); }).dsLichViec(TK); }
+  if (window.__lvTab !== window.TAB_LUOT) { window.__lvTab = window.TAB_LUOT; LV = undefined; }
+  if (LV === undefined) { LV = null; LV_LOI = ''; google.script.run.withSuccessHandler(function(r){ LV = r || []; if (TAB === 'lichviec') render(); }).withFailureHandler(function(e){ LV = []; LV_LOI = (e && e.message) || String(e); if (TAB === 'lichviec') render(); }).dsLichViec(TK); }
   var s = '<div class="row"><h2 style="margin:0">Lịch việc nhân sự</h2><span style="display:flex;gap:6px"><button class="small" onclick="LV = undefined; render()">Làm mới</button><button class="small main" onclick="suaLV(\'\')">+ Thêm việc</button></span></div>';
-  if (!LV) return s + '<div class="box muted" style="margin-top:10px">Đang tải…</div>';
+  if (!LV) return s + '<div class="box muted" style="margin-top:10px">Đang tải danh sách việc…</div>';
+  if (LV_LOI) return s + '<div class="box" style="margin-top:10px;border:2px solid var(--bad);color:var(--bad)">Chưa tải được danh sách việc: ' + esc(LV_LOI) + '<br><button class="small main" style="margin-top:8px" onclick="LV = undefined; render()">Tải lại</button></div>';
   var chua = LV.filter(function(x){ return !x.xong; }), qua = chua.filter(function(x){ return x.con !== null && x.con < 0; }), sap = chua.filter(function(x){ return x.con !== null && x.con >= 0 && x.con <= 7; });
   var o = function(t, n, mau, k){ return '<button class="small" style="flex:1;min-width:120px;' + (LV_LOC === k ? 'outline:2px solid ' + mau + ';' : '') + 'border-color:' + mau + ';color:' + mau + ';font-weight:700" onclick="LV_LOC=\'' + k + '\'; render()">' + t + ': ' + n + '</button>'; };
   s += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">' + o('Quá hạn', qua.length, 'var(--bad)', 'qua') + o('Đến hạn 7 ngày', sap.length, '#D98200', 'sap') + o('Chưa xong', chua.length, 'var(--ink, #333)', 'chua') + o('Đã xong', LV.length - chua.length, 'var(--ok)', 'xong') + '</div>';
