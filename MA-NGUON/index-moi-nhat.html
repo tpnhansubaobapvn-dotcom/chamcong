@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 85, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 86, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2001,7 +2001,7 @@ function xemTep(ma){
     var bin = atob(r.data), arr = new Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
     var u = URL.createObjectURL(new Blob([arr], {type: r.mime}));
-    var noi = r.mime === 'application/pdf' ? '<p><a class="link" href="' + u + '" target="_blank" rel="noopener">Mở tệp PDF</a></p>'
+    var noi = r.mime === 'application/pdf' ? '<p><a class="main btn" style="display:block;padding:14px;border-radius:10px;text-decoration:none;text-align:center;background:#F2B705;color:#1F3A4D;font-weight:700;font-size:16px" href="' + u + '" download="' + esc(r.ten || 'tep.pdf') + '">Tải và mở tệp PDF</a></p><p class="muted" style="font-size:13px;margin:6px 0 0">Trên điện thoại: máy tải về, bấm thông báo &quot;Đã tải xuống&quot; để mở. Trên máy tính: <a class="link" href="' + u + '" target="_blank" rel="noopener">mở trong tab mới</a>.</p>'
       : r.mime.indexOf('image/') === 0 ? '<img src="' + u + '" alt="Tệp đính kèm" style="max-width:100%;max-height:70vh;border-radius:8px">'
       : '<p><a class="link" href="' + u + '" download="' + esc(r.ten) + '">Tải tệp Word về máy</a></p>';
     $('layer').innerHTML = '<div class="veil"><div class="sheet center">' + noi + '<p class="muted">' + esc(r.ten) + '</p><button class="dong" onclick="closeLayer()">Đóng</button></div></div>';
@@ -2295,7 +2295,7 @@ function xemCVUV(ma){
     var bin = atob(r.data), arr = new Uint8Array(bin.length);
     for (var k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
     var u = URL.createObjectURL(new Blob([arr], {type: r.mime}));
-    var noi = r.mime === 'application/pdf' ? '<p><a class="link" href="' + u + '" target="_blank" rel="noopener">Mở CV (PDF)</a></p>'
+    var noi = r.mime === 'application/pdf' ? '<p><a class="main btn" style="display:block;padding:14px;border-radius:10px;text-decoration:none;text-align:center;background:#F2B705;color:#1F3A4D;font-weight:700;font-size:16px" href="' + u + '" download="' + esc(r.ten || 'tep.pdf') + '">Tải và mở CV (PDF)</a></p><p class="muted" style="font-size:13px;margin:6px 0 0">Trên điện thoại: máy tải về, bấm thông báo &quot;Đã tải xuống&quot; để mở. Trên máy tính: <a class="link" href="' + u + '" target="_blank" rel="noopener">mở trong tab mới</a>.</p>'
       : r.mime.indexOf('image/') === 0 ? '<img src="' + u + '" alt="CV" style="max-width:100%;max-height:75vh;border-radius:8px">'
       : '<p><a class="link" href="' + u + '" download="' + esc(r.ten) + '">Tải CV về máy</a></p>';
     $('layer').innerHTML = '<div class="veil"><div class="sheet center">' + noi + '<p class="muted">' + esc(r.ten) + '</p><button class="dong" onclick="closeLayer()">Đóng</button></div></div>';
@@ -2781,7 +2781,7 @@ function xemTepKD(ma, th, id){
     var bin = atob(r.data), arr = new Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
     var u = URL.createObjectURL(new Blob([arr], {type: r.mime}));
-    var noi = r.mime === 'application/pdf' ? '<p><a class="link" href="' + u + '" target="_blank" rel="noopener">Mở tệp PDF</a></p>' : '<img src="' + u + '" alt="Chứng từ" style="max-width:100%;max-height:70vh;border-radius:8px">';
+    var noi = r.mime === 'application/pdf' ? '<p><a class="main btn" style="display:block;padding:14px;border-radius:10px;text-decoration:none;text-align:center;background:#F2B705;color:#1F3A4D;font-weight:700;font-size:16px" href="' + u + '" download="' + esc(r.ten || 'tep.pdf') + '">Tải và mở tệp PDF</a></p><p class="muted" style="font-size:13px;margin:6px 0 0">Trên điện thoại: máy tải về, bấm thông báo &quot;Đã tải xuống&quot; để mở. Trên máy tính: <a class="link" href="' + u + '" target="_blank" rel="noopener">mở trong tab mới</a>.</p>' : '<img src="' + u + '" alt="Chứng từ" style="max-width:100%;max-height:70vh;border-radius:8px">';
     $('layer').innerHTML = '<div class="veil"><div class="sheet center">' + noi + '<p class="muted">' + esc(r.ten) + '</p><button class="dong" onclick="closeLayer()">Đóng</button></div></div>';
   }).withFailureHandler(function(e){ closeLayer(); toast((e && e.message) || String(e), true); }).xemTepKD(TK, ma, th, id);
 }
@@ -3222,16 +3222,29 @@ function huongDanCai(){
   if (CAI.trongZalo) return 'Bạn đang mở trong Zalo nên không cài được. Bấm dấu ⋮ góc phải trên → chọn "Mở bằng trình duyệt", rồi bấm nút Cài app.';
   if (CAI.ios) return 'Trên iPhone: mở bằng Safari, bấm nút Chia sẻ (ô vuông có mũi tên) → "Thêm vào MH chính" → Thêm.';
   if (CAI.prompt) return '';
+  if (/SamsungBrowser/i.test(navigator.userAgent)) return 'Trên trình duyệt Samsung Internet: bấm biểu tượng ≡ (3 gạch) góc dưới bên phải → "Thêm trang vào" → "Màn hình chờ" → Thêm. Hoặc bấm biểu tượng mũi tên tải xuống trên thanh địa chỉ (nếu có).';
   return 'Trên Chrome Android: bấm ⋮ góc phải trên → "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".';
 }
 function caiApp(){
-  if (CAI.prompt) { var p = CAI.prompt; CAI.prompt = null; p.prompt(); p.userChoice.then(function(r){ if (r.outcome === 'accepted') CAI.daCai = true; if (TAB === 'toi') render(); }); return; }
-  toast(huongDanCai());
+  var loiCai = function(){ CAI.prompt = null; hienHuongDanCai(); };
+  if (CAI.prompt) {
+    var p = CAI.prompt; CAI.prompt = null;
+    try {
+      var kq = p.prompt();
+      if (kq && kq.catch) kq.catch(loiCai);
+      p.userChoice.then(function(r){ if (r.outcome === 'accepted') CAI.daCai = true; if (TAB === 'toi') render(); }).catch(loiCai);
+    } catch (e) { loiCai(); }
+    return;
+  }
+  hienHuongDanCai();
+}
+function hienHuongDanCai(){
+  $('layer').innerHTML = '<div class="veil" onclick="closeLayer()"><div class="sheet" onclick="event.stopPropagation()"><h2 style="margin-top:0">Cài app vào điện thoại</h2><p style="font-size:16px;line-height:1.55">' + esc(huongDanCai()) + '</p><button class="main" style="width:100%" onclick="closeLayer()">Đã hiểu</button></div></div>';
 }
 function bannerCai(){
   var b = document.createElement('div');
   b.id = 'bnCai';
-  b.style.cssText = 'position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:30;background:var(--steel);color:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 6px 20px rgba(0,0,0,.25);font-size:14px';
+  b.style.cssText = 'position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:30;background:#1F3A4D;color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:12px 14px;box-shadow:0 6px 20px rgba(0,0,0,.25);font-size:14px';
   b.innerHTML = '<div style="display:flex;gap:10px;align-items:center"><img src="icon-192.png" alt="" style="width:40px;height:40px;border-radius:9px;flex:none" onerror="this.style.display=\'none\'">' +
     '<div style="flex:1;min-width:0"><b>Cài app Chấm công vào điện thoại</b><div style="opacity:.85;font-size:13px">' + (CAI.prompt ? 'Mở nhanh từ màn hình chính, như app thật.' : esc(huongDanCai())) + '</div></div></div>' +
     '<div style="display:flex;gap:8px;margin-top:10px">' + (CAI.prompt ? '<button class="main" style="flex:1;background:#F2B705;color:#1F3A4D;border:none" onclick="document.getElementById(\'bnCai\').remove();caiApp()">Cài app</button>' : '') +
