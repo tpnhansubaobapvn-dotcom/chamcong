@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 80, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 81, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -425,7 +425,7 @@ function go(t){ TAB = t; render(); window.scrollTo(0,0); }
 
 function render(){
   if (!D) return;
-  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec}[TAB]() + tuiTheoTab();
+  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan}[TAB]() + tuiTheoTab();
   body = segBar() + body;
   var TT = laQL() ? TAB_QL : TEN_TAB;
   if (TAB === 'homnay' && !laQL()) TAB = 'cong';
@@ -472,7 +472,7 @@ function vCong(){
   var label = !h.vao ? 'Chấm công vào' : 'Chấm công ra';
   var sub = !h.vao ? 'Giờ vào ' + D.gioVao : (h.ra ? 'Bấm lại nếu về muộn hơn' : 'Đã vào lúc ' + h.vao);
   var duyet = D.choDuyet.length ? '<div class="box" style="background:var(--waitbg);border-color:var(--waitbg);color:var(--wait);cursor:pointer" onclick="go(\'don\')">' + D.choDuyet.length + ' đơn đang chờ bạn duyệt</div>' : '';
-  return canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
+  return canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
     '<button class="punch' + (done ? ' done' : '') + '" id="pb" onclick="punch()"><b>' + label + '</b><span>' + esc(sub) + '</span></button>' +
     '<div class="box"><div class="row"><span>Giờ vào</span><b>' + (h.vao || '--:--') + '</b></div>' +
     '<div class="row"><span>Giờ ra</span><b>' + (h.ra || '--:--') + '</b></div>' +
@@ -992,7 +992,7 @@ function segBar(){
 }
 function menuNhom(){
   var g = [];
-  g.push(['Cá nhân', [['cong','Chấm công'], ['don','Đơn từ, tăng ca'], ['luong','Lương của tôi'], ['kpi','Hiệu quả công việc'], ['toi','Tài khoản của tôi'], ['huongdan','Hướng dẫn sử dụng']]]);
+  g.push(['Cá nhân', [['cong','Chấm công'], ['don','Đơn từ, tăng ca'], ['luong','Lương của tôi'], ['kpi','Hiệu quả công việc'], ['toi','Tài khoản của tôi'], ['vanban','Hồ sơ ký điện tử'], ['huongdan','Hướng dẫn sử dụng']]]);
   var ql = [];
   if (laQT()) ql.push(['quantri','Quản trị nhân sự']); else if (D.nv.vaiTro === 'TP') ql.push(['quantri','Phòng của tôi']);
   if (laQL()) ql.push(['homnay','Hôm nay']);
@@ -2451,6 +2451,95 @@ function inPhieu(x, cot, th){
     '<p style="text-align:center;margin-top:60px"><button onclick="window.print()">In hoặc lưu PDF</button></p></body></html>';
   var w = window.open('', '_blank');
   if (!w) { toast('Trình duyệt chặn cửa sổ mới. Cho phép cửa sổ bật lên rồi bấm lại.', true); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+}
+var VBDS = undefined, VB_LOC = 'cho', VB_TIM = '';
+var LOAI_VB = ['Hợp đồng bán hàng', 'Phụ lục hợp đồng', 'Đơn hàng', 'Báo giá', 'Biên bản giao nhận, nghiệm thu', 'Đối chiếu công nợ', 'Công văn', 'Quyết định, quy chế nội bộ', 'Đề xuất, tờ trình', 'Hồ sơ nhân sự', 'Khác'];
+function canhBaoVBHome(){
+  var n = D.vbCho || 0; if (!n) return '';
+  return '<div class="box" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:700;cursor:pointer" onclick="VB_LOC=\'cho\'; go(\'vanban\')">✍ Bạn có ' + n + ' văn bản chờ ký. Bấm để xem và ký.</div>';
+}
+function vVanBan(){
+  if (VBDS === undefined) { VBDS = null; google.script.run.withSuccessHandler(function(r){ VBDS = r; if (TAB === 'vanban') render(); }).withFailureHandler(function(e){ VBDS = []; toast((e && e.message) || String(e), true); }).dsVanBan(TK); }
+  if (!NVALL) { NVALL = []; google.script.run.withSuccessHandler(function(r){ NVALL = r || []; }).withFailureHandler(function(){}).dsNhanVienTatCa(TK); }
+  var s = '<div class="row"><h2 style="margin:0">Hồ sơ ký điện tử</h2><span style="display:flex;gap:6px"><button class="small" onclick="VBDS = undefined; render()">Làm mới</button><button class="small main" onclick="taoVB()">+ Tải văn bản lên</button></span></div>' +
+    '<p class="note" style="margin:6px 0">Mọi văn bản ký, lưu ở đây: ai ký, ngày giờ ký, mã xác thực tệp. Sửa tệp sau khi tạo thì mã không khớp, app báo ngay.</p>';
+  if (!VBDS) return s + '<div class="box muted">Đang tải…</div>';
+  var cho = VBDS.filter(function(v){ return v.toiKy; });
+  var o = function(t, k, n){ return '<button class="small" style="flex:1;min-width:110px;' + (VB_LOC === k ? 'outline:2px solid var(--brand,#C8102E);font-weight:700' : '') + '" onclick="VB_LOC=\'' + k + '\'; render()">' + t + (n !== undefined ? ': ' + n : '') + '</button>'; };
+  s += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">' + o('Chờ tôi ký', 'cho', cho.length) + o('Đang chờ ký', 'dang', VBDS.filter(function(v){ return v.trangThai === 'Chờ ký'; }).length) + o('Đã ký đủ', 'xong') + o('Tất cả', 'all', VBDS.length) + '</div>' +
+    '<input type="text" placeholder="Tìm theo tiêu đề, khách hàng, số đơn, người tạo…" value="' + esc(VB_TIM) + '" oninput="VB_TIM=this.value; clearTimeout(window.__vbt); window.__vbt=setTimeout(render,400)">';
+  var tim = VB_TIM.toLowerCase();
+  var ds = VBDS.filter(function(v){ return VB_LOC === 'cho' ? v.toiKy : VB_LOC === 'dang' ? v.trangThai === 'Chờ ký' : VB_LOC === 'xong' ? v.trangThai === 'Đã ký đủ' : true; })
+    .filter(function(v){ return !tim || (v.tieuDe + ' ' + v.lienQuan + ' ' + v.loai + ' ' + v.nguoiTao + ' ' + v.ma).toLowerCase().indexOf(tim) >= 0; });
+  if (!ds.length) return s + '<div class="box muted" style="margin-top:8px">Không có văn bản nào.</div>';
+  return s + ds.map(function(v){
+    var mau = v.trangThai === 'Đã ký đủ' ? 'var(--ok)' : v.trangThai === 'Từ chối' ? 'var(--bad)' : v.trangThai === 'Chờ ký' ? '#D98200' : 'var(--line)';
+    var ky = v.tenKy.map(function(k){ var l = v.lichSu.filter(function(x){ return x.ma === k.ma; })[0]; return '<div style="font-size:13px">' + (l ? (l.kq === 'Đã ký' ? '✓ ' : '✗ ') + '<b>' + esc(k.ten) + '</b> ' + esc(l.kq.toLowerCase()) + ' lúc ' + esc(l.luc) + (l.yKien ? ' – "' + esc(l.yKien) + '"' : '') : '○ ' + esc(k.ten) + ' <span class="muted">chưa ký</span>') + '</div>'; }).join('');
+    return '<div class="box" style="border:2px solid ' + mau + ';margin-top:8px"><div class="row" style="align-items:flex-start;gap:8px"><b>' + esc(v.tieuDe) + '</b><span style="color:' + mau + ';font-weight:700;white-space:nowrap">' + esc(v.trangThai) + '</span></div>' +
+      '<div class="muted" style="font-size:13px">' + esc(v.loai) + (v.lienQuan ? ' · ' + esc(v.lienQuan) : '') + ' · ' + esc(v.banGoc) + (v.noiLuuGoc ? ' (gốc giấy: ' + esc(v.noiLuuGoc) + ')' : '') + '</div>' +
+      '<div class="muted" style="font-size:12px">Tạo bởi ' + esc(v.nguoiTao) + ' lúc ' + esc(v.taoLuc) + ' · Mã ' + esc(v.ma) + ' · Mã xác thực ' + esc(v.maBam.slice(0, 16)) + '…</div>' +
+      (ky ? '<div style="margin-top:6px">' + ky + '</div>' : '') + (v.ghiChu ? '<div style="font-size:13px;margin-top:4px">Ghi chú: ' + esc(v.ghiChu) + '</div>' : '') +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="small" onclick="xemVB(\'' + v.ma + '\')">Xem tệp</button><button class="small" onclick="inXacNhanVB(\'' + v.ma + '\')">Trang xác nhận chữ ký</button>' +
+      (v.toiKy ? '<button class="small main" onclick="kyVB(\'' + v.ma + '\', true)">Ký</button><button class="small" style="color:var(--bad)" onclick="kyVB(\'' + v.ma + '\', false)">Từ chối</button>' : '') + '</div></div>';
+  }).join('');
+}
+function taoVB(){
+  var o = function(arr){ return arr.map(function(a){ return '<option>' + a + '</option>'; }).join(''); };
+  var nv = (NVALL || []).map(function(n){ return '<label style="display:flex;gap:6px;align-items:center;font-weight:400"><input type="checkbox" class="vbKy" value="' + esc(n.ma) + '" style="width:auto"> ' + esc(n.ten) + ' <span class="muted" style="font-size:12px">' + esc(n.phong || '') + '</span></label>'; }).join('');
+  $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><h2 style="margin-top:0">Tải văn bản lên</h2>' +
+    '<label for="vbT">Tiêu đề</label><input type="text" id="vbT" placeholder="Ví dụ: Hợp đồng bán cáp số 12/2026 – Công ty A">' +
+    '<div class="grid2"><div><label for="vbL">Loại</label><select id="vbL">' + o(LOAI_VB) + '</select></div><div><label for="vbQ">Liên quan (số đơn, khách, nhân viên)</label><input type="text" id="vbQ"></div></div>' +
+    '<label for="vbB">Loại bản lưu</label><select id="vbB" onchange="$(\'vbNW\').style.display = this.value === \'scan\' ? \'\' : \'none\'"><option value="dt">Bản gốc điện tử (đã ký số, hoặc ký trên app)</option><option value="scan">Bản scan, ảnh chụp (bản gốc là giấy)</option></select>' +
+    '<div id="vbNW" style="display:none"><label for="vbN">Bản gốc giấy đang lưu ở đâu</label><input type="text" id="vbN" placeholder="Ví dụ: Phòng Kế toán, file tháng 11/2026"></div>' +
+    '<label for="vbF">Tệp (PDF, ảnh, Word; tối đa 8 MB)</label><input type="file" id="vbF" accept="application/pdf,image/*,.docx">' +
+    '<label>Người cần ký (bỏ trống nếu chỉ lưu trữ)</label><div style="max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px">' + (nv || '<span class="muted">Đang tải danh sách…</span>') + '</div>' +
+    '<label for="vbG">Ghi chú</label><input type="text" id="vbG"><p id="vbE" class="err"></p>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="vbOK">Lưu</button></div></div></div>';
+  $('vbOK').onclick = function(){
+    var fl = $('vbF').files[0], t = $('vbT').value.trim();
+    if (!t || !fl) { $('vbE').textContent = 'Nhập tiêu đề và chọn tệp.'; return; }
+    var ky = [].slice.call(document.querySelectorAll('.vbKy')).filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
+    $('vbOK').textContent = 'Đang tải…';
+    docTep(fl, function(file){
+      call('taoVanBan', [TK, {tieuDe: t, loai: $('vbL').value, lienQuan: $('vbQ').value.trim(), banGoc: $('vbB').value, noiLuuGoc: $('vbN').value.trim(), ghiChu: $('vbG').value.trim(), nguoiKy: ky, file: file}], function(){ closeLayer(); toast('Đã lưu văn bản'); VBDS = undefined; refresh(); }, function(m){ $('vbE').textContent = m; $('vbOK').textContent = 'Lưu'; });
+    }, function(m){ $('vbE').textContent = m; $('vbOK').textContent = 'Lưu'; });
+  };
+}
+function kyVB(ma, dongY){
+  var v = (VBDS || []).filter(function(x){ return x.ma === ma; })[0]; if (!v) return;
+  $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">' + (dongY ? 'Ký văn bản' : 'Từ chối ký') + '</h2><p><b>' + esc(v.tieuDe) + '</b></p><p class="note">Bấm "Xem tệp" để đọc kỹ trước khi ký. Ký bằng mật khẩu đăng nhập có giá trị như chữ ký tay (Luật Giao dịch điện tử, Nội quy, Phụ lục hợp đồng).</p>' +
+    '<label for="vbY">Ý kiến' + (dongY ? ' (không bắt buộc)' : ' (bắt buộc)') + '</label><input type="text" id="vbY">' +
+    '<label for="pin">Mật khẩu đăng nhập của <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" autocomplete="current-password"><p id="pe" class="err"></p>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">' + (dongY ? 'Ký' : 'Từ chối') + '</button></div></div></div>';
+  $('okb').onclick = function(){
+    var pin = $('pin').value, y = $('vbY').value.trim();
+    if (!dongY && !y) { $('pe').textContent = 'Ghi lý do từ chối.'; return; }
+    if (pin.length < 4) { $('pe').textContent = 'Nhập mật khẩu đăng nhập.'; return; }
+    $('okb').textContent = 'Đang ký…';
+    call('kyVanBan', [TK, ma, pin, !!dongY, y], function(r){ closeLayer(); toast(dongY ? 'Đã ký. ' + r.trangThai : 'Đã từ chối'); VBDS = undefined; refresh(); }, pinErr);
+  };
+}
+function xemVB(ma){
+  $('layer').innerHTML = '<div class="veil" onclick="closeLayer()"><div class="sheet center"><p class="muted">Đang tải tệp…</p></div></div>';
+  google.script.run.withSuccessHandler(function(r){
+    var bin = atob(r.data), arr = new Uint8Array(bin.length); for (var k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
+    var u = URL.createObjectURL(new Blob([arr], {type: r.mime}));
+    var noi = /^image\//.test(r.mime) ? '<img src="' + u + '" style="max-width:100%">' : r.mime === 'application/pdf' ? '<iframe src="' + u + '" style="width:100%;height:70vh;border:0"></iframe>' : '<p>Tệp Word: bấm Tải về để mở.</p>';
+    $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-width:900px;width:96vw"><p style="font-weight:700;color:' + (r.nguyenVen ? 'var(--ok)' : 'var(--bad)') + '">' + (r.nguyenVen ? '✓ Tệp nguyên vẹn, khớp mã xác thực lúc tạo.' : '⚠ Tệp KHÔNG khớp mã xác thực lúc tạo (đã bị thay đổi).') + '</p>' + noi +
+      '<div class="grid2" style="margin-top:8px"><a class="btn" href="' + u + '" download="' + esc(r.ten) + '" style="text-align:center">Tải về</a><button onclick="closeLayer()">Đóng</button></div></div></div>';
+  }).withFailureHandler(function(e){ closeLayer(); toast((e && e.message) || String(e), true); }).xemVanBan(TK, ma);
+}
+function inXacNhanVB(ma){
+  var v = (VBDS || []).filter(function(x){ return x.ma === ma; })[0]; if (!v) return;
+  var ky = v.tenKy.map(function(k){ var l = v.lichSu.filter(function(x){ return x.ma === k.ma; })[0]; return '<tr><td>' + esc(k.ten) + '</td><td>' + (l ? esc(l.kq) : 'Chưa ký') + '</td><td>' + (l ? esc(l.luc) : '') + '</td><td>' + (l ? esc(l.yKien || '') : '') + '</td></tr>'; }).join('');
+  var html = '<!doctype html><html><head><meta charset="utf-8"><title>Xác nhận chữ ký ' + esc(v.ma) + '</title><style>body{font-family:"Times New Roman",serif;max-width:760px;margin:24px auto}td,th{border:1px solid #999;padding:6px 8px;font-size:14px;text-align:left}table{width:100%;border-collapse:collapse}@media print{button{display:none}}</style></head><body>' +
+    '<div style="font-weight:700">CÔNG TY CỔ PHẦN SX DÂY CÁP THÉP VIỆT NAM</div><h2 style="text-align:center">TRANG XÁC NHẬN CHỮ KÝ ĐIỆN TỬ</h2>' +
+    '<p>Văn bản: <b>' + esc(v.tieuDe) + '</b><br>Loại: ' + esc(v.loai) + (v.lienQuan ? ' · Liên quan: ' + esc(v.lienQuan) : '') + '<br>Mã văn bản: ' + esc(v.ma) + ' · Tệp: ' + esc(v.tenTep) + '<br>Mã xác thực tệp (SHA-256): <span style="font-family:monospace;font-size:12px">' + esc(v.maBam) + '</span><br>Tạo bởi: ' + esc(v.nguoiTao) + ' lúc ' + esc(v.taoLuc) + ' · ' + esc(v.banGoc) + (v.noiLuuGoc ? ' (gốc giấy: ' + esc(v.noiLuuGoc) + ')' : '') + '<br>Trạng thái: <b>' + esc(v.trangThai) + '</b></p>' +
+    '<table><tr><th>Người ký</th><th>Kết quả</th><th>Thời gian</th><th>Ý kiến</th></tr>' + (ky || '<tr><td colspan="4">Văn bản lưu trữ, không yêu cầu ký</td></tr>') + '</table>' +
+    '<p style="font-size:12px;margin-top:14px">Chữ ký điện tử thực hiện trên ứng dụng của Công ty bằng tài khoản và mật khẩu cá nhân của người ký, theo Luật Giao dịch điện tử 2023 và quy định nội bộ. Mã xác thực dùng để kiểm tra tệp không bị sửa đổi sau khi tạo.</p>' +
+    '<p style="text-align:center"><button onclick="window.print()">In hoặc lưu PDF</button></p></body></html>';
+  var w = window.open('', '_blank'); if (!w) { toast('Trình duyệt chặn cửa sổ mới. Cho phép cửa sổ bật lên rồi bấm lại.', true); return; }
   w.document.open(); w.document.write(html); w.document.close();
 }
 var LV = undefined, LV_LOC = 'chua';
