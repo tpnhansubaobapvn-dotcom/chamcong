@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 83, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 84, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -385,7 +385,7 @@ function refresh(){
     render();
   }).taiDuLieu(TK);
 }
-function capNhatDL(){ LV = undefined; VBDS = undefined; HN = null; QT = undefined; HSD = undefined; KDD = undefined; KDDS = undefined; DT = undefined; PL = undefined; VPDS = undefined; GVDS = undefined; MT = undefined; QC = null; NVQL = null; NVALL = null; refresh(); }
+function capNhatDL(){ HST = undefined; LV = undefined; VBDS = undefined; HN = null; QT = undefined; HSD = undefined; KDD = undefined; KDDS = undefined; DT = undefined; PL = undefined; VPDS = undefined; GVDS = undefined; MT = undefined; QC = null; NVQL = null; NVALL = null; refresh(); }
 function anToan(){ var a = document.activeElement; return !document.querySelector('#layer .veil') && !document.querySelector('.toantrang') && !(a && /INPUT|TEXTAREA|SELECT/.test(a.tagName)); }
 document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible' && TK && D && Date.now() - LUC_TAI > 60000 && anToan()) capNhatNen(); });
 setInterval(function(){ if (document.visibilityState === 'visible' && TK && D && Date.now() - LUC_TAI > 240000 && anToan()) capNhatNen(); }, 60000);
@@ -420,11 +420,11 @@ function laLuong(){ return !!D && ['GD','HCNS','KT'].indexOf(D.nv.vaiTro) >= 0; 
 function tien(n){ return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 function laQL(){ return !!D && ['TP','GD','HCNS'].indexOf(D.nv.vaiTro) >= 0; }
 
-function go(t){ TAB = t; window.TAB_LUOT = (window.TAB_LUOT || 0) + 1; render(); window.scrollTo(0,0); }
+function go(t){ TAB = t; window.TAB_LUOT = (window.TAB_LUOT || 0) + 1; if (t === 'hosotoi') HST = undefined; render(); window.scrollTo(0,0); }
 
 function render(){
   if (!D) return;
-  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan}[TAB]() + tuiTheoTab();
+  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan, hosotoi:vHoSoToi}[TAB]() + tuiTheoTab();
   body = segBar() + body;
   var TT = laQL() ? TAB_QL : TEN_TAB;
   if (TAB === 'homnay' && !laQL()) TAB = 'cong';
@@ -632,7 +632,7 @@ function napHD(ma){
 }
 /* ---------- TRANG HỒ SƠ RIÊNG TỪNG NHÂN VIÊN ---------- */
 var HS_MA = '', HSD = undefined;
-var LOAI_HS = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công dân (2 mặt)', 'Bằng cấp, chứng chỉ', 'Giấy khám sức khỏe', 'Xác nhận cư trú', 'Đăng ký người phụ thuộc',
+var LOAI_HS = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công dân (2 mặt)', 'Bằng cấp, chứng chỉ', 'Giấy khám sức khỏe', 'Kết quả khám sức khỏe định kỳ', 'Xác nhận cư trú', 'Đăng ký người phụ thuộc',
   'Quyết định (bổ nhiệm, điều chuyển, tăng lương)', 'Khen thưởng, kỷ luật', 'Khác'];
 var HS_BAT_BUOC = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công dân (2 mặt)', 'Bằng cấp, chứng chỉ', 'Giấy khám sức khỏe'];
 var PHONG_MAC_DINH = {bgd: 'Ban Giám đốc', hcns: 'Phòng Hành chính nhân sự', kt: 'Phòng Kế toán', vt: 'Phòng Vật tư', kd: 'Phòng Kinh doanh',
@@ -991,7 +991,7 @@ function segBar(){
 }
 function menuNhom(){
   var g = [];
-  g.push(['Cá nhân', [['cong','Chấm công'], ['don','Đơn từ, tăng ca'], ['luong','Lương của tôi'], ['kpi','Hiệu quả công việc'], ['toi','Tài khoản của tôi'], ['vanban','Hồ sơ ký điện tử'], ['huongdan','Hướng dẫn sử dụng']]]);
+  g.push(['Cá nhân', [['cong','Chấm công'], ['don','Đơn từ, tăng ca'], ['luong','Lương của tôi'], ['kpi','Hiệu quả công việc'], ['toi','Tài khoản của tôi'], ['hosotoi','Hồ sơ của tôi'], ['vanban','Hồ sơ ký điện tử'], ['huongdan','Hướng dẫn sử dụng']]]);
   var ql = [];
   if (laQT()) ql.push(['quantri','Quản trị nhân sự']); else if (D.nv.vaiTro === 'TP') ql.push(['quantri','Phòng của tôi']);
   if (laQL()) ql.push(['homnay','Hôm nay']);
@@ -2451,6 +2451,33 @@ function inPhieu(x, cot, th){
   var w = window.open('', '_blank');
   if (!w) { toast('Trình duyệt chặn cửa sổ mới. Cho phép cửa sổ bật lên rồi bấm lại.', true); return; }
   w.document.open(); w.document.write(html); w.document.close();
+}
+var HST = undefined;
+function vHoSoToi(){
+  if (HST === undefined) { HST = null; google.script.run.withSuccessHandler(function(r){ HST = r; if (TAB === 'hosotoi') render(); }).withFailureHandler(function(e){ HST = {loi: (e && e.message) || String(e), hoSo: []}; if (TAB === 'hosotoi') render(); }).hoSoNhanVien(TK, D.nv.ma); }
+  var s = '<h2 style="margin-top:0">📁 Hồ sơ của tôi</h2><p class="note" style="margin:4px 0 10px">Nơi bạn tự nộp giấy tờ cá nhân cho công ty: kết quả khám sức khỏe, căn cước, bằng cấp, xác nhận cư trú, đăng ký người phụ thuộc… Chỉ <b>bạn, Giám đốc và Hành chính nhân sự</b> xem được.</p>';
+  if (!HST) return s + '<div class="box muted">Đang tải hồ sơ…</div>';
+  if (HST.loi) return s + '<div class="box" style="border:2px solid var(--bad);color:var(--bad)">Chưa tải được hồ sơ: ' + esc(HST.loi) + '<br><button class="small main" style="margin-top:8px" onclick="HST = undefined; render()">Tải lại</button></div>';
+  var ds = HST.hoSo || [];
+  var coKSK = ds.some(function(h){ return h.loai === 'Kết quả khám sức khỏe định kỳ'; });
+  s += '<div class="box" style="border:2px solid ' + (coKSK ? 'var(--ok)' : '#D98200') + ';background:' + (coKSK ? 'transparent' : 'color-mix(in srgb,#D98200 8%,transparent)') + '"><b>' + (coKSK ? '✓ Bạn đã nộp kết quả khám sức khỏe định kỳ' : '⚠ Cần nộp: Kết quả khám sức khỏe định kỳ ngày 29/10/2026 – hạn 20/11/2026') + '</b>' +
+    (coKSK ? '' : '<ol style="margin:8px 0 0 18px;padding:0;font-size:14px;line-height:1.6"><li>Mở app <b>Công dân số TP.HCM</b>, đăng nhập bằng <b>VNeID</b>, mở kết quả khám sức khỏe ngày 29/10.</li><li><b>Chụp màn hình</b> kết quả (hoặc tải file PDF), chụp đủ các trang.</li><li>Bấm nút <b>"+ Nộp hồ sơ"</b> bên dưới, chọn loại <b>"Kết quả khám sức khỏe định kỳ"</b>, chọn ảnh, bấm <b>Tải lên</b>. Nhiều trang thì nộp từng ảnh.</li></ol>') + '</div>';
+  s += '<button class="main" style="margin:12px 0" onclick="napHoSoToi()">+ Nộp hồ sơ</button>';
+  s += '<h3 style="margin:6px 0">Đã nộp (' + ds.length + ')</h3>' + (ds.length ? ds.map(function(h){ return '<div class="box" style="margin-top:6px"><div class="row" style="gap:8px"><b>' + esc(h.loai) + '</b><button class="small" onclick="xemTep(\'' + h.ma + '\')">Xem</button></div><div class="muted" style="font-size:12px">' + esc(h.luc) + ' · ' + esc(h.nguoiNap) + (h.ghiChu ? ' · ' + esc(h.ghiChu) : '') + '</div></div>'; }).join('') : '<div class="box muted">Bạn chưa nộp hồ sơ nào.</div>');
+  return s;
+}
+function napHoSoToi(){
+  $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">Nộp hồ sơ</h2>' +
+    '<label for="htL">Loại hồ sơ</label><select id="htL">' + LOAI_HS.map(function(l){ return '<option' + (l === 'Kết quả khám sức khỏe định kỳ' ? ' selected' : '') + '>' + l + '</option>'; }).join('') + '</select>' +
+    '<label for="htG">Ghi chú (không bắt buộc)</label><input type="text" id="htG" placeholder="Ví dụ: trang 1/2, khám ngày 29/10/2026">' +
+    '<label for="htF">Ảnh chụp hoặc file PDF</label><input type="file" id="htF" accept="image/*,application/pdf"><p id="htE" class="err"></p>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="htOK">Tải lên</button></div></div></div>';
+  $('htOK').onclick = function(){
+    var fl = $('htF').files && $('htF').files[0], e = $('htE');
+    if (!fl) { e.textContent = 'Chọn ảnh hoặc file.'; return; }
+    $('htOK').textContent = 'Đang tải lên…';
+    docTep(fl, function(tep){ call('napHoSo', [TK, {ma: D.nv.ma, loai: $('htL').value, ghiChu: $('htG').value.trim(), file: tep}], function(){ closeLayer(); toast('Đã nộp hồ sơ'); HST = undefined; render(); }, function(m){ e.textContent = m; $('htOK').textContent = 'Tải lên'; }); }, function(m){ e.textContent = m; $('htOK').textContent = 'Tải lên'; });
+  };
 }
 var VBDS = undefined, VB_LOC = 'cho', VB_TIM = '';
 var LOAI_VB = ['Hợp đồng bán hàng', 'Phụ lục hợp đồng', 'Đơn hàng', 'Báo giá', 'Biên bản giao nhận, nghiệm thu', 'Đối chiếu công nợ', 'Công văn', 'Quyết định, quy chế nội bộ', 'Đề xuất, tờ trình', 'Hồ sơ nhân sự', 'Khác'];
