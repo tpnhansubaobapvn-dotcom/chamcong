@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 81, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 82, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -382,7 +382,6 @@ function refresh(){
     try { localStorage.setItem('ccD', JSON.stringify({tk: TK, d: r})); } catch (e) { try { localStorage.removeItem('ccD'); } catch (e2) {} }
     if (!TB_T) { TB_T = setInterval(kiemTB, 180000); setTimeout(kiemTB, 15000); }
     LECH = (r.serverNow || Date.now()) - Date.now();
-    if (!D.nv.coPin) { askPin('Đặt mã PIN ký gồm 4 số. Bạn dùng mã này để ký đơn.', function(pin){ setPin('', pin); }, true); }
     render();
   }).taiDuLieu(TK);
 }
@@ -1045,7 +1044,7 @@ function vTangCa(){
     '<label for="tcL">Lý do (khách hàng, số đơn hàng, số phiếu xuất kho…)</label><textarea id="tcL"></textarea>' +
     '<label for="tcV">Khối lượng việc đã làm trong giờ hành chính hôm nay</label><textarea id="tcV" placeholder="Ví dụ: đã xuất 12 phiếu, cắt 800 m cáp"></textarea>' +
     '<p class="note">Sắp xếp công việc hợp lý trong giờ hành chính trước, chỉ đề nghị tăng ca khi khối lượng còn lại thật sự cần làm thêm. Phiếu phải được duyệt trước giờ tăng ca ít nhất 1 tiếng; tối đa 40 giờ/tháng, 200 giờ/năm (Điều 19 Quy chế lương). Tiền tăng ca chỉ tính khi được duyệt.</p>' +
-    '<p id="tcE" class="err"></p><button class="main" style="margin-top:4px" onclick="nopTangCa()">Ký PIN và gửi đề nghị</button></div>' +
+    '<p id="tcE" class="err"></p><button class="main" style="margin-top:4px" onclick="nopTangCa()">Ký và gửi đề nghị</button></div>' +
     '<h2>Tăng ca tháng ' + esc(D.thang.ten) + '</h2><div class="grid2">' +
     '<div class="box"><div class="muted">Giờ đã được duyệt</div><div class="num">' + tc.gio + '</div></div>' +
     '<div class="box"><div class="muted">Tiền tăng ca tạm tính</div><div class="num">' + tien(tc.tien) + '</div></div></div>' +
@@ -1085,7 +1084,7 @@ function nopTangCa(){
   if (!c) { e.textContent = 'Ghi nội dung công việc sẽ làm khi tăng ca.'; return; }
   if (!l) { e.textContent = 'Nhập lý do tăng ca.'; return; }
   if (!v) { e.textContent = 'Ghi khối lượng việc đã làm trong giờ hành chính.'; return; }
-  askPin('Nhập mã PIN để ký đề nghị tăng ca ' + gio + ' giờ.', function(pin){
+  askPin('Nhập mật khẩu đăng nhập app để ký đề nghị tăng ca ' + gio + ' giờ.', function(pin){
     call('guiDon', [TK, {loai:'Tăng ca', tu:n, soGio:gio, lyDo:'Việc làm: ' + c + ' | Lý do: ' + l, khoiLuong:v, gioBD:b, gioKT:k}, pin], function(){ closeLayer(); toast('Đã gửi đề nghị tăng ca'); refresh(); }, pinErr);
   });
 }
@@ -1249,7 +1248,7 @@ function lapBL(){
 }
 function congBo(){
   var th = $('blT').value; if (!th) return;
-  askPin('Nhập PIN để công bố phiếu lương tháng ' + th + '. Sau khi công bố, nhân viên xem được phiếu lương và không lập lại bảng tháng này được.', function(pin){
+  askPin('Nhập mật khẩu đăng nhập app để công bố phiếu lương tháng ' + th + '. Sau khi công bố, nhân viên xem được phiếu lương và không lập lại bảng tháng này được.', function(pin){
     call('congBoLuong', [TK, th, pin], function(){ closeLayer(); toast('Đã công bố phiếu lương tháng ' + th); lsBL(); }, pinErr);
   });
 }
@@ -1265,7 +1264,7 @@ function vKpi(){
     '<label for="kF">Nạp file tự đánh giá và kế hoạch tháng mới (ảnh hoặc PDF, số liệu xuất từ AMIS/CRM)</label><input type="file" id="kF" accept="image/*,application/pdf">' +
     '<label for="kD">Điểm tự đánh giá (0–100)</label><input type="number" id="kD" min="0" max="100">' +
     '<label for="kG">Ghi chú</label><textarea id="kG" placeholder="Việc làm tốt, việc chưa đạt, kế hoạch cải thiện tháng tới"></textarea>' +
-    '<p id="kE" class="err"></p><button class="main" style="margin-top:8px" onclick="nopKPI()">Ký PIN và nộp</button></div>' +
+    '<p id="kE" class="err"></p><button class="main" style="margin-top:8px" onclick="nopKPI()">Ký và nộp</button></div>' +
     '<p class="note">Theo Điều 13 Quy chế lương: nộp trước 17:00 ngày làm việc thứ 1 của tháng; trưởng phòng chấm điểm trước 17:00 ngày làm việc thứ 2. Bắt buộc có tiêu chí "Dữ liệu phần mềm đầy đủ, đúng, khớp" 40%. Dưới 50 điểm thì thưởng hiệu suất bằng 0. Điểm trưởng phòng duyệt tự chạy vào bảng lương.</p>' +
     '<h2>Đánh giá hằng tháng của tôi</h2>' + (ds.length ? ds.map(function(d){
       return '<div class="box"><div class="row"><b>Tháng ' + esc(String(d.thangKPI).slice(5) + '/' + String(d.thangKPI).slice(0, 4)) + '</b>' + pillOf(d.trangThai) + '</div>' +
@@ -1284,7 +1283,7 @@ function nopKPI(){
   e.textContent = 'Đang chuẩn bị file…';
   docTep(fl, function(tep){
     e.textContent = '';
-    askPin('Nhập mã PIN để ký và nộp đánh giá tháng ' + th + '.', function(pin){
+    askPin('Nhập mật khẩu đăng nhập app để ký và nộp đánh giá tháng ' + th + '.', function(pin){
       call('guiDon', [TK, {loai:'Đánh giá KPI', thang:th, diemTu:dt, lyDo:g, file:tep}, pin], function(){ closeLayer(); toast('Đã nộp đánh giá'); refresh(); }, pinErr);
     });
   }, function(m){ e.textContent = m; });
@@ -1753,7 +1752,7 @@ function vDon(){
         '<div>' + esc(d.loai) + ': ' + esc(moTa(d)) + '</div><div class="muted">' + (d.loai === 'Trình duyệt' ? 'Nội dung: ' : 'Lý do: ') + esc(d.lyDo) + '</div>' +
         '<button class="small" style="margin-top:6px" onclick="inDon(\'' + d.ma + '\')">In đơn</button>' +
         '<div class="grid2" style="margin-top:10px"><button class="small" onclick="tuChoi(\'' + d.ma + '\')">Trả lại</button>' +
-        '<button class="small main" onclick="dongY(\'' + d.ma + '\')">Duyệt bằng PIN</button></div></div>';
+        '<button class="small main" onclick="dongY(\'' + d.ma + '\')">Duyệt (ký bằng mật khẩu)</button></div></div>';
     }).join('');
   }
   s += '<h2>Tạo đơn</h2><div class="box">' +
@@ -1770,7 +1769,7 @@ function vDon(){
     '<label id="wNua" style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="checkbox" id="nua" style="width:auto"> Chỉ nghỉ nửa ngày</label>' +
     '<label for="ly" id="lyL">Lý do</label><textarea id="ly" oninput="clrErr()"></textarea>' +
     '<p id="hint" class="note"></p><p id="eDon" class="err"></p>' +
-    '<button class="main" style="margin-top:8px" onclick="nopDon()">Ký PIN và gửi</button></div>';
+    '<button class="main" style="margin-top:8px" onclick="nopDon()">Ký và gửi</button></div>';
   s += '<h2>Đơn của tôi</h2>' + (D.dons.length ? D.dons.map(function(d){
     return '<div class="box"><div class="row"><b>' + esc(d.loai) + '</b>' + pillOf(d.trangThai) + '</div>' +
       '<div class="muted">' + esc(moTa(d)) + '</div>' +
@@ -1827,7 +1826,7 @@ function nopDon(){
     e.textContent = 'Đang chuẩn bị tệp…';
     docTep(fl, function(tep){
       e.textContent = ''; f.file = tep;
-      askPin('Nhập mã PIN để ký và trình duyệt.', function(pin){
+      askPin('Nhập mật khẩu đăng nhập app để ký và trình duyệt.', function(pin){
         call('guiDon', [TK, f, pin], function(){ closeLayer(); toast('Đã trình duyệt'); refresh(); }, pinErr);
       });
     }, function(m){ e.textContent = m; });
@@ -1841,7 +1840,7 @@ function nopDon(){
   if (f.loai !== 'Tăng ca' && f.den && f.den < f.tu) { e.textContent = 'Ngày kết thúc phải sau ngày bắt đầu.'; return; }
   if (f.loai === 'Tăng ca' && !(Number(f.soGio) > 0)) { e.textContent = 'Nhập số giờ tăng ca.'; return; }
   if (!f.lyDo) { e.textContent = 'Nhập lý do.'; return; }
-  askPin('Nhập mã PIN để ký và gửi đơn.', function(pin){
+  askPin('Nhập mật khẩu đăng nhập app để ký và gửi đơn.', function(pin){
     call('guiDon', [TK, f, pin], function(){ closeLayer(); toast('Đã gửi đơn, chờ duyệt'); refresh(); },
       function(m){ pinErr(m); });
   });
@@ -1872,7 +1871,7 @@ function inDon(ma){
     '<div class="dau"><div><b>' + esc(cty) + '</b></div><div><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><u>Độc lập - Tự do - Hạnh phúc</u></div></div>' +
     '<div class="tieude">' + td + '</div><p style="text-align:center;margin-top:0" class="nho">Mã đơn: ' + esc(d.ma) + ' · Ngày gửi: ' + esc(d.ngayTao) + '</p>' +
     '<p>Kính gửi: <b>Ban Giám đốc</b>; Phòng Hành chính nhân sự; Quản lý trực tiếp.</p>' + nd + duyet +
-    '<div class="ky"><div><p><b>NGƯỜI LÀM ĐƠN</b></p><p class="nho">(Đã ký điện tử bằng PIN)</p><br><br><br><p>' + esc(d.ten) + '</p></div>' +
+    '<div class="ky"><div><p><b>NGƯỜI LÀM ĐƠN</b></p><p class="nho">(Đã ký điện tử bằng mật khẩu đăng nhập)</p><br><br><br><p>' + esc(d.ten) + '</p></div>' +
     '<div><p><b>QUẢN LÝ TRỰC TIẾP</b></p><p class="nho">(Ký, ghi rõ họ tên)</p></div><div><p><b>GIÁM ĐỐC</b></p><p class="nho">(Ký, ghi rõ họ tên)</p></div></div>' +
     '<div class="chan">In từ Hệ thống chấm công CAPVINA lúc ' + esc(gioVN()) + '. Bản gốc điện tử lưu tại Google Sheet (trang DonTu) và thư mục Drive "HỆ THỐNG CHẤM CÔNG - ĐƠN TỪ ĐÃ DUYỆT".</div></body></html>';
   var w = window.open('', '_blank');
@@ -1964,11 +1963,11 @@ function dongY(ma){
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">' + (kpi ? 'Chấm điểm KPI' : 'Duyệt đề xuất') + '</h2>' +
     (kpi ? '<p class="muted" style="margin:0">' + esc(dd.ten) + ' tự chấm ' + esc(dd.diemTu) + ' điểm</p><label for="dd">Điểm duyệt (0–100)</label><input type="number" id="dd" min="0" max="100" value="' + esc(dd.diemTu) + '">' : '') +
     '<label for="gc">' + (kpi ? 'Nhận xét, đánh giá' : 'Ghi chú duyệt (không bắt buộc)') + '</label><textarea id="gc"></textarea>' +
-    '<label for="pin">Mã PIN</label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin">' +
+    '<label for="pin">Mật khẩu đăng nhập app (dùng để ký)</label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">' +
     '<p id="pe" class="err"></p><div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Duyệt</button></div></div></div>';
   $('okb').onclick = function(){
     var pin = $('pin').value.trim();
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     $('okb').textContent = 'Đang xử lý…';
     call('duyetDon', [TK, ma, true, $('gc').value.trim(), pin, kpi ? $('dd').value : ''], function(){ closeLayer(); toast('Đã duyệt'); refresh(); }, pinErr);
   };
@@ -2057,12 +2056,12 @@ function duyetBL(th, cty, buoc){
     '<p class="muted" style="margin-top:-6px">Tháng ' + esc(th.slice(5) + '/' + th.slice(0, 4)) + ' · ' + (cty === 'CAP' ? 'Công ty Dây Cáp Thép' : 'Công ty Bao Báp') + '</p>' +
     (buoc === 2 ? '<p class="note">Sau bước này, phiếu lương được công bố cho nhân viên công ty này.</p>' : '') +
     '<label for="gcBL">Ghi chú (không bắt buộc)</label><input type="text" id="gcBL">' +
-    '<p class="note" style="font-size:15px">Nhập <b>mã PIN 4 số</b> của bạn (mã tự đặt lúc đăng nhập lần đầu), rồi bấm nút <b>Duyệt</b>. Quên mã PIN thì báo HCNS.</p>' +
-    '<label for="pin">Mã PIN</label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin"><p id="pe" class="err"></p>' +
+    '<p class="note" style="font-size:15px">Nhập <b>mật khẩu đăng nhập app</b> của bạn, rồi bấm nút <b>Duyệt</b>. Quên mật khẩu: đăng xuất, bấm "Quên mật khẩu?" ở màn hình đăng nhập để lấy lại.</p>' +
+    '<label for="pin">Mật khẩu đăng nhập app (dùng để ký)</label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app"><p id="pe" class="err"></p>' +
     '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Duyệt</button></div></div></div>';
   $('okb').onclick = function(){
     var pin = $('pin').value.trim();
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     $('okb').textContent = 'Đang xử lý…';
     call('duyetBangLuong', [TK, th, cty, pin, $('gcBL').value.trim()], function(){ closeLayer(); toast('Đã duyệt'); refresh(); }, pinErr);
   };
@@ -2084,14 +2083,14 @@ function viecCanLam(){
     s += '<div style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px"><div style="font-weight:700;font-size:18px">Bảng lương tháng ' + esc(th) + '</div>' +
       '<div class="muted" style="font-size:15px">' + esc(x.tenCty) + ' · ' + x.soNguoi + ' người · tổng thực lĩnh <b style="color:var(--ink,#222)">' + tien(x.tong) + ' đ</b></div>' +
       '<div class="buoc"><i>1</i><span>Bấm <b>XEM BẢNG LƯƠNG</b> để kiểm tra số tiền từng người.</span></div>' +
-      '<div class="buoc"><i>2</i><span>Đúng rồi thì bấm <b>DUYỆT</b>, nhập <b>mã PIN 4 số</b>, bấm Duyệt lần nữa là xong.</span></div>' +
+      '<div class="buoc"><i>2</i><span>Đúng rồi thì bấm <b>DUYỆT</b>, nhập <b>mật khẩu đăng nhập app</b>, bấm Duyệt lần nữa là xong.</span></div>' +
       '<div class="grid2" style="margin-top:8px"><button class="nutTo" onclick="xemTTL(\'' + x.thang + '\',\'' + x.cty + '\',' + x.buoc + ')">1. Xem bảng lương</button>' +
       '<button class="nutTo main" onclick="duyetBL(\'' + x.thang + '\',\'' + x.cty + '\',' + x.buoc + ')">2. Duyệt</button></div>' +
       '<p class="note" style="margin:8px 0 0">' + (x.buoc === 1 ? 'Bạn duyệt bước 1/2 (Giám đốc). Sau đó kế toán duyệt và lập lệnh chi.' : 'Bạn duyệt bước 2/2 (Kế toán). Duyệt xong là phiếu lương tự gửi tới nhân viên, kế toán lập lệnh chi.') + '</p></div>';
   });
   if (n) s += '<div style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px"><div style="font-weight:700;font-size:18px">' + n + ' đơn của nhân viên chờ bạn duyệt</div>' +
     '<div class="buoc"><i>1</i><span>Bấm nút bên dưới để mở danh sách đơn, đọc nội dung từng đơn.</span></div>' +
-    '<div class="buoc"><i>2</i><span>Bấm <b>Duyệt</b> hoặc <b>Trả lại</b>, nhập mã PIN là xong.</span></div>' +
+    '<div class="buoc"><i>2</i><span>Bấm <b>Duyệt</b> hoặc <b>Trả lại</b>, nhập mật khẩu đăng nhập app là xong.</span></div>' +
     (TAB === 'don' ? '' : '<button class="nutTo main" onclick="go(\'don\')">Mở đơn cần duyệt</button>') + '</div>';
   if (kdc.length) s += '<div style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px"><div style="font-weight:700;font-size:18px">' + kdc.length + ' báo cáo doanh số chờ bạn duyệt</div>' +
     '<div class="muted" style="font-size:14px">' + kdc.map(function(x){ return esc(x.ten) + ' (' + esc(x.thang.slice(5) + '/' + x.thang.slice(0, 4)) + ')'; }).join(', ') + '</div>' +
@@ -2131,7 +2130,7 @@ function vHuongDan(){
     don: B(1, 'Bấm <b>Đơn từ, tăng ca</b> ở menu.') +
       B(2, 'Chọn loại đơn: nghỉ phép, nghỉ đột xuất, nghỉ không lương, tăng ca, tạm ứng, trình duyệt, xin nghỉ việc.') +
       B(3, 'Chọn ngày, ghi lý do, đính kèm ảnh hoặc file nếu có.') +
-      B(4, 'Bấm <b>Ký và gửi</b>, nhập <b>mã PIN 4 số</b>. Theo dõi trạng thái ngay bên dưới; duyệt xong có bản PDF và nút <b>In đơn</b>.'),
+      B(4, 'Bấm <b>Ký và gửi</b>, nhập <b>mật khẩu đăng nhập app</b>. Theo dõi trạng thái ngay bên dưới; duyệt xong có bản PDF và nút <b>In đơn</b>.'),
     pc: B(1, 'Mở app bằng <b>Chrome</b>. Nhìn <b>góc phải thanh địa chỉ</b>, ngay <b>bên trái ngôi sao ☆</b>, bấm biểu tượng <b>màn hình có mũi tên xuống</b>.') +
       thanhDC('cai') + '<div style="color:#D7262E;font-weight:700;margin-bottom:6px">↑ Bấm vào chỗ khoanh đỏ (bên trái ngôi sao ☆)</div>' +
       B(2, 'Hiện khung <b>"Cài đặt ứng dụng?"</b> → bấm nút xanh <b>Cài đặt</b>.') +
@@ -2147,8 +2146,8 @@ function vHuongDan(){
       B(2, 'Bấm nút <b>Chia sẻ</b> (ô vuông có mũi tên lên) ở thanh dưới.') +
       B(3, 'Kéo xuống, bấm <b>Thêm vào MH chính</b> → bấm <b>Thêm</b>.'),
     duyet: B(1, 'Khi có việc, đầu trang Chấm công hiện <b>khung đỏ "Bạn có … việc cần duyệt"</b>.') +
-      B(2, 'Đơn nhân viên: bấm <b>Mở đơn cần duyệt</b>, đọc nội dung, bấm <b>Duyệt</b> hoặc <b>Trả lại</b>, nhập mã PIN.') +
-      B(3, 'Bảng lương: bấm <b>1. Xem bảng lương</b> kiểm tra từng người → bấm <b>2. Duyệt</b> → nhập mã PIN.') +
+      B(2, 'Đơn nhân viên: bấm <b>Mở đơn cần duyệt</b>, đọc nội dung, bấm <b>Duyệt</b> hoặc <b>Trả lại</b>, nhập mật khẩu đăng nhập app.') +
+      B(3, 'Bảng lương: bấm <b>1. Xem bảng lương</b> kiểm tra từng người → bấm <b>2. Duyệt</b> → nhập mật khẩu đăng nhập app.') +
       '<p class="note">Bảng lương chỉ hiện khi HCNS đã bấm <b>Trình Giám đốc duyệt</b>. Giám đốc duyệt bước 1, kế toán duyệt bước 2 và lập lệnh chi; xong bước 2 phiếu lương tự gửi tới nhân viên.</p>'
   };
   if (!nd[HD_TAB]) HD_TAB = 'cc';
@@ -2194,7 +2193,7 @@ function kiemTB(){
   if (!TK || !tbCo() || Notification.permission !== 'granted') return;
   google.script.run.withSuccessHandler(function(r){
     var cu = {}; try { cu = JSON.parse(localStorage.getItem('ccTB') || '{}'); } catch (e) {}
-    if (cu.vx !== undefined && r.vx > cu.vx) baoTB('Có việc giao đột xuất mới', 'Mở app, bấm Nhận việc và nhập mã PIN.', 'vx');
+    if (cu.vx !== undefined && r.vx > cu.vx) baoTB('Có việc giao đột xuất mới', 'Mở app, bấm Nhận việc và nhập mật khẩu đăng nhập app.', 'vx');
     var moi = {cho: r.cho, luong: r.luong, vx: r.vx, cua: {}, ngay: r.ngay, nhacVao: cu.ngay === r.ngay ? cu.nhacVao : 0, nhacRa: cu.ngay === r.ngay ? cu.nhacRa : 0};
     r.cua.forEach(function(d){ moi.cua[d.ma] = d.tt; });
     if (cu.cho !== undefined && r.cho > cu.cho) baoTB('Có đơn mới chờ bạn duyệt', 'Đang có ' + r.cho + ' đơn chờ duyệt. Mở app để xem.', 'cho');
@@ -2349,7 +2348,7 @@ function giaoVX(noiNgay){
     '<label for="vxND">Nội dung công việc</label><div style="display:flex;gap:8px;align-items:flex-start"><textarea id="vxND" style="flex:1" placeholder="Bấm micro đỏ rồi nói, hoặc gõ nội dung"></textarea><button class="mic" id="vxMic" title="Bấm để nói" onclick="ghiAm(\'vxND\', this)">' + MIC_SVG + '</button></div>' +
     '<label for="vxHan">Hạn hoàn thành</label><input type="date" id="vxHan" value="' + D.homNayISO + '">' +
     '<label for="vxF">Đính kèm hình ảnh, tài liệu (không bắt buộc, chọn được nhiều tệp)</label><input type="file" id="vxF" multiple accept="image/*,application/pdf,.docx,video/mp4,video/quicktime">' +
-    '<label for="pin">Mã PIN của người đang đăng nhập: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin"><p id="pe" class="err"></p>' +
+    '<label for="pin">Mật khẩu đăng nhập app của: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app"><p id="pe" class="err"></p>' +
     '<div class="grid2"><button onclick="if(GHI)GHI.stop();closeLayer()">Hủy</button><button class="main" id="okb">Giao việc</button></div></div></div>';
   if (noiNgay) ghiAm('vxND', $('vxMic'));
   $('okb').onclick = function(){
@@ -2358,7 +2357,7 @@ function giaoVX(noiNgay){
     var nd = $('vxND').value.trim(), pin = $('pin').value.trim();
     if (!ds.length) { $('pe').textContent = 'Chọn người nhận việc.'; return; }
     if (!nd) { $('pe').textContent = 'Nói hoặc gõ nội dung công việc.'; return; }
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     $('okb').textContent = 'Đang giao…';
     var fs = [].slice.call($('vxF').files || []);
     call('giaoViecDX', [TK, {dsMa: ds, noiDung: nd, han: $('vxHan').value, coTep: fs.length > 0}, pin], function(r){ taiTepVX(r.dsVX || [], fs, $('pe'), function(){ closeLayer(); toast('Đã giao việc cho ' + r.soNguoi + ' người' + (fs.length ? ' kèm ' + fs.length + ' tệp' : '')); refresh(); }); }, pinErr);
@@ -2367,12 +2366,12 @@ function giaoVX(noiNgay){
 function xuLyVX(ma, hd){
   var tieuDe = {nhan: 'Nhận việc', xong: 'Báo hoàn thành', huy: 'Hủy việc đã giao'}[hd];
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">' + tieuDe + '</h2>' +
-    (hd === 'xong' ? '<label for="vxGC">Ghi chú kết quả (không bắt buộc)</label><input type="text" id="vxGC" placeholder="Kết quả, chứng từ đã gửi…">' + '<label for="vxF">Đính kèm ảnh, tài liệu kết quả (không bắt buộc)</label><input type="file" id="vxF" multiple accept="image/*,application/pdf,.docx,video/mp4,video/quicktime">' : hd !== 'nhan' ? '<label for="vxGC">Ghi chú (không bắt buộc)</label><input type="text" id="vxGC" placeholder="Lý do hủy">' : '<p class="muted" style="margin-top:-6px">Nhập mã PIN để xác nhận bạn đã nhận việc.</p>') +
-    '<label for="pin">Mã PIN của người đang đăng nhập: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin"><p id="pe" class="err"></p>' +
+    (hd === 'xong' ? '<label for="vxGC">Ghi chú kết quả (không bắt buộc)</label><input type="text" id="vxGC" placeholder="Kết quả, chứng từ đã gửi…">' + '<label for="vxF">Đính kèm ảnh, tài liệu kết quả (không bắt buộc)</label><input type="file" id="vxF" multiple accept="image/*,application/pdf,.docx,video/mp4,video/quicktime">' : hd !== 'nhan' ? '<label for="vxGC">Ghi chú (không bắt buộc)</label><input type="text" id="vxGC" placeholder="Lý do hủy">' : '<p class="muted" style="margin-top:-6px">Nhập mật khẩu đăng nhập app để xác nhận bạn đã nhận việc.</p>') +
+    '<label for="pin">Mật khẩu đăng nhập app của: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app"><p id="pe" class="err"></p>' +
     '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Xác nhận</button></div></div></div>';
   $('okb').onclick = function(){
     var pin = $('pin').value.trim();
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     $('okb').textContent = 'Đang lưu…';
     var fs = $('vxF') ? [].slice.call($('vxF').files || []) : [];
     call('capNhatViecDX', [TK, ma, hd, pin, $('vxGC') ? $('vxGC').value.trim() : ''], function(){ taiTepVX([ma], fs, $('pe'), function(){ closeLayer(); toast(tieuDe + ': đã lưu' + (fs.length ? ' kèm ' + fs.length + ' tệp' : '')); refresh(); }); }, pinErr);
@@ -2611,7 +2610,7 @@ var VP_KD = {KHAC: 'Vi phạm khác (ghi rõ nội dung)', D19: 'Không theo dõ
   D17: 'Thiệt hại do làm sai quy trình (Điều 17): nhân viên 35%, quản lý 35%', D18: 'Nợ xấu (Điều 18): phong tỏa thu nhập có điều kiện', D22: 'Đang xác minh gian lận (Điều 22): tạm giữ thưởng, hoa hồng'};
 var NHOM_KD = {KD_CAO: 'Kinh doanh kinh nghiệm cao', KD_MOI: 'Kinh doanh dưới 3 năm', QL45: 'Quản lý 4–5 người', QL6: 'Quản lý trên 6 người'};
 var LOAI_TEP_KD = ['Ảnh Giám đốc duyệt chiết khấu', 'Đơn đặt hàng ký, đóng dấu', 'Biên bản giao nhận', 'Biên bản nghiệm thu', 'Ảnh giao nhận thực tế', 'Ảnh hàng hóa đã giao', 'Khác'];
-var HD_KD = '<b>Nhân viên kinh doanh</b><ol><li>Chọn tháng, bấm <b>+ Thêm đơn hàng</b> cho từng đơn đã giao trong tháng.</li><li>Ghi số đơn, khách, ngày giao, giá trị <b>chưa VAT</b>, chiết khấu (nếu có, kèm ảnh Giám đốc duyệt), mức thấp hơn giá sàn (nếu có), số tiền đã thu.</li><li>Tích đủ 6 chứng từ theo Điều 11.8 và đính kèm ảnh. <b>Thiếu chứng từ thì đơn bị treo</b>, chưa tính doanh số.</li><li>Xong hết đơn, bấm <b>Ký PIN và nộp</b> trước cuộc họp đầu tháng.</li></ol>' +
+var HD_KD = '<b>Nhân viên kinh doanh</b><ol><li>Chọn tháng, bấm <b>+ Thêm đơn hàng</b> cho từng đơn đã giao trong tháng.</li><li>Ghi số đơn, khách, ngày giao, giá trị <b>chưa VAT</b>, chiết khấu (nếu có, kèm ảnh Giám đốc duyệt), mức thấp hơn giá sàn (nếu có), số tiền đã thu.</li><li>Tích đủ 6 chứng từ theo Điều 11.8 và đính kèm ảnh. <b>Thiếu chứng từ thì đơn bị treo</b>, chưa tính doanh số.</li><li>Xong hết đơn, bấm <b>Ký và nộp</b> trước cuộc họp đầu tháng.</li></ol>' +
   '<b>App tự tính:</b> doanh số bị trừ = chiết khấu × 8,67 (Điều 8); thấp hơn giá sàn ghi nhận 70%, 60%, 50%, 40% (Điều 7); hoa hồng theo Phụ lục 01. Duyệt lần lượt: trưởng phòng, kế toán, Giám đốc.<br>';
 function thangKD(){ if (!KDT) KDT = Number(D.homNayISO.slice(8, 10)) <= 5 ? thangTruoc() : thangNay(); return KDT; }
 function ttKD(t){ var c = t === 'Đã duyệt' ? 'p-ok' : t === 'Trả lại' ? 'p-bad' : t === 'Nháp' || t === 'Chưa nộp' || t === 'Chưa có' ? '' : 'p-wait'; return '<span class="pill ' + c + '"' + (c ? '' : ' style="background:var(--zinc);color:var(--muted)"') + '>' + esc(t) + '</span>'; }
@@ -2656,7 +2655,7 @@ function dsVPKD(vp, coGo){
 }
 function hopKD(){
   if (KDD === undefined) taiKD();
-  var s = '<h2 id="phieuKD">Phiếu doanh số tháng của tôi</h2><p class="muted" style="margin:-4px 0 8px;font-size:13px">Nhập từng đơn hàng, xem vi phạm, rồi bấm Ký PIN và nộp ở cuối phiếu.</p><div class="box">' + nutHD('hdkd', HD_KD) +
+  var s = '<h2 id="phieuKD">Phiếu doanh số tháng của tôi</h2><p class="muted" style="margin:-4px 0 8px;font-size:13px">Nhập từng đơn hàng, xem vi phạm, rồi bấm Ký và nộp ở cuối phiếu.</p><div class="box">' + nutHD('hdkd', HD_KD) +
     '<label for="kdT">Tháng</label><input type="month" id="kdT" value="' + thangKD() + '" onchange="KDT = this.value; KDD = undefined; render()" style="max-width:220px">';
   if (!KDD) return s + '<p class="muted">Đang tải…</p></div>';
   if (KDD.loi) return s + '<p class="err">' + esc(KDD.loi) + '</p></div>';
@@ -2696,7 +2695,7 @@ function hopKD(){
       (t.phongToa ? '<p class="err">Đang phong tỏa thu nhập có điều kiện: tạm giữ ' + tien(t.tamGiu) + ' đ đến khi gỡ.</p>' : '') +
       '<p class="note" style="margin:6px 0 0">' + t.ghi.map(esc).join(' · ') + '. Chuyên cần thực nhận tùy ngày công, đi trễ.</p></div>';
   }
-  if (sua && don.length) s += '<button class="main nutTo" style="margin-top:4px" onclick="nopKD()">Ký PIN và nộp trưởng phòng</button>';
+  if (sua && don.length) s += '<button class="main nutTo" style="margin-top:4px" onclick="nopKD()">Ký và nộp trưởng phòng</button>';
   return s;
 }
 function moDonKD(i){
@@ -2743,7 +2742,7 @@ function tinhDonKD(hs){
 }
 function xoaDonKD(i){ if (!confirm('Xóa đơn này khỏi báo cáo?')) return; call('xoaDonKD', [TK, thangKD(), i], function(){ toast('Đã xóa'); taiKD(); render(); }); }
 function nopKD(){
-  askPin('Nhập mã PIN để ký và nộp báo cáo doanh số tháng ' + thangKD().slice(5) + '/' + thangKD().slice(0, 4) + ' cho trưởng phòng.', function(pin){
+  askPin('Nhập mật khẩu đăng nhập app để ký và nộp báo cáo doanh số tháng ' + thangKD().slice(5) + '/' + thangKD().slice(0, 4) + ' cho trưởng phòng.', function(pin){
     call('nopBaoCaoKD', [TK, thangKD(), pin, ''], function(){ closeLayer(); toast('Đã nộp, chờ trưởng phòng duyệt'); taiKD(); refresh(); }, pinErr);
   });
 }
@@ -2801,28 +2800,28 @@ function moBCKD(ma){
   }).withFailureHandler(function(e){ closeLayer(); toast((e && e.message) || String(e), true); }).taiBaoCaoKD(TK, thangKD2(), ma);
 }
 function duyetBCKD(ds){
-  askPin('Nhập mã PIN để duyệt ' + ds.length + ' báo cáo doanh số tháng ' + thangKD2().slice(5) + '/' + thangKD2().slice(0, 4) + '.', function(pin){
+  askPin('Nhập mật khẩu đăng nhập app để duyệt ' + ds.length + ' báo cáo doanh số tháng ' + thangKD2().slice(5) + '/' + thangKD2().slice(0, 4) + '.', function(pin){
     call('duyetBaoCaoKD', [TK, thangKD2(), ds, true, '', pin], function(r){ closeLayer(); toast('Đã duyệt ' + r.so + ' báo cáo'); KDDS = undefined; refresh(); }, pinErr);
   });
 }
 function traBCKD(ma){
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">Trả lại báo cáo doanh số</h2><label for="gc">Lý do trả lại (đơn nào sai, thiếu gì)</label><textarea id="gc"></textarea>' +
-    '<label for="pin">Mã PIN của người đang đăng nhập: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin"><p id="pe" class="err"></p>' +
+    '<label for="pin">Mật khẩu đăng nhập app của: <b>' + esc(D.nv.ten) + '</b></label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app"><p id="pe" class="err"></p>' +
     '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Trả lại</button></div></div></div>';
   $('okb').onclick = function(){
     var gc = $('gc').value.trim(), pin = $('pin').value.trim();
     if (!gc) { $('pe').textContent = 'Ghi lý do trả lại.'; return; }
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     call('duyetBaoCaoKD', [TK, thangKD2(), [ma], false, gc, pin], function(){ closeLayer(); toast('Đã trả lại'); KDDS = undefined; refresh(); }, pinErr);
   };
 }
 function goVPKD(ma){
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">Gỡ vi phạm, mở phong tỏa</h2><label for="gc">Lý do (đã thu hồi đủ nợ, kết luận không vi phạm…)</label><textarea id="gc"></textarea>' +
-    '<label for="pin">Mã PIN</label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin"><p id="pe" class="err"></p>' +
+    '<label for="pin">Mật khẩu đăng nhập app (dùng để ký)</label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app"><p id="pe" class="err"></p>' +
     '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="okb">Gỡ</button></div></div></div>';
   $('okb').onclick = function(){
     var pin = $('pin').value.trim();
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     call('goViPhamKD', [TK, ma, pin, $('gc').value.trim()], function(){ closeLayer(); toast('Đã gỡ'); KDDS = undefined; render(); }, pinErr);
   };
 }
@@ -2835,7 +2834,7 @@ function vGhiVPKD(){
     '<label for="vkL">Loại</label><select id="vkL" onchange="$(\'vkTien\').style.display = this.value === \'D17\' ? \'block\' : \'none\'">' + Object.keys(VP_KD).filter(function(k){ return k !== 'D22' || D.nv.vaiTro === 'GD'; }).map(function(k){ return '<option value="' + k + '">' + esc(VP_KD[k]) + '</option>'; }).join('') + '</select>' +
     '<div id="vkTien" style="display:none"><label for="vkS">Tổng thiệt hại theo Biên bản xác định thiệt hại (đồng)</label><input type="number" id="vkS" min="0" step="1000"></div>' +
     '<label for="vkC">Nội dung (số đơn, khách, việc gì)</label><textarea id="vkC"></textarea>' +
-    '<label for="vkP">Mã PIN của người đang đăng nhập: <b>' + esc(D.nv.ten) + '</b></label><input id="vkP" type="password" inputmode="numeric" maxlength="4" class="pin">' +
+    '<label for="vkP">Mật khẩu đăng nhập app của: <b>' + esc(D.nv.ten) + '</b></label><input id="vkP" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">' +
     '<p id="vkE" class="err"></p><button class="main" onclick="ghiVPKD()">Ghi vi phạm</button>' +
     '<p class="note">Nợ xấu và đang xác minh gian lận: app phong tỏa thu nhập có điều kiện đến khi Giám đốc, kế toán hoặc HCNS bấm Gỡ. Thiệt hại: app tự chia 35% nhân viên, 35% quản lý trực tiếp, trừ vào thưởng và hoa hồng tháng đó.</p></div>';
 }
@@ -2843,7 +2842,7 @@ function ghiVPKD(){
   var f = {ma: $('vkN').value, thang: $('vkT').value, loai: $('vkL').value, soTien: $('vkS') ? $('vkS').value : '', noiDung: $('vkC').value.trim()}, pin = $('vkP').value.trim(), e = $('vkE');
   if (!f.noiDung) { e.textContent = 'Ghi nội dung vi phạm.'; return; }
   if (f.loai === 'D17' && !(Number(f.soTien) > 0)) { e.textContent = 'Nhập tổng thiệt hại.'; return; }
-  if (!/^\d{4}$/.test(pin)) { e.textContent = 'PIN gồm 4 chữ số.'; return; }
+  if (!pin) { e.textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
   call('ghiViPhamKD', [TK, f, pin], function(){ toast('Đã ghi vi phạm'); KDDS = undefined; render(); }, function(m){ e.textContent = m; });
 }
 function vXepNhomKD(){
@@ -3139,13 +3138,13 @@ function rightPanel(){
 function tuChoi(ma){
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">Trả lại đơn</h2>' +
     '<label for="gc">Lý do trả lại</label><textarea id="gc"></textarea>' +
-    '<label for="pin">Mã PIN</label><input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin">' +
+    '<label for="pin">Mật khẩu đăng nhập app (dùng để ký)</label><input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">' +
     '<p id="pe" class="err"></p><div class="grid2"><button onclick="closeLayer()">Hủy</button>' +
     '<button class="main" id="okb">Trả lại</button></div></div></div>';
   $('okb').onclick = function(){
     var gc = $('gc').value.trim(), pin = $('pin').value.trim();
     if (!gc) { $('pe').textContent = 'Nhập lý do trả lại.'; return; }
-    if (!/^\d{4}$/.test(pin)) { $('pe').textContent = 'PIN gồm 4 chữ số.'; return; }
+    if (!pin) { $('pe').textContent = 'Nhập mật khẩu đăng nhập app.'; return; }
     call('duyetDon', [TK, ma, false, gc, pin], function(){ closeLayer(); toast('Đã trả lại đơn'); refresh(); }, pinErr);
   };
 }
@@ -3155,7 +3154,7 @@ function tuChoi(ma){
 function askPin(title, cb, mustSet){
   if (!mustSet) title = String(title).replace(/mã PIN|PIN/g, 'mật khẩu đăng nhập');
   $('layer').innerHTML = '<div class="veil"><div class="sheet"><p style="margin:0 0 6px">' + esc(title) + '</p>' +
-    (mustSet ? '<input id="pin" type="password" inputmode="numeric" maxlength="4" class="pin" autocomplete="off">' : '<input id="pin" type="password" class="pin" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">') +
+    (mustSet ? '<input id="pin" type="password" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">' : '<input id="pin" type="password" class="pin" autocomplete="current-password" placeholder="Mật khẩu đăng nhập app">') +
     (mustSet ? '<label for="pin2">Nhập lại mã PIN</label><input id="pin2" type="password" inputmode="numeric" maxlength="4" class="pin">' : '') +
     '<p id="pe" class="err"></p><div class="grid2">' + (mustSet ? '<span></span>' : '<button onclick="closeLayer()">Hủy</button>') +
     '<button class="main" id="okb">Xác nhận</button></div></div></div>';
@@ -3257,10 +3256,10 @@ function vToi(){
     '<label for="cnHS">Đề nghị cập nhật hồ sơ (đổi số điện thoại, địa chỉ, tài khoản ngân hàng, người phụ thuộc…)</label><textarea id="cnHS" placeholder="Ghi rõ nội dung cần thay đổi. Không ghi mật khẩu."></textarea>' +
     '<p id="cnE" class="err"></p><button style="margin-top:6px" onclick="guiCN()">Gửi HCNS</button>');
   s += the('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', 'Bảo mật tài khoản',
-    kv('Tên đăng nhập', esc(D.nv.gmail || '') + ' hoặc ' + esc(D.nv.ma)) + kv('Mật khẩu đăng nhập', D.nv.coMK ? 'Đã đặt' : '<span style="color:var(--bad)">Chưa đặt</span>') + kv('Phiên đăng nhập', 'Tự hết hạn sau 30 ngày') + kv('Chữ ký điện tử', 'Mã PIN 4 số, đã mã hóa') +
-    '<p class="note">Không đưa PIN hay mã đăng nhập cho bất kỳ ai. HCNS và quản lý không bao giờ hỏi PIN của bạn.</p>' +
+    kv('Tên đăng nhập', esc(D.nv.gmail || '') + ' hoặc ' + esc(D.nv.ma)) + kv('Mật khẩu đăng nhập', D.nv.coMK ? 'Đã đặt' : '<span style="color:var(--bad)">Chưa đặt</span>') + kv('Phiên đăng nhập', 'Tự hết hạn sau 30 ngày') + kv('Chữ ký điện tử', 'Mật khẩu đăng nhập app, đã mã hóa') +
+    '<p class="note">Không đưa mật khẩu đăng nhập cho bất kỳ ai. HCNS và quản lý không bao giờ hỏi mật khẩu của bạn.</p>' +
     '<button class="main" style="margin-top:8px;width:100%" onclick="datMK()">' + (D.nv.coMK ? 'Đổi mật khẩu đăng nhập' : 'Đặt mật khẩu đăng nhập') + '</button>' +
-    '<div class="grid2" style="margin-top:8px"><button onclick="doiPin()">Đổi mã PIN ký</button><button onclick="logout()">Đăng xuất</button></div>');
+    '<div class="grid2" style="margin-top:8px"><button onclick="logout()">Đăng xuất</button></div>');
   if (!CAI.daCai) s += the('<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 18h.01"/>', 'Cài app vào điện thoại',
     '<p style="margin:0 0 8px;font-size:14px">Cài biểu tượng Chấm công ra màn hình chính để mở nhanh như app thật, không cần vào Zalo hay gõ địa chỉ.</p>' +
     (huongDanCai() ? '<p class="note" style="margin:0 0 8px">' + esc(huongDanCai()) + '</p>' : '') +
