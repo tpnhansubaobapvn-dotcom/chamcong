@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 79, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 80, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -425,14 +425,14 @@ function go(t){ TAB = t; render(); window.scrollTo(0,0); }
 
 function render(){
   if (!D) return;
-  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao}[TAB]() + tuiTheoTab();
+  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec}[TAB]() + tuiTheoTab();
   body = segBar() + body;
   var TT = laQL() ? TAB_QL : TEN_TAB;
   if (TAB === 'homnay' && !laQL()) TAB = 'cong';
   if (TAB === 'bangluong' && !laLuong()) TAB = 'cong';
   if (TAB === 'solieu' && !(laLuong() || D.nv.vaiTro === 'TP')) TAB = 'cong';
   if (TAB === 'quantri' && !laQT()) TAB = 'cong';
-  if (TAB === 'hoso' && !laQT()) TAB = 'cong';
+  if (TAB === 'hoso' && !laQT()) TAB = 'cong'; if (TAB === 'lichviec' && !laQT()) TAB = 'cong';
   var NGAN = {quantri:'Quản trị', cong:'Công', don:'Đơn từ', luong:'Lương', homnay:'Hôm nay', solieu:laLuong() ? 'Tiền lương' : 'Giao việc', kpi:'KPI', vaitro:'Quy định', donhang:'Đơn hàng', toi:'Tôi', huongdan:'Hướng dẫn'};
   var dauTien = ['cong', 'quantri', 'don', 'luong', 'homnay'];
   var co = menuItems().map(function(m){ return m[0]; });
@@ -472,7 +472,7 @@ function vCong(){
   var label = !h.vao ? 'Chấm công vào' : 'Chấm công ra';
   var sub = !h.vao ? 'Giờ vào ' + D.gioVao : (h.ra ? 'Bấm lại nếu về muộn hơn' : 'Đã vào lúc ' + h.vao);
   var duyet = D.choDuyet.length ? '<div class="box" style="background:var(--waitbg);border-color:var(--waitbg);color:var(--wait);cursor:pointer" onclick="go(\'don\')">' + D.choDuyet.length + ' đơn đang chờ bạn duyệt</div>' : '';
-  return canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
+  return canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
     '<button class="punch' + (done ? ' done' : '') + '" id="pb" onclick="punch()"><b>' + label + '</b><span>' + esc(sub) + '</span></button>' +
     '<div class="box"><div class="row"><span>Giờ vào</span><b>' + (h.vao || '--:--') + '</b></div>' +
     '<div class="row"><span>Giờ ra</span><b>' + (h.ra || '--:--') + '</b></div>' +
@@ -996,6 +996,7 @@ function menuNhom(){
   var ql = [];
   if (laQT()) ql.push(['quantri','Quản trị nhân sự']); else if (D.nv.vaiTro === 'TP') ql.push(['quantri','Phòng của tôi']);
   if (laQL()) ql.push(['homnay','Hôm nay']);
+  if (laQT()) ql.push(['lichviec','Lịch việc nhân sự']);
   if (laLuong() || D.nv.vaiTro === 'TP') ql.push(['solieu', laLuong() ? 'Tiền lương, KPI, thưởng' : 'KPI, giao việc']);
   if (ql.length) g.push(['Quản lý', ql]);
   g.push(['Công việc, quy định', [['donhang','Đơn hàng bị trả, treo, lỗi'], ['vaitro','Vai trò, nội quy, vi phạm']]]);
@@ -2451,6 +2452,58 @@ function inPhieu(x, cot, th){
   var w = window.open('', '_blank');
   if (!w) { toast('Trình duyệt chặn cửa sổ mới. Cho phép cửa sổ bật lên rồi bấm lại.', true); return; }
   w.document.open(); w.document.write(html); w.document.close();
+}
+var LV = undefined, LV_LOC = 'chua';
+function canhBaoLVHome(){
+  var c = D.lvCB; if (!c || !(c.quaHan || c.sapHan)) return '';
+  return '<div class="box nhay" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:700;cursor:pointer" onclick="go(\'lichviec\')">⚠ Lịch việc nhân sự: ' + (c.quaHan ? c.quaHan + ' việc QUÁ HẠN' : '') + (c.quaHan && c.sapHan ? ', ' : '') + (c.sapHan ? c.sapHan + ' việc đến hạn trong 7 ngày' : '') + '. Bấm để xem.</div>';
+}
+function vLichViec(){
+  if (!laQT()) return '<div class="box muted">Chỉ Giám đốc, HCNS xem trang này.</div>';
+  if (LV === undefined) { LV = null; google.script.run.withSuccessHandler(function(r){ LV = r; if (TAB === 'lichviec') render(); }).withFailureHandler(function(e){ LV = []; toast((e && e.message) || String(e), true); }).dsLichViec(TK); }
+  var s = '<div class="row"><h2 style="margin:0">Lịch việc nhân sự</h2><span style="display:flex;gap:6px"><button class="small" onclick="LV = undefined; render()">Làm mới</button><button class="small main" onclick="suaLV(\'\')">+ Thêm việc</button></span></div>';
+  if (!LV) return s + '<div class="box muted" style="margin-top:10px">Đang tải…</div>';
+  var chua = LV.filter(function(x){ return !x.xong; }), qua = chua.filter(function(x){ return x.con !== null && x.con < 0; }), sap = chua.filter(function(x){ return x.con !== null && x.con >= 0 && x.con <= 7; });
+  var o = function(t, n, mau, k){ return '<button class="small" style="flex:1;min-width:120px;' + (LV_LOC === k ? 'outline:2px solid ' + mau + ';' : '') + 'border-color:' + mau + ';color:' + mau + ';font-weight:700" onclick="LV_LOC=\'' + k + '\'; render()">' + t + ': ' + n + '</button>'; };
+  s += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">' + o('Quá hạn', qua.length, 'var(--bad)', 'qua') + o('Đến hạn 7 ngày', sap.length, '#D98200', 'sap') + o('Chưa xong', chua.length, 'var(--ink, #333)', 'chua') + o('Đã xong', LV.length - chua.length, 'var(--ok)', 'xong') + '</div>';
+  var ds = LV.filter(function(x){ return LV_LOC === 'xong' ? x.xong : LV_LOC === 'qua' ? (!x.xong && x.con !== null && x.con < 0) : LV_LOC === 'sap' ? (!x.xong && x.con !== null && x.con >= 0 && x.con <= 7) : !x.xong; });
+  ds.sort(function(a, b){ return LV_LOC === 'xong' ? String(b.ngayXong).localeCompare(String(a.ngayXong)) : String(a.han).localeCompare(String(b.han)); });
+  if (!ds.length) return s + '<div class="box muted">Không có việc nào trong mục này.</div>';
+  return s + ds.map(function(x){
+    var mau = x.xong ? 'var(--ok)' : x.con < 0 ? 'var(--bad)' : x.con <= 7 ? '#D98200' : 'var(--line)';
+    var tt = x.xong ? '✓ Đã xong ' + esc(x.ngayXong) + (x.nguoiXong ? ' – ' + esc(x.nguoiXong) : '') : x.con < 0 ? 'QUÁ HẠN ' + (-x.con) + ' ngày' : x.con === 0 ? 'HẠN HÔM NAY' : 'Còn ' + x.con + ' ngày';
+    return '<div class="box' + (!x.xong && x.con < 0 ? ' nhay' : '') + '" style="border:2px solid ' + mau + ';margin-top:8px">' +
+      '<div class="row" style="gap:8px;align-items:flex-start"><b style="font-weight:700">' + esc(x.ten) + '</b><span style="color:' + mau + ';font-weight:700;white-space:nowrap">' + tt + '</span></div>' +
+      '<div class="muted" style="font-size:13px;margin-top:4px">Hạn: <b>' + esc(x.han.split('-').reverse().join('/')) + '</b> · ' + esc(x.chuKy) + ' · ' + esc(x.nhom) + (x.phuTrach ? ' · Phụ trách: ' + esc(x.phuTrach) : '') + '</div>' +
+      (x.canCu ? '<div class="muted" style="font-size:12px">Căn cứ: ' + esc(x.canCu) + '</div>' : '') +
+      (x.ghiChu ? '<div style="font-size:13px;margin-top:4px">Ghi chú: ' + esc(x.ghiChu) + '</div>' : '') +
+      (x.xong ? '' : '<div style="display:flex;gap:6px;margin-top:8px"><button class="small main" onclick="xongLV(\'' + x.ma + '\')">Đã xong</button><button class="small" onclick="suaLV(\'' + x.ma + '\')">Sửa, ghi chú</button></div>') + '</div>';
+  }).join('');
+}
+function suaLV(ma){
+  var x = (LV || []).filter(function(v){ return v.ma === ma; })[0] || {chuKy: 'Một lần', nhom: 'Khác', han: D.homNayISO};
+  var o = function(arr, v){ return arr.map(function(a){ return '<option' + (a === v ? ' selected' : '') + '>' + a + '</option>'; }).join(''); };
+  $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><h2 style="margin-top:0">' + (ma ? 'Sửa công việc' : 'Thêm công việc') + '</h2>' +
+    '<label for="lvT">Công việc</label><textarea id="lvT" rows="3">' + esc(x.ten || '') + '</textarea>' +
+    '<div class="grid2"><div><label for="lvH">Hạn hoàn thành</label><input type="date" id="lvH" value="' + esc(x.han || '') + '"></div><div><label for="lvC">Chu kỳ</label><select id="lvC">' + o(['Một lần', 'Hằng tháng', 'Hằng quý', '6 tháng', 'Hằng năm'], x.chuKy) + '</select></div></div>' +
+    '<div class="grid2"><div><label for="lvN">Nhóm</label><select id="lvN">' + o(['Thiết lập', 'Lương', 'Bảo hiểm', 'Hợp đồng', 'Nghỉ việc', 'Thuế', 'Báo cáo', 'PCCC', 'ATVSLĐ', 'Công đoàn', 'Bảo mật', 'Khác'], x.nhom) + '</select></div><div><label for="lvP">Người phụ trách</label><input type="text" id="lvP" value="' + esc(x.phuTrach || '') + '"></div></div>' +
+    '<label for="lvCC">Căn cứ</label><input type="text" id="lvCC" value="' + esc(x.canCu || '') + '">' +
+    '<label for="lvG">Ghi chú, tiến độ</label><textarea id="lvG" rows="2">' + esc(x.ghiChu || '') + '</textarea><p id="lvE" class="err"></p>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="lvOK">Lưu</button></div></div></div>';
+  $('lvOK').onclick = function(){
+    var f = {ma: ma, ten: $('lvT').value.trim(), han: $('lvH').value, chuKy: $('lvC').value, nhom: $('lvN').value, phuTrach: $('lvP').value.trim(), canCu: $('lvCC').value.trim(), ghiChu: $('lvG').value.trim()};
+    if (!f.ten || !f.han) { $('lvE').textContent = 'Nhập tên công việc và hạn.'; return; }
+    $('lvOK').textContent = 'Đang lưu…';
+    call('luuLichViec', [TK, f], function(){ closeLayer(); toast('Đã lưu'); LV = undefined; refresh(); }, function(m){ $('lvE').textContent = m; $('lvOK').textContent = 'Lưu'; });
+  };
+}
+function xongLV(ma){
+  var x = (LV || []).filter(function(v){ return v.ma === ma; })[0]; if (!x) return;
+  $('layer').innerHTML = '<div class="veil"><div class="sheet"><h2 style="margin-top:0">Xác nhận đã xong</h2><p><b>' + esc(x.ten) + '</b></p>' +
+    (x.chuKy !== 'Một lần' ? '<p class="note">Việc lặp lại ' + esc(x.chuKy.toLowerCase()) + ': app tự tạo kỳ tiếp theo.</p>' : '') +
+    '<label for="lvX">Ghi chú kết quả (không bắt buộc)</label><textarea id="lvX" rows="2" placeholder="Ví dụ: đã nộp, số biên nhận…"></textarea>' +
+    '<div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="lvXOK">Đã xong</button></div></div></div>';
+  $('lvXOK').onclick = function(){ $('lvXOK').textContent = 'Đang lưu…'; call('xongLichViec', [TK, ma, $('lvX').value.trim()], function(r){ closeLayer(); toast(r.tiep ? 'Đã xong. Kỳ tiếp theo: ' + r.tiep.split('-').reverse().join('/') : 'Đã xong'); LV = undefined; refresh(); }); };
 }
 var KDSUM = undefined, KDSUM_T = '';
 function vTongKDNhanh(){
