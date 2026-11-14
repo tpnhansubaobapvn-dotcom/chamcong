@@ -60,7 +60,7 @@ const API_FN = {
   lapBangLuong: lapBangLuong, congBoLuong: congBoLuong, phieuLuong: phieuLuong, dsNhanVienQL: dsNhanVienQL, nhapSoLieu: nhapSoLieu
 };
 
-const KHOI_UV = { kd: 'Kinh doanh', kho: 'Kho', vt: 'Vật tư, mua hàng', kt: 'Kế toán', hcns: 'Hành chính nhân sự', mkt: 'Marketing' };
+const KHOI_UV = { kd: 'Kinh doanh', kho: 'Kho', gc: 'Gia công cơ khí', vt: 'Vật tư, mua hàng', kt: 'Kế toán', hcns: 'Hành chính nhân sự', mkt: 'Marketing' };
 function cungPhongTP_(nv, r) { return nhomDT_(r.PhongBan) === nhomDT_(nv.PhongBan) && /xích/i.test(String(r.PhongBan)) === /xích/i.test(String(nv.PhongBan)); }
 function uvXem_(nv, r) {
   if (dtQL_(nv)) return true;
@@ -3169,6 +3169,7 @@ function xemTepKD(token, maNV, thang, id) {
 function nhomDT_(pb) {
   const s = norm_(pb);
   if (!s) return '';
+  if (/gia công cơ khí|cơ khí|thợ hàn/.test(s)) return 'Gia công cơ khí';
   if (/kho/.test(s)) return 'Kho';
   if (/kế toán/.test(s)) return 'Kế toán';
   if (/vật tư|mua hàng|xuất nhập khẩu/.test(s)) return 'Vật tư, mua hàng';

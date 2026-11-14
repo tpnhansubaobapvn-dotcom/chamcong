@@ -499,9 +499,10 @@ var SO_DO = [
   {id:'kdx', ten:'Phòng Kinh doanh Xích neo', khop:function(x){ return /kinh doanh/i.test(x.phong) && /xích/i.test(x.phong); }, cap:[['Trưởng phòng', /trưởng phòng|trưởng bộ phận/i], ['Trưởng nhóm', /trưởng nhóm/i], ['Nhân viên kinh doanh', /./]]},
   {id:'mkt', ten:'Marketing', khop:function(x){ return /marketing/i.test(x.phong); }, cap:[['Trưởng nhóm Marketing', /trưởng/i], ['Nhân viên Marketing', /./]]},
   {id:'kho', ten:'Kho Tân Đông Hiệp', khop:function(x){ return /kho/i.test(x.phong) && !/hà nội|\bhn\b/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Kế toán kho', /kế toán kho/i], ['Thủ kho, quản lý kho', /thủ kho|quản lý kho/i], ['Phụ kho', /./]]},
+  {id:'gc', ten:'Bộ phận Gia công cơ khí', khop:function(x){ return /gia công cơ khí|cơ khí|thợ hàn/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Trưởng bộ phận Gia công cơ khí', /trưởng/i], ['Thợ hàn, cắt, chấn sắt', /./]]},
   {id:'khohn', ten:'Kho Hà Nội', khop:function(x){ return /hà nội|\bhn\b/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Thủ kho', /thủ kho|quản lý/i], ['Phụ kho', /./]]}
 ];
-var THU_TU_KHOP = ['bgd', 'khohn', 'kho', 'hcns', 'kt', 'vt', 'kdx', 'kd', 'mkt'];
+var THU_TU_KHOP = ['bgd', 'gc', 'khohn', 'kho', 'hcns', 'kt', 'vt', 'kdx', 'kd', 'mkt'];
 function ttNV(t){
   if (!t) return '<span class="pill" style="background:var(--zinc);color:var(--muted)">Chưa có dữ liệu</span>';
   if (t.tt === 'dung') return '<span class="pill p-ok">Có mặt ' + esc(t.vao) + '</span>';
@@ -636,7 +637,7 @@ var LOAI_HS = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công d
   'Quyết định (bổ nhiệm, điều chuyển, tăng lương)', 'Khen thưởng, kỷ luật', 'Khác'];
 var HS_BAT_BUOC = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công dân (2 mặt)', 'Bằng cấp, chứng chỉ', 'Giấy khám sức khỏe'];
 var PHONG_MAC_DINH = {bgd: 'Ban Giám đốc', hcns: 'Phòng Hành chính nhân sự', kt: 'Phòng Kế toán', vt: 'Phòng Vật tư', kd: 'Phòng Kinh doanh',
-  kdx: 'Phòng Kinh doanh Xích neo', mkt: 'Marketing', kho: 'Kho', khohn: 'Kho Hà Nội', khac: ''};
+  kdx: 'Phòng Kinh doanh Xích neo', mkt: 'Marketing', kho: 'Kho', gc: 'Bộ phận Gia công cơ khí', khohn: 'Kho Hà Nội', khac: ''};
 function themNV(id, capI){
   var p = SO_DO.filter(function(q){ return q.id === id; })[0] || {cap: [['Nhân viên']]};
   var cap = p.cap[capI] || ['Nhân viên'];
@@ -663,7 +664,7 @@ function themNV(id, capI){
   $('tnOK').onclick = function(){
     var f = {ten: $('tnTen').value.trim(), gmail: $('tnGm').value.trim(), phong: $('tnPB').value.trim(), chucVu: $('tnCV').value.trim(), vaiTro: $('tnVT').value,
       gmailDuyet: $('tnQL').value, ngayVao: $('tnNV').value, ngaySinh: $('tnNS').value, congTy: $('tnCT').value, thuViec: $('tnTV').checked,
-      khoi: (id === 'kho' || id === 'khohn') ? 'KHO' : 'VP'};
+      khoi: (id === 'kho' || id === 'khohn' || id === 'gc') ? 'KHO' : 'VP'};
     if (f.ten.split(/\s+/).length < 2) { $('tnE').textContent = 'Nhập đủ họ và tên.'; return; }
     $('tnOK').textContent = 'Đang lưu…';
     call('themNhanVien', [TK, f], function(){ closeLayer(); toast('Đã thêm ' + f.ten); QT = undefined; NVALL = null; render(); }, function(m){ $('tnE').textContent = m; $('tnOK').textContent = 'Thêm vào sơ đồ'; });
@@ -854,7 +855,7 @@ function nhomTheoVT(phong, cv, khoi){
   var s = (phong + ' ' + cv).toLowerCase();
   if (/kinh doanh/.test(s)) return 'C';
   if (/kế toán|hành chính|nhân sự|marketing|vật tư|mua hàng|xuất nhập khẩu|giám đốc|văn phòng/.test(String(cv).toLowerCase())) return 'A';
-  if (khoi === 'KHO' || /kho|sản xuất|công nhân|kỹ thuật|qc|quản đốc|tổ trưởng/.test(s)) return 'B';
+  if (khoi === 'KHO' || /kho|sản xuất|công nhân|kỹ thuật|qc|quản đốc|tổ trưởng|gia công|cơ khí|thợ hàn/.test(s)) return 'B';
   return 'A';
 }
 function goiYBac(){
@@ -2907,6 +2908,7 @@ function dtTrong(x){
 function nhomDT(pb){
   var s = String(pb || '').toLowerCase().trim();
   if (!s) return '';
+  if (/gia công cơ khí|cơ khí|thợ hàn/.test(s)) return 'Gia công cơ khí';
   if (/kho/.test(s)) return 'Kho';
   if (/kế toán/.test(s)) return 'Kế toán';
   if (/vật tư|mua hàng|xuất nhập khẩu/.test(s)) return 'Vật tư, mua hàng';
@@ -2916,7 +2918,7 @@ function nhomDT(pb){
   return String(pb).trim();
 }
 var CD_TCT = ['Nội quy lao động', 'Quy chế lương, thưởng, phụ cấp', 'Thông báo mới'];
-var CD_KHOI = {'Kho': ['Quy trình và nguyên tắc nhập kho', 'Quy trình và nguyên tắc xuất kho', 'Nguyên tắc hàng hóa để trong kho', 'Nguyên tắc khách hàng vào kho', 'An toàn lao động', 'Phòng cháy chữa cháy', 'Họp đầu giờ, phân chia công việc'], 'Vật tư, mua hàng': ['Bức tranh mua hàng, quan hệ Kinh doanh và các phòng ban', 'Quy trình mua hàng', 'Nguyên tắc tạo mã và quy định chung', 'Kỹ năng tìm kiếm sản phẩm, nhà cung cấp mới', 'Kỹ năng đàm phán, thương lượng, ép giá', 'Soạn hợp đồng mua bán và chứng từ thanh toán', 'Báo giá hỗ trợ kinh doanh bán hàng', 'Theo dõi công nợ, báo cáo tổng kết'], 'Kinh doanh': ['Đào tạo bán hàng', 'Soạn hợp đồng, bảo lãnh hợp đồng', 'Văn hóa doanh nghiệp', 'Quy trình làm việc', 'Sản phẩm, kỹ thuật', 'Kỹ năng']};
+var CD_KHOI = {'Gia công cơ khí': ['Đọc bản vẽ, thiết kế 3D sản phẩm của Công ty', 'Quy trình gia công neo tàu, mỏ neo, lá neo', 'Bóc tách khối lượng vật tư, vật liệu', 'Sắp xếp thợ, tiến độ, nghiệm thu chất lượng', 'Quản lý công cụ dụng cụ, vật tư tiêu hao (oxy, gas, xăng, que hàn)', 'Phế liệu và vật tư tái sử dụng', 'An toàn lao động khi hàn, cắt, chấn', 'Phòng cháy chữa cháy', 'Họp đầu giờ, phân chia công việc'], 'Kho': ['Quy trình và nguyên tắc nhập kho', 'Quy trình và nguyên tắc xuất kho', 'Nguyên tắc hàng hóa để trong kho', 'Nguyên tắc khách hàng vào kho', 'An toàn lao động', 'Phòng cháy chữa cháy', 'Họp đầu giờ, phân chia công việc'], 'Vật tư, mua hàng': ['Bức tranh mua hàng, quan hệ Kinh doanh và các phòng ban', 'Quy trình mua hàng', 'Nguyên tắc tạo mã và quy định chung', 'Kỹ năng tìm kiếm sản phẩm, nhà cung cấp mới', 'Kỹ năng đàm phán, thương lượng, ép giá', 'Soạn hợp đồng mua bán và chứng từ thanh toán', 'Báo giá hỗ trợ kinh doanh bán hàng', 'Theo dõi công nợ, báo cáo tổng kết'], 'Kinh doanh': ['Đào tạo bán hàng', 'Soạn hợp đồng, bảo lãnh hợp đồng', 'Văn hóa doanh nghiệp', 'Quy trình làm việc', 'Sản phẩm, kỹ thuật', 'Kỹ năng']};
 function tenPham(){ return DTP === 'Tất cả' ? 'TOÀN CÔNG TY' : DTP === 'RIENG' ? 'RIÊNG CHO TÔI' : DTP.slice(3).toUpperCase(); }
 function chu3(t){
   var w = String(t).split(' '), d = [''];
