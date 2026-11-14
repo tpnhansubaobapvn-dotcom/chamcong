@@ -431,7 +431,7 @@ function render(){
   if (TAB === 'bangluong' && !laLuong()) TAB = 'cong';
   if (TAB === 'solieu' && !(laLuong() || D.nv.vaiTro === 'TP')) TAB = 'cong';
   if (TAB === 'quantri' && !laQT()) TAB = 'cong';
-  if (TAB === 'hoso' && !laQT()) TAB = 'cong'; if (TAB === 'lichviec' && !laQT()) TAB = 'cong';
+  if (TAB === 'hoso' && !laQT()) TAB = 'cong'; if (TAB === 'lichviec' && !laQT() && !(D && D.lvGiao)) TAB = 'cong';
   var NGAN = {quantri:'Quản trị', cong:'Công', don:'Đơn từ', luong:'Lương', homnay:'Hôm nay', solieu:laLuong() ? 'Tiền lương' : 'Giao việc', kpi:'KPI', vaitro:'Quy định', donhang:'Đơn hàng', toi:'Tôi', huongdan:'Hướng dẫn'};
   var dauTien = ['cong', 'quantri', 'don', 'luong', 'homnay'];
   var co = menuItems().map(function(m){ return m[0]; });
@@ -496,13 +496,14 @@ var SO_DO = [
   {id:'kt', ten:'Phòng Kế toán', khop:function(x){ return /kế toán/i.test(x.phong) && !/kho/i.test(x.phong); }, cap:[['Kế toán trưởng', /trưởng/i], ['Kế toán viên', /./]]},
   {id:'vt', ten:'Phòng Vật tư', khop:function(x){ return /vật tư|mua hàng|xuất nhập khẩu/i.test(x.phong); }, cap:[['Trưởng phòng Vật tư', /trưởng/i], ['Nhân viên mua hàng, xuất nhập khẩu', /./]]},
   {id:'kd', ten:'Phòng Kinh doanh Cáp thép', khop:function(x){ return /kinh doanh/i.test(x.phong) && !/xích/i.test(x.phong); }, cap:[['Trưởng phòng', /trưởng phòng|trưởng bộ phận/i], ['Trưởng nhóm', /trưởng nhóm/i], ['Nhân viên kinh doanh', /./]]},
+  {id:'kdbl', ten:'Văn phòng Kinh doanh An Lộc – Bình Long', khop:function(x){ return /bình long|an lộc/i.test(x.phong); }, cap:[['Trưởng nhóm', /trưởng/i, 1], ['Nhân viên kinh doanh', /./, 3]]},
   {id:'kdx', ten:'Phòng Kinh doanh Xích neo', khop:function(x){ return /kinh doanh/i.test(x.phong) && /xích/i.test(x.phong); }, cap:[['Trưởng phòng', /trưởng phòng|trưởng bộ phận/i], ['Trưởng nhóm', /trưởng nhóm/i], ['Nhân viên kinh doanh', /./]]},
   {id:'mkt', ten:'Marketing', khop:function(x){ return /marketing/i.test(x.phong); }, cap:[['Trưởng nhóm Marketing', /trưởng/i], ['Nhân viên Marketing', /./]]},
   {id:'kho', ten:'Kho Tân Đông Hiệp', khop:function(x){ return /kho/i.test(x.phong) && !/hà nội|\bhn\b/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Kế toán kho', /kế toán kho/i], ['Thủ kho, quản lý kho', /thủ kho|quản lý kho/i], ['Phụ kho', /./]]},
-  {id:'gc', ten:'Bộ phận Gia công cơ khí', khop:function(x){ return /gia công cơ khí|cơ khí|thợ hàn/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Trưởng bộ phận Gia công cơ khí', /trưởng/i], ['Thợ hàn, cắt, chấn sắt', /./]]},
+  {id:'gc', ten:'Bộ phận Gia công cơ khí', khop:function(x){ return /gia công cơ khí|cơ khí|thợ hàn/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Trưởng bộ phận Gia công cơ khí', /trưởng/i, 1], ['Thợ hàn, cắt, chấn sắt', /./, 1]]},
   {id:'khohn', ten:'Kho Hà Nội', khop:function(x){ return /hà nội|\bhn\b/i.test(x.phong + ' ' + x.chucVu); }, cap:[['Thủ kho', /thủ kho|quản lý/i], ['Phụ kho', /./]]}
 ];
-var THU_TU_KHOP = ['bgd', 'gc', 'khohn', 'kho', 'hcns', 'kt', 'vt', 'kdx', 'kd', 'mkt'];
+var THU_TU_KHOP = ['bgd', 'gc', 'khohn', 'kho', 'hcns', 'kt', 'vt', 'kdbl', 'kdx', 'kd', 'mkt'];
 function ttNV(t){
   if (!t) return '<span class="pill" style="background:var(--zinc);color:var(--muted)">Chưa có dữ liệu</span>';
   if (t.tt === 'dung') return '<span class="pill p-ok">Có mặt ' + esc(t.vao) + '</span>';
@@ -548,7 +549,7 @@ function vQuanTri(){
     p.cap.forEach(function(c, i){
       var o = nguoi.filter(function(x){ if (daXep[x.ma]) return false; var ok = i === p.cap.length - 1 || c[1].test(x.chucVu); if (ok) daXep[x.ma] = 1; return ok; });
       s += '<div class="cap"><h4>' + (i + 1) + '. ' + esc(c[0]) + '</h4>' +
-        (o.length ? '<div class="luoi-nv">' + o.map(theNV).join('') + '</div>' : '<div class="trong">Vị trí đang trống, chưa có người</div>') +
+        (o.length ? '<div class="luoi-nv">' + o.map(theNV).join('') + '</div>' : '<div class="trong">Vị trí đang trống, chưa có người</div>') + (c[2] ? '<div class="muted" style="font-size:12px;margin-top:4px">Định biên ' + c[2] + ' người · ' + (c[2] > o.length ? 'còn trống ' + (c[2] - o.length) + ', đang tuyển' : 'đã đủ') + '</div>' : '') +
         (laTP ? '' : '<button class="small" style="margin-top:6px;border-color:#D7262E;color:#D7262E" onclick="themNV(\'' + p.id + '\',' + i + ')">+ Thêm người</button>') + (i === p.cap.length - 1 ? hopCVPhong(p.id) : '') + '</div>';
     });
     s += '</section>';
@@ -637,7 +638,7 @@ var LOAI_HS = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công d
   'Quyết định (bổ nhiệm, điều chuyển, tăng lương)', 'Khen thưởng, kỷ luật', 'Khác'];
 var HS_BAT_BUOC = ['Sơ yếu lý lịch', 'Đơn xin việc', 'Căn cước công dân (2 mặt)', 'Bằng cấp, chứng chỉ', 'Giấy khám sức khỏe'];
 var PHONG_MAC_DINH = {bgd: 'Ban Giám đốc', hcns: 'Phòng Hành chính nhân sự', kt: 'Phòng Kế toán', vt: 'Phòng Vật tư', kd: 'Phòng Kinh doanh',
-  kdx: 'Phòng Kinh doanh Xích neo', mkt: 'Marketing', kho: 'Kho', gc: 'Bộ phận Gia công cơ khí', khohn: 'Kho Hà Nội', khac: ''};
+  kdx: 'Phòng Kinh doanh Xích neo', mkt: 'Marketing', kdbl: 'Văn phòng Kinh doanh An Lộc – Bình Long', kho: 'Kho', gc: 'Bộ phận Gia công cơ khí', khohn: 'Kho Hà Nội', khac: ''};
 function themNV(id, capI){
   var p = SO_DO.filter(function(q){ return q.id === id; })[0] || {cap: [['Nhân viên']]};
   var cap = p.cap[capI] || ['Nhân viên'];
@@ -996,7 +997,7 @@ function menuNhom(){
   var ql = [];
   if (laQT()) ql.push(['quantri','Quản trị nhân sự']); else if (D.nv.vaiTro === 'TP') ql.push(['quantri','Phòng của tôi']);
   if (laQL()) ql.push(['homnay','Hôm nay']);
-  if (laQT()) ql.push(['lichviec','Lịch việc nhân sự']);
+  if (laQT() || D.lvGiao) ql.push(['lichviec','Lịch việc nhân sự']);
   if (laLuong() || D.nv.vaiTro === 'TP') ql.push(['solieu', laLuong() ? 'Tiền lương, KPI, thưởng' : 'KPI, giao việc']);
   if (ql.length) g.push(['Quản lý', ql]);
   g.push(['Công việc, quy định', [['donhang','Đơn hàng bị trả, treo, lỗi'], ['vaitro','Vai trò, nội quy, vi phạm']]]);
@@ -2575,7 +2576,7 @@ function canhBaoLVHome(){
   return '<div class="box nhay" style="border:2px solid var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent);color:var(--bad);font-weight:700;cursor:pointer" onclick="LV = undefined; go(\'lichviec\')">⚠ Lịch việc nhân sự: ' + (c.quaHan ? c.quaHan + ' việc QUÁ HẠN' : '') + (c.quaHan && c.sapHan ? ', ' : '') + (c.sapHan ? c.sapHan + ' việc đến hạn trong 7 ngày' : '') + '. Bấm để xem.</div>';
 }
 function vLichViec(){
-  if (!laQT()) return '<div class="box muted">Chỉ Giám đốc, HCNS xem trang này.</div>';
+  if (!laQT() && !D.lvGiao) return '<div class="box muted">Chỉ Giám đốc, HCNS và người được giao việc xem trang này.</div>';
   if (window.__lvTab !== window.TAB_LUOT) { window.__lvTab = window.TAB_LUOT; LV = undefined; }
   if (LV === undefined) { LV = null; LV_LOI = ''; google.script.run.withSuccessHandler(function(r){ LV = r || []; if (TAB === 'lichviec') render(); }).withFailureHandler(function(e){ LV = []; LV_LOI = (e && e.message) || String(e); if (TAB === 'lichviec') render(); }).dsLichViec(TK); }
   var s = '<div class="row"><h2 style="margin:0">Lịch việc nhân sự</h2><span style="display:flex;gap:6px"><button class="small" onclick="LV = undefined; render()">Làm mới</button><button class="small main" onclick="suaLV(\'\')">+ Thêm việc</button></span></div>';
@@ -2903,12 +2904,13 @@ function capNhatNen(){ refresh(); if (TAB === 'daotao' && DT) taiDT(true); }
 function dtTrong(x){
   if (DTP === 'Tất cả') return x.apDung === 'Tất cả';
   if (DTP === 'RIENG') return x.apDung.indexOf('NV:') === 0;
-  return x.apDung.indexOf('PB:') === 0 && nhomDT(x.apDung.slice(3)).toLowerCase() === nhomDT(DTP.slice(3)).toLowerCase();
+  return x.apDung.indexOf('PB:') === 0 && (nhomDT(x.apDung.slice(3)).toLowerCase() === nhomDT(DTP.slice(3)).toLowerCase() || (nhomDT(x.apDung.slice(3)) === 'Kinh doanh' && nhomDT(DTP.slice(3)) === 'Kinh doanh Bình Long'));
 }
 function nhomDT(pb){
   var s = String(pb || '').toLowerCase().trim();
   if (!s) return '';
   if (/gia công cơ khí|cơ khí|thợ hàn/.test(s)) return 'Gia công cơ khí';
+  if (/bình long|an lộc/.test(s)) return 'Kinh doanh Bình Long';
   if (/kho/.test(s)) return 'Kho';
   if (/kế toán/.test(s)) return 'Kế toán';
   if (/vật tư|mua hàng|xuất nhập khẩu/.test(s)) return 'Vật tư, mua hàng';
@@ -2919,6 +2921,7 @@ function nhomDT(pb){
 }
 var CD_TCT = ['Nội quy lao động', 'Quy chế lương, thưởng, phụ cấp', 'Thông báo mới'];
 var CD_KHOI = {'Gia công cơ khí': ['Đọc bản vẽ, thiết kế 3D sản phẩm của Công ty', 'Quy trình gia công neo tàu, mỏ neo, lá neo', 'Bóc tách khối lượng vật tư, vật liệu', 'Sắp xếp thợ, tiến độ, nghiệm thu chất lượng', 'Quản lý công cụ dụng cụ, vật tư tiêu hao (oxy, gas, xăng, que hàn)', 'Phế liệu và vật tư tái sử dụng', 'An toàn lao động khi hàn, cắt, chấn', 'Phòng cháy chữa cháy', 'Họp đầu giờ, phân chia công việc'], 'Kho': ['Quy trình và nguyên tắc nhập kho', 'Quy trình và nguyên tắc xuất kho', 'Nguyên tắc hàng hóa để trong kho', 'Nguyên tắc khách hàng vào kho', 'An toàn lao động', 'Phòng cháy chữa cháy', 'Họp đầu giờ, phân chia công việc'], 'Vật tư, mua hàng': ['Bức tranh mua hàng, quan hệ Kinh doanh và các phòng ban', 'Quy trình mua hàng', 'Nguyên tắc tạo mã và quy định chung', 'Kỹ năng tìm kiếm sản phẩm, nhà cung cấp mới', 'Kỹ năng đàm phán, thương lượng, ép giá', 'Soạn hợp đồng mua bán và chứng từ thanh toán', 'Báo giá hỗ trợ kinh doanh bán hàng', 'Theo dõi công nợ, báo cáo tổng kết'], 'Kinh doanh': ['Đào tạo bán hàng', 'Soạn hợp đồng, bảo lãnh hợp đồng', 'Văn hóa doanh nghiệp', 'Quy trình làm việc', 'Sản phẩm, kỹ thuật', 'Kỹ năng']};
+CD_KHOI['Kinh doanh Bình Long'] = (CD_KHOI['Kinh doanh'] || []).concat(['Thị trường Bình Phước: khách hàng, công trình, nhà máy, nông nghiệp', 'Làm việc từ xa với kho và văn phòng TP. HCM qua app, camera']);
 function tenPham(){ return DTP === 'Tất cả' ? 'TOÀN CÔNG TY' : DTP === 'RIENG' ? 'RIÊNG CHO TÔI' : DTP.slice(3).toUpperCase(); }
 function chu3(t){
   var w = String(t).split(' '), d = [''];

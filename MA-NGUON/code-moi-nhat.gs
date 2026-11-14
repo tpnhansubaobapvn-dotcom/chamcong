@@ -60,7 +60,7 @@ const API_FN = {
   lapBangLuong: lapBangLuong, congBoLuong: congBoLuong, phieuLuong: phieuLuong, dsNhanVienQL: dsNhanVienQL, nhapSoLieu: nhapSoLieu
 };
 
-const KHOI_UV = { kd: 'Kinh doanh', kho: 'Kho', gc: 'Gia công cơ khí', vt: 'Vật tư, mua hàng', kt: 'Kế toán', hcns: 'Hành chính nhân sự', mkt: 'Marketing' };
+const KHOI_UV = { kd: 'Kinh doanh', kdbl: 'Kinh doanh Bình Long', kho: 'Kho', gc: 'Gia công cơ khí', vt: 'Vật tư, mua hàng', kt: 'Kế toán', hcns: 'Hành chính nhân sự', mkt: 'Marketing' };
 function cungPhongTP_(nv, r) { return nhomDT_(r.PhongBan) === nhomDT_(nv.PhongBan) && /xích/i.test(String(r.PhongBan)) === /xích/i.test(String(nv.PhongBan)); }
 function uvXem_(nv, r) {
   if (dtQL_(nv)) return true;
@@ -77,7 +77,7 @@ function chamSoVan_(khoi, sv) { if (khoi === 'vt') { const dl = (sv || []).filte
   const m = { kn: '', nganh: '', t7: '', nv: '', th: '', tm: '' }; (sv || []).forEach(function (x) { m[x.id] = String(x.t || ''); });
   let d = 0, toi = 0;
   toi += 2; if (/Trên 2 năm/.test(m.kn)) d += 2; else if (/1–2 năm/.test(m.kn)) d += 1;
-  if (khoi === 'kd') { toi += 1; if (/Vật tư|Sắt thép|Cơ khí/i.test(m.nganh)) d += 1; }
+  if (khoi === 'kd' || khoi === 'kdbl') { toi += 1; if (/Vật tư|Sắt thép|Cơ khí/i.test(m.nganh)) d += 1; }
   toi += 1; if (/Ngay|ngày|tuần/.test(m.nv)) d += 1;
   toi += 1; if (m.th.replace(/\s+/g, ' ').trim().length >= 40) d += 1;
   toi += 1; if (m.tm.replace(/\s+/g, ' ').trim().length >= 40) d += 1;
@@ -647,7 +647,7 @@ function taiDuLieu_(token) {
   let anh = '';
   if (nv.AnhDaiDien) { try { anh = 'data:image/jpeg;base64,' + Utilities.base64Encode(DriveApp.getFileById(String(nv.AnhDaiDien)).getBlob().getBytes()); } catch (e) {} }
   return {
-    congTy: t.TenCongTy || '', anh: anh, tangCa: tcInfo, coCau: hienBac_(nv, t) ? coCauLuong_(nv, t, today) : null, coCauAn: !hienBac_(nv, t), hoSo: anBac_(hoSo_(nv, t, today), nv, t), taiSan: taiSanCua_(nv.MaNV, true), tsCB: canhBaoTS_(nv.MaNV), vbCho: vbChoKy_(nv.MaNV), lvCB: (['GD', 'HCNS'].indexOf(String(nv.VaiTro).trim()) >= 0) ? canhBaoLV_() : null, gpsMax: Number(t.DoChinhXacToiDa || 100), banKinhCC: Number(t.BanKinhChamCong || 30), bangTin: bangTin_(today), hopDong: hopDongCua_(nv.MaNV, today), choDuyetLuong: choDuyetLuong_(nv), viecDX: viecDX_(nv), moTa: moTaNV_(nv), kd: !!nhomKD_(nv), choDuyetKD: kdChoToi_(nv), banGiao: bgCua_(nv.MaNV), serverNow: Date.now(), lichSuCC: lichSuCC_(cc),
+    congTy: t.TenCongTy || '', anh: anh, tangCa: tcInfo, coCau: hienBac_(nv, t) ? coCauLuong_(nv, t, today) : null, coCauAn: !hienBac_(nv, t), hoSo: anBac_(hoSo_(nv, t, today), nv, t), taiSan: taiSanCua_(nv.MaNV, true), tsCB: canhBaoTS_(nv.MaNV), vbCho: vbChoKy_(nv.MaNV), lvGiao: giaoLV_(nv), lvCB: ((['GD', 'HCNS'].indexOf(String(nv.VaiTro).trim()) >= 0) || giaoLV_(nv)) ? canhBaoLV_() : null, gpsMax: Number(t.DoChinhXacToiDa || 100), banKinhCC: Number(t.BanKinhChamCong || 30), bangTin: bangTin_(today), hopDong: hopDongCua_(nv.MaNV, today), choDuyetLuong: choDuyetLuong_(nv), viecDX: viecDX_(nv), moTa: moTaNV_(nv), kd: !!nhomKD_(nv), choDuyetKD: kdChoToi_(nv), banGiao: bgCua_(nv.MaNV), serverNow: Date.now(), lichSuCC: lichSuCC_(cc),
     diemCC: rows_(SH.DIEM).map(function (p) { return { ten: String(p.TenDiem), lat: Number(p.ViDo), lng: Number(p.KinhDo), r: Number(p.BanKinh_m || 50) }; }), chuyenCan: chuyenCan_(nv, cc, month, today),
     nv: { ma: nv.MaNV, ten: nv.HoTen, gmail: nv.Gmail, phong: nv.PhongBan, chucVu: nv.ChucVu, vaiTro: vt, coPin: !!(nv.PinHash || String(nv.MatKhauHash || '')), coMK: !!String(nv.MatKhauHash || '') },
     homNay: { ngay: ymdToVN_(today), vao: vao ? fmtT_(vao.ThoiGian) : '', ra: ra ? fmtT_(ra.ThoiGian) : '', diem: vao ? vao.Diem : '', tre: vao ? Number(vao.DiTre_phut || 0) : 0 },
@@ -1988,6 +1988,21 @@ function lvSheet_() {
     s.getRange(2, 1, v.length, LV_COT.length).setValues(v);
     if (MEMO_) delete MEMO_[SH.LV];
   }
+  const pp = PropertiesService.getScriptProperties();
+  if (!pp.getProperty('LV_GIAO_PHUONG_1')) {
+    pp.setProperty('LV_GIAO_PHUONG_1', '1');
+    const h = s.getRange(1, 1, 1, s.getLastColumn()).getValues()[0], cP = h.indexOf('PhuTrach'), cN = h.indexOf('Nhom'), cT = h.indexOf('TrangThai'), n = s.getLastRow() - 1;
+    if (cP >= 0 && cN >= 0 && cT >= 0 && n > 0) {
+      const v = s.getRange(2, 1, n, h.length).getValues(), out = v.map(function (r) {
+        let p = String(r[cP] || '');
+        if (String(r[cT]) === 'Đã xong' || !/HCNS/.test(p)) return [p];
+        p = String(r[cN]) === 'Lương' ? p.replace(/HCNS/g, 'Giám đốc') : p.replace(/HCNS/g, 'Nguyễn Thị Xuân Phương (HCNS)');
+        return [p.split(/\s*,\s*/).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(', ')];
+      });
+      s.getRange(2, cP + 1, n, 1).setValues(out);
+      if (MEMO_) delete MEMO_[SH.LV];
+    }
+  }
   return s;
 }
 function hanTiep_(han, chuKy) {
@@ -2010,7 +2025,8 @@ function lvRows_() {
 function canhBaoLV_() {
   try { const a = lvRows_().filter(function (x) { return !x.xong && x.con !== null; }); return { quaHan: a.filter(function (x) { return x.con < 0; }).length, sapHan: a.filter(function (x) { return x.con >= 0 && x.con <= 7; }).length }; } catch (e) { return null; }
 }
-function quyenLV_(token) { const nv = auth_(token), vt = String(nv.VaiTro).trim(); if (vt !== 'GD' && vt !== 'HCNS') throw new Error('Chỉ Giám đốc, HCNS dùng Lịch việc nhân sự.'); return nv; }
+function giaoLV_(nv) { try { const ten = norm_(nv.HoTen); return !!ten && lvRows_().some(function (x) { return !x.xong && norm_(x.phuTrach).indexOf(ten) >= 0; }); } catch (e) { return false; } }
+function quyenLV_(token) { const nv = auth_(token), vt = String(nv.VaiTro).trim(); if (vt === 'GD' || vt === 'HCNS' || giaoLV_(nv)) return nv; throw new Error('Chỉ Giám đốc, HCNS và người được giao việc dùng Lịch việc nhân sự.'); }
 function dsLichViec(token) { quyenLV_(token); return lvRows_().map(function (x) { delete x._row; return x; }); }
 function luuLichViec(token, f) {
   const nv = quyenLV_(token); lvSheet_(); f = f || {};
@@ -3170,6 +3186,7 @@ function nhomDT_(pb) {
   const s = norm_(pb);
   if (!s) return '';
   if (/gia công cơ khí|cơ khí|thợ hàn/.test(s)) return 'Gia công cơ khí';
+  if (/bình long|an lộc/.test(s)) return 'Kinh doanh Bình Long';
   if (/kho/.test(s)) return 'Kho';
   if (/kế toán/.test(s)) return 'Kế toán';
   if (/vật tư|mua hàng|xuất nhập khẩu/.test(s)) return 'Vật tư, mua hàng';
@@ -3183,7 +3200,7 @@ function dtApDung_(nv, r) {
   const a = String(r.ApDung || 'Tất cả').trim();
   if (a === '' || a === 'Tất cả') return true;
   if (a.indexOf('VT:') === 0) return a.slice(3).split(',').map(function (x) { return x.trim(); }).indexOf(String(nv.VaiTro).trim()) >= 0;
-  if (a.indexOf('PB:') === 0) { return cungNhomDT_(a.slice(3), nv.PhongBan); }
+  if (a.indexOf('PB:') === 0) { return cungNhomDT_(a.slice(3), nv.PhongBan) || (nhomDT_(a.slice(3)) === 'Kinh doanh' && nhomDT_(nv.PhongBan) === 'Kinh doanh Bình Long'); }
   if (a.indexOf('NV:') === 0) return a.slice(3) === String(nv.MaNV);
   return false;
 }
