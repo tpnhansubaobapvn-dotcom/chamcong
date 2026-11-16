@@ -56,7 +56,7 @@ const API_FN = {
   chamCong: chamCong, chamCongAnh: chamCongAnh, guiDon: guiDon, duyetDon: duyetDon, taiQuyChe: taiQuyChe,
   hoiNoiQuy: hoiNoiQuy, baoCaoHomNay: baoCaoHomNay, xemAnh: xemAnh, datAnhDaiDien: datAnhDaiDien, taiMoTa: taiMoTa, xemTep: xemTep, lapViPham: lapViPham, dsViPham: dsViPham,
   giaoViec: giaoViec, dsGiaoViec: dsGiaoViec, lichSuSoLieu: lichSuSoLieu, dsBangLuong: dsBangLuong,
-  dsNhanVienTatCa: dsNhanVienTatCa, lichSu: lichSu, deNghiCapNhat: deNghiCapNhat, duyetBangLuong: duyetBangLuong, tomTatBangLuong: tomTatBangLuong, thongBao: thongBao, trinhDuyetLuong: trinhDuyetLuong, khoaBangLuong: khoaBangLuong, tongHopTaiSan: tongHopTaiSan, xacNhanTaiSan: xacNhanTaiSan, xemBangLuong: xemBangLuong, dsLichViec: dsLichViec, luuLichViec: luuLichViec, xongLichViec: xongLichViec, dsVanBan: dsVanBan, taoVanBan: taoVanBan, kyVanBan: kyVanBan, xemVanBan: xemVanBan, napMoTa: napMoTa, luuMoTaNV: luuMoTaNV, quanTriCongTy: quanTriCongTy, datNgaySinh: datNgaySinh, luuVinhDanh: luuVinhDanh, napHopDong: napHopDong, luuBanGiao: luuBanGiao, hoSoNhanVien: hoSoNhanVien, capNhatHoSoNV: capNhatHoSoNV, napHoSo: napHoSo, themNhanVien: themNhanVien, luuTaiSan: luuTaiSan, lichSuTaiSan: lichSuTaiSan, taiBaoCaoKD: taiBaoCaoKD, luuDonKD: luuDonKD, xoaDonKD: xoaDonKD, nopBaoCaoKD: nopBaoCaoKD, dsBaoCaoKD: dsBaoCaoKD, duyetBaoCaoKD: duyetBaoCaoKD, ghiViPhamKD: ghiViPhamKD, goViPhamKD: goViPhamKD, datNhomKD: datNhomKD, xemTepKD: xemTepKD, taiDaoTao: taiDaoTao, luuDaoTao: luuDaoTao, anDaoTao: anDaoTao, hocXongDT: hocXongDT, xemTepDT: xemTepDT, nopBaiDT: nopBaiDT, chamBaiDT: chamBaiDT, guiDeXuatDT: guiDeXuatDT, phanHoiDeXuatDT: phanHoiDeXuatDT, themTepDT: themTepDT, binhLuanDT: binhLuanDT, suaDaoTao: suaDaoTao, goTepDT: goTepDT, giaoViecDX: giaoViecDX, capNhatViecDX: capNhatViecDX, themTepVX: themTepVX, xemTepVX: xemTepVX, lapDonHangLoi: lapDonHangLoi, dsDonHangLoi: dsDonHangLoi, capNhatDonHangLoi: capNhatDonHangLoi,
+  dsNhanVienTatCa: dsNhanVienTatCa, lichSu: lichSu, deNghiCapNhat: deNghiCapNhat, duyetBangLuong: duyetBangLuong, tomTatBangLuong: tomTatBangLuong, thongBao: thongBao, dsThongBaoCT: dsThongBaoCT, dangThongBaoCT: dangThongBaoCT, docThongBaoCT: docThongBaoCT, anThongBaoCT: anThongBaoCT, xemTepTBCT: xemTepTBCT, trinhDuyetLuong: trinhDuyetLuong, khoaBangLuong: khoaBangLuong, tongHopTaiSan: tongHopTaiSan, xacNhanTaiSan: xacNhanTaiSan, xemBangLuong: xemBangLuong, dsLichViec: dsLichViec, luuLichViec: luuLichViec, xongLichViec: xongLichViec, dsVanBan: dsVanBan, taoVanBan: taoVanBan, kyVanBan: kyVanBan, xemVanBan: xemVanBan, napMoTa: napMoTa, luuMoTaNV: luuMoTaNV, quanTriCongTy: quanTriCongTy, datNgaySinh: datNgaySinh, luuVinhDanh: luuVinhDanh, napHopDong: napHopDong, luuBanGiao: luuBanGiao, hoSoNhanVien: hoSoNhanVien, capNhatHoSoNV: capNhatHoSoNV, napHoSo: napHoSo, themNhanVien: themNhanVien, luuTaiSan: luuTaiSan, lichSuTaiSan: lichSuTaiSan, taiBaoCaoKD: taiBaoCaoKD, luuDonKD: luuDonKD, xoaDonKD: xoaDonKD, nopBaoCaoKD: nopBaoCaoKD, dsBaoCaoKD: dsBaoCaoKD, duyetBaoCaoKD: duyetBaoCaoKD, ghiViPhamKD: ghiViPhamKD, goViPhamKD: goViPhamKD, datNhomKD: datNhomKD, xemTepKD: xemTepKD, taiDaoTao: taiDaoTao, luuDaoTao: luuDaoTao, anDaoTao: anDaoTao, hocXongDT: hocXongDT, xemTepDT: xemTepDT, nopBaiDT: nopBaiDT, chamBaiDT: chamBaiDT, guiDeXuatDT: guiDeXuatDT, phanHoiDeXuatDT: phanHoiDeXuatDT, themTepDT: themTepDT, binhLuanDT: binhLuanDT, suaDaoTao: suaDaoTao, goTepDT: goTepDT, giaoViecDX: giaoViecDX, capNhatViecDX: capNhatViecDX, themTepVX: themTepVX, xemTepVX: xemTepVX, lapDonHangLoi: lapDonHangLoi, dsDonHangLoi: dsDonHangLoi, capNhatDonHangLoi: capNhatDonHangLoi,
   lapBangLuong: lapBangLuong, congBoLuong: congBoLuong, phieuLuong: phieuLuong, dsNhanVienQL: dsNhanVienQL, nhapSoLieu: nhapSoLieu
 };
 
@@ -647,7 +647,7 @@ function taiDuLieu_(token) {
   let anh = '';
   if (nv.AnhDaiDien) { try { anh = 'data:image/jpeg;base64,' + Utilities.base64Encode(DriveApp.getFileById(String(nv.AnhDaiDien)).getBlob().getBytes()); } catch (e) {} }
   return {
-    congTy: t.TenCongTy || '', anh: anh, tangCa: tcInfo, coCau: hienBac_(nv, t) ? coCauLuong_(nv, t, today) : null, coCauAn: !hienBac_(nv, t), hoSo: anBac_(hoSo_(nv, t, today), nv, t), taiSan: taiSanCua_(nv.MaNV, true), tsCB: canhBaoTS_(nv.MaNV), vbCho: vbChoKy_(nv.MaNV), lvGiao: giaoLV_(nv), lvCB: ((['GD', 'HCNS'].indexOf(String(nv.VaiTro).trim()) >= 0) || giaoLV_(nv)) ? canhBaoLV_() : null, gpsMax: Number(t.DoChinhXacToiDa || 100), banKinhCC: Number(t.BanKinhChamCong || 30), bangTin: bangTin_(today), hopDong: hopDongCua_(nv.MaNV, today), choDuyetLuong: choDuyetLuong_(nv), viecDX: viecDX_(nv), moTa: moTaNV_(nv), kd: !!nhomKD_(nv), choDuyetKD: kdChoToi_(nv), banGiao: bgCua_(nv.MaNV), serverNow: Date.now(), lichSuCC: lichSuCC_(cc),
+    thongBaoCT: tbCuaToi_(nv), congTy: t.TenCongTy || '', anh: anh, tangCa: tcInfo, coCau: hienBac_(nv, t) ? coCauLuong_(nv, t, today) : null, coCauAn: !hienBac_(nv, t), hoSo: anBac_(hoSo_(nv, t, today), nv, t), taiSan: taiSanCua_(nv.MaNV, true), tsCB: canhBaoTS_(nv.MaNV), vbCho: vbChoKy_(nv.MaNV), lvGiao: giaoLV_(nv), lvCB: ((['GD', 'HCNS'].indexOf(String(nv.VaiTro).trim()) >= 0) || giaoLV_(nv)) ? canhBaoLV_() : null, gpsMax: Number(t.DoChinhXacToiDa || 100), banKinhCC: Number(t.BanKinhChamCong || 30), bangTin: bangTin_(today), hopDong: hopDongCua_(nv.MaNV, today), choDuyetLuong: choDuyetLuong_(nv), viecDX: viecDX_(nv), moTa: moTaNV_(nv), kd: !!nhomKD_(nv), choDuyetKD: kdChoToi_(nv), banGiao: bgCua_(nv.MaNV), serverNow: Date.now(), lichSuCC: lichSuCC_(cc),
     diemCC: rows_(SH.DIEM).map(function (p) { return { ten: String(p.TenDiem), lat: Number(p.ViDo), lng: Number(p.KinhDo), r: Number(p.BanKinh_m || 50) }; }), chuyenCan: chuyenCan_(nv, cc, month, today),
     nv: { ma: nv.MaNV, ten: nv.HoTen, gmail: nv.Gmail, phong: nv.PhongBan, chucVu: nv.ChucVu, vaiTro: vt, coPin: !!(nv.PinHash || String(nv.MatKhauHash || '')), coMK: !!String(nv.MatKhauHash || '') },
     homNay: { ngay: ymdToVN_(today), vao: vao ? fmtT_(vao.ThoiGian) : '', ra: ra ? fmtT_(ra.ThoiGian) : '', diem: vao ? vao.Diem : '', tre: vao ? Number(vao.DiTre_phut || 0) : 0 },
@@ -3515,6 +3515,98 @@ function thongBao(token) {
     return { cho: cho, luong: choDuyetLuong_(nv).length, vx: vx, cua: cua, vao: cc.some(function (r) { return r.Loai === 'VAO'; }),
       ra: cc.some(function (r) { return r.Loai === 'RA'; }), gioVao: t.GioVao || '08:00', gioRa: t.GioRa || '17:00', ngay: today };
   });
+}
+
+/* ================= THÔNG BÁO CÔNG TY ================= */
+
+const TB_SH = 'ThongBaoCT', TBD_SH = 'ThongBaoDoc';
+const TB_COT = ['MaTB', 'TieuDe', 'NoiDung', 'ApDung', 'QuanTrong', 'NguoiTao', 'MaNVTao', 'ThoiGian', 'TrangThai', 'TepDinhKem'];
+const TBD_COT = ['MaTB', 'MaNV', 'HoTen', 'ThoiGian'];
+function tbSheet_(n, cot) {
+  const ss = ss_(); let s = ss.getSheetByName(n);
+  if (!s) { s = ss.insertSheet(n); s.getRange(1, 1, 1, cot.length).setValues([cot]); s.setFrozenRows(1); if (MEMO_) delete MEMO_[n]; }
+  return s;
+}
+function tbRows_() { tbSheet_(TB_SH, TB_COT); return rows_(TB_SH).filter(function (r) { return String(r.MaTB || '').trim() && String(r.TrangThai || '') !== 'Ẩn'; }); }
+function tbDoc_() { tbSheet_(TBD_SH, TBD_COT); return rows_(TBD_SH).filter(function (r) { return String(r.MaTB || '').trim(); }); }
+function tbPham_(a) { a = String(a || 'Tất cả').trim(); return a === '' || a === 'Tất cả' ? 'toàn công ty' : a.indexOf('PB:') === 0 ? 'phòng ' + a.slice(3) : a; }
+function tbBai_(ma) { const r = tbRows_().find(function (x) { return String(x.MaTB) === String(ma); }); if (!r) throw new Error('Không tìm thấy thông báo.'); return r; }
+function tbQuyen_(nv, r) { return dtQL_(nv) || String(r.MaNVTao) === String(nv.MaNV); }
+function tbGon_(r, daDoc) {
+  return { ma: String(r.MaTB), tieuDe: String(r.TieuDe || ''), noiDung: String(r.NoiDung || ''), quanTrong: String(r.QuanTrong || '') === 'Có', nguoiTao: String(r.NguoiTao || ''),
+    luc: fmtDT_(r.ThoiGian), pham: tbPham_(r.ApDung), tep: !!String(r.TepDinhKem || '').trim(), daDoc: !!daDoc };
+}
+function tbCuaToi_(nv) {
+  try {
+    const doc = {};
+    tbDoc_().forEach(function (d) { if (String(d.MaNV) === String(nv.MaNV)) doc[String(d.MaTB)] = 1; });
+    const ds = tbRows_().filter(function (r) { return dtApDung_(nv, r); }).map(function (r) { return tbGon_(r, doc[String(r.MaTB)]); }).reverse();
+    let daXem = 0;
+    return ds.filter(function (x) { if (!x.daDoc) return true; daXem++; return daXem <= 3; });
+  } catch (e) { return []; }
+}
+function dsThongBaoCT(token) {
+  return coMemo_(function () {
+    const nv = auth_(token), ql = dtQL_(nv), tp = String(nv.VaiTro).trim() === 'TP';
+    const doc = tbDoc_(), toi = {};
+    doc.forEach(function (d) { if (String(d.MaNV) === String(nv.MaNV)) toi[String(d.MaTB)] = 1; });
+    const nvs = rows_(SH.NV).filter(function (n) { const tt = String(n.TrangThai).trim(); return String(n.MaNV).trim() && tt !== 'Nghỉ việc' && tt !== 'Tài khoản phụ'; });
+    const phong = {};
+    nvs.forEach(function (n) { const p = nhomDT_(n.PhongBan); if (p) phong[p] = 1; });
+    const ds = tbRows_().filter(function (r) { return ql || dtApDung_(nv, r) || String(r.MaNVTao) === String(nv.MaNV); }).map(function (r) {
+      const x = tbGon_(r, toi[String(r.MaTB)]);
+      x.toiNhan = dtApDung_(nv, r);
+      x.quyen = tbQuyen_(nv, r);
+      if (x.quyen) {
+        const nhan = nvs.filter(function (n) { return dtApDung_(n, r); }), da = {};
+        doc.forEach(function (d) { if (String(d.MaTB) === x.ma) da[String(d.MaNV)] = 1; });
+        x.tong = nhan.length;
+        x.soDoc = nhan.filter(function (n) { return da[String(n.MaNV)]; }).length;
+        x.chua = nhan.filter(function (n) { return !da[String(n.MaNV)]; }).map(function (n) { return String(n.HoTen) + ' (' + String(n.PhongBan || '') + ')'; });
+      }
+      return x;
+    }).reverse();
+    return { ql: ql, duocDang: ql || tp, phongToi: nhomDT_(nv.PhongBan), dsPhong: Object.keys(phong).sort(), ds: ds };
+  });
+}
+function dangThongBaoCT(token, f) {
+  const nv = auth_(token), ql = dtQL_(nv);
+  if (!ql && String(nv.VaiTro).trim() !== 'TP') throw new Error('Chỉ Giám đốc, HCNS, trưởng phòng được đăng thông báo.');
+  f = f || {};
+  const tieuDe = String(f.tieuDe || '').trim().slice(0, 200), noiDung = String(f.noiDung || '').trim().slice(0, 8000);
+  if (!tieuDe) throw new Error('Nhập tiêu đề thông báo.');
+  if (!noiDung) throw new Error('Nhập nội dung thông báo.');
+  let ap = 'PB:' + nhomDT_(nv.PhongBan);
+  if (ql) { ap = String(f.apDung || 'Tất cả').trim().slice(0, 200); if (ap !== 'Tất cả' && ap.indexOf('PB:') !== 0) ap = 'Tất cả'; }
+  let tep = '';
+  if (f.file && f.file.data) tep = luuTep_('TB_FOLDER', 'HỆ THỐNG CHẤM CÔNG - THÔNG BÁO CÔNG TY', f.file, tieuDe.slice(0, 80)).getId();
+  const now = new Date(), ma = 'TB' + Utilities.formatDate(now, TZ, 'yyMMddHHmmss') + Math.floor(Math.random() * 90 + 10);
+  tbSheet_(TB_SH, TB_COT);
+  append_(TB_SH, { MaTB: ma, TieuDe: tieuDe, NoiDung: noiDung, ApDung: ap, QuanTrong: f.quanTrong ? 'Có' : 'Không', NguoiTao: nv.HoTen, MaNVTao: nv.MaNV, ThoiGian: now, TrangThai: 'Hiện', TepDinhKem: tep });
+  log_(nv.Gmail, 'Đăng thông báo công ty', tieuDe + ' · ' + ap);
+  return { ok: true, ma: ma };
+}
+function docThongBaoCT(token, ma) {
+  const nv = auth_(token), r = tbBai_(ma);
+  if (!dtApDung_(nv, r)) throw new Error('Không tìm thấy thông báo.');
+  if (!tbDoc_().some(function (d) { return String(d.MaTB) === String(ma) && String(d.MaNV) === String(nv.MaNV); }))
+    append_(TBD_SH, { MaTB: String(ma), MaNV: nv.MaNV, HoTen: nv.HoTen, ThoiGian: new Date() });
+  return { ok: true };
+}
+function anThongBaoCT(token, ma) {
+  const nv = auth_(token), r = tbBai_(ma);
+  if (!tbQuyen_(nv, r)) throw new Error('Bạn không được gỡ thông báo này.');
+  setCell_(TB_SH, r._row, 'TrangThai', 'Ẩn');
+  log_(nv.Gmail, 'Gỡ thông báo công ty', String(r.TieuDe));
+  return { ok: true };
+}
+function xemTepTBCT(token, ma) {
+  const nv = auth_(token), r = tbBai_(ma);
+  if (!tbQuyen_(nv, r) && !dtApDung_(nv, r)) throw new Error('Không tìm thấy tệp.');
+  const id = String(r.TepDinhKem || '').trim();
+  if (!id) throw new Error('Không có tệp.');
+  const f = DriveApp.getFileById(id), b = f.getBlob();
+  return { mime: b.getContentType(), data: Utilities.base64Encode(b.getBytes()), ten: f.getName() };
 }
 
 function SAO_LUU_HANG_NGAY() {
