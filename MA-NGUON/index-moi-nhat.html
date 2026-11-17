@@ -187,7 +187,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 89, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 90, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -425,7 +425,7 @@ function go(t){ TAB = t; window.TAB_LUOT = (window.TAB_LUOT || 0) + 1; if (t ===
 function render(){
   if (!D) return;
   var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan, hosotoi:vHoSoToi}[TAB]() + tuiTheoTab();
-  body = segBar() + body;
+  body = segBar() + ((TAB === 'cong' || TAB === 'quantri' || TAB === 'homnay') ? thanhTBCT() : '') + body;
   var TT = laQL() ? TAB_QL : TEN_TAB;
   if (TAB === 'homnay' && !laQL()) TAB = 'cong';
   if (TAB === 'bangluong' && !laLuong()) TAB = 'cong';
@@ -444,7 +444,8 @@ function render(){
   var side = '<aside class="side"><div class="brand"><div class="cty">' + esc(D.congTy) + '</div><div class="muted">Hệ thống chấm công và nhân sự</div></div>' +
     menuNhom().map(function(n){ return '<div class="nhom-menu"><h5>' + n[0] + '</h5>' + n[1].map(function(m){ var bd = (m[0] === 'don' && D.choDuyet.length) ? '<span class="mn-badge nhay">' + D.choDuyet.length + '</span>' : ''; return '<button class="' + (nhomCua(TAB) === m[0] ? 'on' : '') + '" onclick="go(\'' + m[0] + '\')">' + (ICON[m[0]] || '') + '<span>' + m[1] + '</span>' + bd + '</button>'; }).join('') + '</div>'; }).join('') +
     '<div class="nhom-menu"><button onclick="go(\'toi\')">' + ICON.toi + '<span>' + esc(D.nv.ten) + '</span></button><button onclick="logout()" style="color:#D7262E"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Đăng xuất</span></button><button onclick="capNhatApp()" style="color:var(--steel)">' + ICON.capnhat + '<span>Tải lại, cập nhật app<br><small class="muted" style="font-weight:400">Đang dùng bản ' + PB_GD + '</small></span></button></div>' +
-    '<div class="nhom-menu" style="border:2px solid #D7262E"><button class="' + (TAB === 'daotao' ? 'on' : '') + '" onclick="go(\'daotao\')" style="color:#D7262E;font-weight:700">' + ICON.daotao + '<span>Đào tạo chuyên môn</span></button></div></aside>';
+    '<div class="nhom-menu" style="border:2px solid #D7262E"><button class="' + (TAB === 'daotao' ? 'on' : '') + '" onclick="go(\'daotao\')" style="color:#D7262E;font-weight:700">' + ICON.daotao + '<span>Đào tạo chuyên môn</span></button></div>' +
+    '<div class="nhom-menu" style="border:2px solid var(--steel)"><button onclick="moTBCT()" style="font-weight:700"><span>📢 Thông báo công ty</span></button>' + (tbctDuocDang() ? '<button onclick="moDangTBCT()" style="font-weight:700;color:var(--steel)"><span>+ Đăng thông báo</span></button>' : '') + '</div></aside>';
   $('app').innerHTML = '<div class="wrap">' + side + '<section class="main">' +
     '<div class="top"><div class="who"><div class="ava" title="Bấm để đổi ảnh đại diện" onclick="doiAnh()">' + (D.anh ? '<img src="' + D.anh + '" alt="Ảnh đại diện">' : esc(chu)) + '</div>' +
     '<div style="min-width:0"><div class="cty">' + esc(D.congTy) + '</div><h1>' + esc(D.nv.ten) + '</h1><div class="muted">' + esc(D.nv.phong) + (D.nv.chucVu ? ' · ' + esc(D.nv.chucVu) : '') + '</div></div></div>' +
@@ -2037,6 +2038,13 @@ function canhBaoTBCT(){
   if (!ds.length) return '';
   return ds.slice(0, 3).map(function(x){ return tbctThe(x, true); }).join('') +
     (ds.length > 3 ? '<div class="box" style="cursor:pointer;font-weight:700" onclick="moTBCT()">Còn ' + (ds.length - 3) + ' thông báo chưa đọc. Bấm để xem.</div>' : '');
+}
+function thanhTBCT(){
+  var ds = (D && D.thongBaoCT) || [], chua = ds.filter(function(x){ return !x.daDoc; }).length, dang = tbctDuocDang();
+  return '<div class="box" style="border:2px solid var(--steel);display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
+    '<b style="flex:1;min-width:150px">📢 Thông báo công ty' + (chua ? ' <span class="pill p-bad">' + chua + ' chưa đọc</span>' : '') + '</b>' +
+    (dang ? '<button class="small main" style="font-weight:700" onclick="moDangTBCT()">+ Đăng thông báo</button>' : '') +
+    '<button class="small" onclick="moTBCT()">Xem tất cả</button></div>';
 }
 function hopTBCT(){
   var ds = (D && D.thongBaoCT) || [], chua = ds.filter(function(x){ return !x.daDoc; }).length;
