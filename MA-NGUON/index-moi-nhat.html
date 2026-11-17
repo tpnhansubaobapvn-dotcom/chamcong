@@ -32,6 +32,20 @@ h2{font-size:16px;font-weight:600;margin:20px 0 8px}
 .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sld-wrap{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table.sld{border-collapse:collapse;font-size:13px;white-space:nowrap}
+table.sld th{position:sticky;top:0;background:var(--steel);color:var(--page);padding:8px 10px;text-align:left;font-weight:700}
+table.sld td{padding:7px 10px;border-top:1px solid var(--line);max-width:280px;overflow:hidden;text-overflow:ellipsis}
+table.sld td.trong{color:var(--muted)}
+table.sld tbody tr:hover{background:color-mix(in srgb,var(--steel) 7%,transparent)}
+table.sld td:nth-child(2),table.sld th:nth-child(2){position:sticky;left:0;background:var(--card);font-weight:600;z-index:1}
+table.sld th:nth-child(2){background:var(--steel);z-index:2}
+.sld-cot{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 12px}
+.sld-cot label{display:flex;gap:8px;align-items:center;margin:0;padding:5px 0;color:var(--ink);font-size:13px;cursor:pointer}
+.sld-cot input{width:18px;height:18px;flex:none;padding:0}
+.sld-full{position:fixed;inset:0;z-index:15;background:var(--page);overflow:auto;padding:16px}
+.sld-full .sld-wrap{max-height:none}
+
 .num{font-size:22px;font-weight:600;color:var(--steel)}
 label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
 input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px}
@@ -187,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 90, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 91, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -424,13 +438,14 @@ function go(t){ TAB = t; window.TAB_LUOT = (window.TAB_LUOT || 0) + 1; if (t ===
 
 function render(){
   if (!D) return;
-  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan, hosotoi:vHoSoToi}[TAB]() + tuiTheoTab();
+  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan, hosotoi:vHoSoToi, solaodong:vSoLD}[TAB]() + tuiTheoTab();
   body = segBar() + ((TAB === 'cong' || TAB === 'quantri' || TAB === 'homnay') ? thanhTBCT() : '') + body;
   var TT = laQL() ? TAB_QL : TEN_TAB;
   if (TAB === 'homnay' && !laQL()) TAB = 'cong';
   if (TAB === 'bangluong' && !laLuong()) TAB = 'cong';
   if (TAB === 'solieu' && !(laLuong() || D.nv.vaiTro === 'TP')) TAB = 'cong';
   if (TAB === 'quantri' && !laQT()) TAB = 'cong';
+  if (TAB === 'solaodong' && !laLuong()) TAB = 'cong';
   if (TAB === 'hoso' && !laQT()) TAB = 'cong'; if (TAB === 'lichviec' && !laQT() && !(D && D.lvGiao)) TAB = 'cong';
   var NGAN = {quantri:'Quản trị', cong:'Công', don:'Đơn từ', luong:'Lương', homnay:'Hôm nay', solieu:laLuong() ? 'Tiền lương' : 'Giao việc', kpi:'KPI', vaitro:'Quy định', donhang:'Đơn hàng', toi:'Tôi', huongdan:'Hướng dẫn'};
   var dauTien = ['cong', 'quantri', 'don', 'luong', 'homnay'];
@@ -472,7 +487,7 @@ function vCong(){
   var label = !h.vao ? 'Chấm công vào' : 'Chấm công ra';
   var sub = !h.vao ? 'Giờ vào ' + D.gioVao : (h.ra ? 'Bấm lại nếu về muộn hơn' : 'Đã vào lúc ' + h.vao);
   var duyet = D.choDuyet.length ? '<div class="box" style="background:var(--waitbg);border-color:var(--waitbg);color:var(--wait);cursor:pointer" onclick="go(\'don\')">' + D.choDuyet.length + ' đơn đang chờ bạn duyệt</div>' : '';
-  return canhBaoTBCT() + canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
+  return canhBaoTBCT() + canhBaoSLD() + canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
     '<button class="punch' + (done ? ' done' : '') + '" id="pb" onclick="punch()"><b>' + label + '</b><span>' + esc(sub) + '</span></button>' +
     '<div class="box"><div class="row"><span>Giờ vào</span><b>' + (h.vao || '--:--') + '</b></div>' +
     '<div class="row"><span>Giờ ra</span><b>' + (h.ra || '--:--') + '</b></div>' +
@@ -999,6 +1014,7 @@ function menuNhom(){
   if (laQT()) ql.push(['quantri','Quản trị nhân sự']); else if (D.nv.vaiTro === 'TP') ql.push(['quantri','Phòng của tôi']);
   if (laQL()) ql.push(['homnay','Hôm nay']);
   if (laQT() || D.lvGiao) ql.push(['lichviec','Lịch việc nhân sự']);
+  if (laLuong()) ql.push(['solaodong','Sổ quản lý lao động']);
   if (laLuong() || D.nv.vaiTro === 'TP') ql.push(['solieu', laLuong() ? 'Tiền lương, KPI, thưởng' : 'KPI, giao việc']);
   if (ql.length) g.push(['Quản lý', ql]);
   g.push(['Công việc, quy định', [['donhang','Đơn hàng bị trả, treo, lỗi'], ['vaitro','Vai trò, nội quy, vi phạm']]]);
@@ -2010,6 +2026,176 @@ function xemTep(ma){
     $('layer').innerHTML = '<div class="veil"><div class="sheet center">' + noi + '<p class="muted">' + esc(r.ten) + '</p><button class="dong" onclick="closeLayer()">Đóng</button></div></div>';
   }).withFailureHandler(function(e){ closeLayer(); toast((e && e.message) || String(e), true); }).xemTep(TK, ma);
 }
+/* ---------- SỔ QUẢN LÝ LAO ĐỘNG ---------- */
+var SLD = undefined, SLD_LOI = '', SLD_TT = 'dang', SLD_CTY = '', SLD_TIM = '', SLD_FULL = false, SLD_CHUA = false;
+var SLD_COTS = [
+  ['ten','Họ và tên'], ['GioiTinh','Giới tính'], ['ngaySinh','Ngày sinh'], ['QuocTich','Quốc tịch'], ['SoCCCD','Số CCCD / hộ chiếu'], ['NgayCapCCCD','Ngày cấp'], ['NoiCapCCCD','Nơi cấp'],
+  ['ThuongTru','Địa chỉ thường trú'], ['NoiO','Nơi ở hiện tại'], ['sdt','Số điện thoại'], ['MailCaNhan','Mail cá nhân'], ['mailCT','Mail công ty (đăng nhập app)'],
+  ['HocVan','Trình độ phổ thông'], ['TrinhDoCMKT','Trình độ chuyên môn kỹ thuật'], ['ChuyenNganh','Chuyên ngành đào tạo'],
+  ['ctyTen','Công ty'], ['phong','Phòng ban'], ['chucVu','Vị trí việc làm'], ['trangThai','Trạng thái'],
+  ['ngayVao','Ngày vào làm'], ['thuViec','Thử việc / chính thức'], ['hetTV','Ngày hết thử việc'], ['loaiHD','Loại hợp đồng'], ['soHD','Số hợp đồng'], ['hdTu','Hợp đồng từ ngày'], ['hdDen','Hợp đồng đến ngày'],
+  ['MaSoBHXH','Mã số BHXH'], ['ThamGiaBH','Tham gia BHXH, BHYT, BHTN'], ['MaSoThue','Mã số thuế'],
+  ['bac','Bậc lương'], ['luongCB','Lương cơ bản'], ['luongTong','Thu nhập tối đa theo bậc'], ['NangBacLuong','Nâng bậc, nâng lương'],
+  ['phepNam','Phép năm được hưởng'], ['phepDaNghi','Phép đã nghỉ trong năm'], ['gioTC','Giờ làm thêm trong năm'],
+  ['daoTao','Số bài đào tạo đã học'], ['kyLuat','Số lần kỷ luật, vi phạm'], ['TaiNanBNN','Tai nạn lao động, bệnh nghề nghiệp'],
+  ['NgayNghiViec','Ngày chấm dứt hợp đồng'], ['LyDoNghi','Lý do chấm dứt'], ['DongYDLCN','Đồng ý xử lý dữ liệu cá nhân'], ['GhiChu','Ghi chú'], ['CapNhat','Cập nhật lần cuối']
+];
+var SLD_MAU = {
+  so: ['ten','GioiTinh','ngaySinh','QuocTich','ThuongTru','SoCCCD','TrinhDoCMKT','ChuyenNganh','chucVu','loaiHD','ngayVao','ThamGiaBH','MaSoBHXH','luongCB','NangBacLuong','phepDaNghi','gioTC','daoTao','kyLuat','TaiNanBNN','NgayNghiViec','LyDoNghi'],
+  lienhe: ['ten','phong','chucVu','sdt','MailCaNhan','mailCT','NoiO'],
+  hopdong: ['ten','phong','chucVu','ngayVao','thuViec','hetTV','loaiHD','soHD','hdTu','hdDen','NgayNghiViec','LyDoNghi'],
+  tatca: SLD_COTS.map(function(c){ return c[0]; })
+};
+var SLD_NGAYK = {ngaySinh:1, NgayCapCCCD:1, ngayVao:1, hetTV:1, hdTu:1, hdDen:1, NgayNghiViec:1};
+function sldChon(){
+  var a = null; try { a = JSON.parse(localStorage.getItem('sldCot') || 'null'); } catch (e) {}
+  if (!a || !a.length) a = SLD_MAU.so.slice();
+  return a;
+}
+function sldDatChon(a){ try { localStorage.setItem('sldCot', JSON.stringify(a)); } catch (e) {} render(); }
+function sldTich(k, on){ var a = sldChon().filter(function(x){ return x !== k; }); if (on) a.push(k); sldDatChon(a); }
+function sldVN(s){ var m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? m[3] + '/' + m[2] + '/' + m[1] : String(s || ''); }
+function sldGia(x, k){
+  if (k === 'ctyTen') return x.cty === 'CAP' ? 'Dây Cáp Thép Việt Nam' : 'Bao Báp Việt Nam';
+  var v = x[k];
+  if (SLD_NGAYK[k]) return sldVN(v);
+  if (k === 'luongCB' || k === 'luongTong') return v ? tien(v) : '';
+  if (k === 'phepDaNghi' || k === 'gioTC' || k === 'daoTao' || k === 'kyLuat') return String(v || 0);
+  return String(v == null ? '' : v);
+}
+function sldLoc(){
+  var q = SLD_TIM.trim().toLowerCase();
+  return (SLD && SLD.ds || []).filter(function(x){
+    if (SLD_TT === 'dang' && x.trangThai === 'Nghỉ việc') return false;
+    if (SLD_TT === 'nghi' && x.trangThai !== 'Nghỉ việc') return false;
+    if (SLD_CTY && x.cty !== SLD_CTY) return false;
+    if (q && (x.ten + ' ' + x.phong + ' ' + x.chucVu + ' ' + x.sdt + ' ' + x.mailCT).toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+}
+function sldCotDang(){ var a = sldChon(); return SLD_COTS.filter(function(c){ return a.indexOf(c[0]) >= 0; }); }
+function sldBang(){
+  var cot = sldCotDang(), ds = sldLoc();
+  if (!cot.length) return '<div class="box muted">Tích chọn ít nhất một cột ở trên.</div>';
+  if (!ds.length) return '<div class="box muted">Không có người nào khớp điều kiện lọc.</div>';
+  return '<div class="sld-wrap"><table class="sld"><thead><tr><th>STT</th>' + cot.map(function(c){ return '<th>' + esc(c[1]) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    ds.map(function(x, i){ return '<tr' + (SLD.sua ? ' style="cursor:pointer" onclick="sldSua(\'' + esc(x.ma) + '\')"' : '') + '><td>' + (i + 1) + '</td>' + cot.map(function(c){ var v = sldGia(x, c[0]); return '<td' + (v === '' ? ' class="trong"' : '') + '>' + (v === '' ? '—' : esc(v)) + '</td>'; }).join('') + '</tr>'; }).join('') +
+    '</tbody></table></div>';
+}
+function sldTimGo(v){ SLD_TIM = v; var b = $('sldB'); if (b) b.innerHTML = sldBang(); var n = $('sldN'); if (n) n.textContent = sldLoc().length + ' người'; }
+function vSoLD(){
+  if (!laLuong()) return '<div class="box muted">Chỉ Giám đốc, Hành chính nhân sự, Kế toán xem sổ quản lý lao động.</div>';
+  if (window.__sldTab !== window.TAB_LUOT) { window.__sldTab = window.TAB_LUOT; SLD = undefined; }
+  if (SLD === undefined) { SLD = null; SLD_LOI = ''; google.script.run.withSuccessHandler(function(r){ SLD = r || {ds: []}; if (TAB === 'solaodong') render(); }).withFailureHandler(function(e){ SLD = {ds: []}; SLD_LOI = (e && e.message) || String(e); if (TAB === 'solaodong') render(); }).soLaoDong(TK); }
+  var s = '<div class="row"><h2 style="margin:0">Sổ quản lý lao động</h2><button class="small" onclick="SLD = undefined; render()">Làm mới</button></div>';
+  if (!SLD) return s + '<div class="box muted" style="margin-top:10px">Đang lập sổ từ dữ liệu trên app…</div>';
+  if (SLD_LOI) return s + '<div class="box" style="margin-top:10px;border:2px solid var(--bad);color:var(--bad)">Chưa lập được sổ: ' + esc(SLD_LOI) + '<br><button class="small main" style="margin-top:8px" onclick="SLD = undefined; render()">Tải lại</button></div>';
+  var chon = sldChon(), o = function(t, k, cur, bien){ return '<button class="small" style="' + (cur === k ? 'background:var(--steel);color:var(--page);border-color:var(--steel);font-weight:700' : '') + '" onclick="' + bien + '=\'' + k + '\'; render()">' + t + '</button>'; };
+  var chua = SLD.ds.filter(function(x){ return x.trangThai !== 'Nghỉ việc' && !(x.SoCCCD && x.ThuongTru); });
+  s += '<p class="note" style="margin:4px 0 10px">Sổ tự lập từ hồ sơ nhân viên, hợp đồng, bậc lương, đơn từ và phần mỗi người tự khai trên app. Tích cột cần xem, rồi bấm Tải Excel hoặc In.' + (SLD.sua ? ' Bấm vào một dòng để sửa, bổ sung.' : '') + '</p>';
+  s += '<div class="box"><b>Chọn nhanh mẫu cột</b><div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">' +
+    '<button class="small main" onclick="sldDatChon(SLD_MAU.so.slice())">Mẫu sổ theo quy định</button><button class="small" onclick="sldDatChon(SLD_MAU.lienhe.slice())">Danh bạ liên hệ</button><button class="small" onclick="sldDatChon(SLD_MAU.hopdong.slice())">Hợp đồng, ngày vào, ngày nghỉ</button><button class="small" onclick="sldDatChon(SLD_MAU.tatca.slice())">Tất cả cột</button><button class="small" onclick="sldDatChon([\'ten\'])">Bỏ chọn hết</button></div>' +
+    '<div class="sld-cot">' + SLD_COTS.map(function(c){ return '<label><input type="checkbox"' + (chon.indexOf(c[0]) >= 0 ? ' checked' : '') + ' onchange="sldTich(\'' + c[0] + '\', this.checked)"> ' + esc(c[1]) + '</label>'; }).join('') + '</div></div>';
+  s += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;align-items:center">' + o('Đang làm', 'dang', SLD_TT, 'SLD_TT') + o('Đã nghỉ', 'nghi', SLD_TT, 'SLD_TT') + o('Tất cả', 'tat', SLD_TT, 'SLD_TT') +
+    '<span style="width:10px"></span>' + o('Cả hai công ty', '', SLD_CTY, 'SLD_CTY') + o('Dây Cáp Thép', 'CAP', SLD_CTY, 'SLD_CTY') + o('Bao Báp', 'BB', SLD_CTY, 'SLD_CTY') + '</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px"><input type="text" style="flex:1;min-width:160px" placeholder="Tìm tên, phòng, số điện thoại…" value="' + esc(SLD_TIM) + '" oninput="sldTimGo(this.value)">' +
+    '<b id="sldN">' + sldLoc().length + ' người</b><button class="small main" onclick="sldExcel()">Tải Excel</button><button class="small" onclick="sldIn()">In sổ</button><button class="small" onclick="SLD_FULL = !SLD_FULL; render()">' + (SLD_FULL ? 'Thu nhỏ' : 'Xem toàn màn hình') + '</button></div>';
+  if (chua.length) s += '<div class="box" style="border:2px solid #D98200"><div class="row" style="align-items:center"><b style="color:#D98200">' + chua.length + ' người đang làm chưa khai thông tin cá nhân</b><button class="small" onclick="SLD_CHUA = !SLD_CHUA; render()">' + (SLD_CHUA ? 'Ẩn' : 'Xem tên') + '</button></div>' +
+    (SLD_CHUA ? '<div class="muted" style="font-size:13px;margin-top:6px;line-height:1.6">' + chua.map(function(x){ return esc(x.ten) + ' (' + esc(x.phong) + ')'; }).join(', ') + '</div>' : '') +
+    '<p class="note">App đã nhắc từng người ngay trang Chấm công. Mỗi người bấm vào lời nhắc và tự khai, không cần phiếu riêng.</p></div>';
+  s += '<div id="sldB">' + sldBang() + '</div>';
+  return SLD_FULL ? '<div class="sld-full"><button class="small main" style="float:right" onclick="SLD_FULL = false; render()">Thu nhỏ</button>' + s + '</div>' : s;
+}
+function sldTenTep(){ var d = new Date(), p = function(n){ return (n < 10 ? '0' : '') + n; }; return 'SỔ QUẢN LÝ LAO ĐỘNG - ' + p(d.getDate()) + '-' + p(d.getMonth() + 1) + '-' + d.getFullYear(); }
+function sldHtml(){
+  var cot = sldCotDang(), ds = sldLoc();
+  var cty = SLD_CTY === 'CAP' ? 'CÔNG TY CỔ PHẦN SX DÂY CÁP THÉP VIỆT NAM' : SLD_CTY === 'BB' ? 'CÔNG TY TNHH BAO BÁP VIỆT NAM' : esc(String(D.congTy || '').toUpperCase());
+  return '<table border="1" cellspacing="0" cellpadding="4" style="border-collapse:collapse;font-family:Arial;font-size:11pt">' +
+    '<tr><td colspan="' + (cot.length + 1) + '" style="border:none;font-weight:bold">' + cty + '</td></tr>' +
+    '<tr><td colspan="' + (cot.length + 1) + '" style="border:none;font-weight:bold;font-size:14pt;text-align:center">SỔ QUẢN LÝ LAO ĐỘNG</td></tr>' +
+    '<tr><td colspan="' + (cot.length + 1) + '" style="border:none;text-align:center">Lập lúc ' + esc(SLD.luc || '') + ' · ' + (SLD_TT === 'dang' ? 'Lao động đang làm việc' : SLD_TT === 'nghi' ? 'Lao động đã nghỉ việc' : 'Tất cả lao động') + ' · ' + ds.length + ' người</td></tr>' +
+    '<tr style="background:#1F3A4D;color:#fff"><th>STT</th>' + cot.map(function(c){ return '<th>' + esc(c[1]) + '</th>'; }).join('') + '</tr>' +
+    ds.map(function(x, i){ return '<tr><td>' + (i + 1) + '</td>' + cot.map(function(c){ return '<td style="mso-number-format:\'\\@\'">' + esc(sldGia(x, c[0])) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>';
+}
+function sldExcel(){
+  if (!SLD || !sldLoc().length) { toast('Không có dòng nào để tải.', true); return; }
+  var h = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8"></head><body>' + sldHtml() + '</body></html>';
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + h], {type: 'application/vnd.ms-excel;charset=utf-8'}));
+  a.download = sldTenTep() + '.xls'; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  toast('Đã tải tệp Excel về máy');
+}
+function sldIn(){
+  if (!SLD || !sldLoc().length) { toast('Không có dòng nào để in.', true); return; }
+  var f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
+  var d = f.contentWindow.document; d.open();
+  d.write('<html><head><meta charset="utf-8"><title>' + sldTenTep() + '</title><style>@page{size:A4 landscape;margin:10mm}table{width:100%}td,th{font-size:8pt !important;word-break:break-word}</style></head><body>' + sldHtml() + '</body></html>');
+  d.close();
+  setTimeout(function(){ f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function(){ f.remove(); }, 60000); }, 400);
+}
+function sldO(arr, v){ return arr.map(function(a){ return '<option' + (a === v ? ' selected' : '') + '>' + a + '</option>'; }).join(''); }
+function sldForm(x, ql){
+  var i = function(id, nhan, v, kieu, goiY){ return '<label for="' + id + '">' + nhan + '</label><input type="' + (kieu || 'text') + '" id="' + id + '" value="' + esc(v || '') + '"' + (goiY ? ' placeholder="' + goiY + '"' : '') + '>'; };
+  var s = i('sdTen', 'Họ và tên', x.ten, 'text').replace('<input', '<input disabled') +
+    '<div class="grid2"><div><label for="sdGT">Giới tính</label><select id="sdGT">' + sldO(['', 'Nam', 'Nữ'], x.GioiTinh || '') + '</select></div><div>' + i('sdNS', 'Ngày, tháng, năm sinh', x.ngaySinh, 'date') + '</div></div>' +
+    '<div class="grid2"><div>' + i('sdQT', 'Quốc tịch', x.QuocTich || 'Việt Nam') + '</div><div>' + i('sdDT', 'Số điện thoại liên hệ', x.sdt, 'tel') + '</div></div>' +
+    i('sdCC', 'Số căn cước công dân / định danh cá nhân (hoặc hộ chiếu)', x.SoCCCD, 'text') +
+    '<div class="grid2"><div>' + i('sdNC', 'Ngày cấp', x.NgayCapCCCD, 'date') + '</div><div>' + i('sdNoiC', 'Nơi cấp', x.NoiCapCCCD, 'text', 'Ví dụ: Bộ Công an') + '</div></div>' +
+    i('sdTT', 'Địa chỉ thường trú (ghi đủ theo căn cước / VNeID)', x.ThuongTru) + i('sdNO', 'Nơi ở hiện tại', x.NoiO) + i('sdMail', 'Mail cá nhân', x.MailCaNhan, 'email') +
+    '<div class="grid2"><div><label for="sdHV">Trình độ phổ thông cao nhất</label><select id="sdHV">' + sldO(['', '12/12', '11/12', '10/12', '9/12', 'Dưới lớp 9'], x.HocVan || '') + '</select></div>' +
+    '<div><label for="sdCM">Trình độ chuyên môn kỹ thuật</label><select id="sdCM">' + sldO(['', 'Chưa qua đào tạo', 'Sơ cấp nghề', 'Trung cấp', 'Cao đẳng', 'Đại học', 'Thạc sĩ'], x.TrinhDoCMKT || '') + '</select></div></div>' +
+    i('sdCN', 'Chuyên ngành đào tạo (chưa qua đào tạo thì ghi Không)', x.ChuyenNganh) +
+    '<div class="grid2"><div>' + i('sdMST', 'Mã số thuế cá nhân (nếu có)', x.MaSoThue) + '</div><div>' + i('sdBH', 'Mã số BHXH / BHYT (nếu có)', x.MaSoBHXH) + '</div></div>';
+  if (ql) s += '<h3 style="margin:16px 0 0">Phần Hành chính nhân sự ghi</h3>' +
+    '<div class="grid2"><div>' + i('sdNV', 'Ngày vào làm', x.ngayVao, 'date') + '</div><div>' + i('sdTG', 'Tham gia BHXH, BHYT, BHTN', x.ThamGiaBH, 'text', 'Ví dụ: Có, từ 12/2026') + '</div></div>' +
+    i('sdNL', 'Nâng bậc, nâng lương', x.NangBacLuong, 'text', 'Ví dụ: 01/2027 lên bậc A.5') + i('sdTN', 'Tai nạn lao động, bệnh nghề nghiệp', x.TaiNanBNN, 'text', 'Không có thì để trống') +
+    '<div class="grid2"><div>' + i('sdNN', 'Ngày chấm dứt hợp đồng', x.NgayNghiViec, 'date') + '</div><div>' + i('sdLD', 'Lý do chấm dứt', x.LyDoNghi) + '</div></div>' + i('sdGC', 'Ghi chú', x.GhiChu);
+  return s;
+}
+function sldDoc(ql){
+  var g = function(id){ var e = $(id); return e ? e.value.trim() : undefined; };
+  var f = {GioiTinh: g('sdGT'), NgaySinh: g('sdNS'), QuocTich: g('sdQT'), SoDienThoai: g('sdDT'), SoCCCD: g('sdCC'), NgayCapCCCD: g('sdNC'), NoiCapCCCD: g('sdNoiC'), ThuongTru: g('sdTT'), NoiO: g('sdNO'), MailCaNhan: g('sdMail'), HocVan: g('sdHV'), TrinhDoCMKT: g('sdCM'), ChuyenNganh: g('sdCN'), MaSoThue: g('sdMST'), MaSoBHXH: g('sdBH')};
+  if (ql) { f.NgayVaoLam = g('sdNV'); f.ThamGiaBH = g('sdTG'); f.NangBacLuong = g('sdNL'); f.TaiNanBNN = g('sdTN'); f.NgayNghiViec = g('sdNN'); f.LyDoNghi = g('sdLD'); f.GhiChu = g('sdGC'); }
+  return f;
+}
+function sldSua(ma){
+  var x = (SLD && SLD.ds || []).filter(function(v){ return v.ma === ma; })[0]; if (!x || !SLD.sua) return;
+  $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><h2 style="margin-top:0">Sổ lao động: ' + esc(x.ten) + '</h2>' +
+    '<p class="note" style="margin-top:0">' + esc(x.phong) + ' · ' + esc(x.chucVu) + (x.DongYDLCN ? ' · ' + esc(x.DongYDLCN) : ' · chưa bấm đồng ý xử lý dữ liệu cá nhân') + '</p>' +
+    sldForm(x, true) + '<p id="sdE" class="err"></p><div class="grid2"><button onclick="closeLayer()">Hủy</button><button class="main" id="sdOK">Lưu</button></div></div></div>';
+  $('sdOK').onclick = function(){
+    $('sdOK').textContent = 'Đang lưu…';
+    call('luuSoLaoDong', [TK, ma, sldDoc(true)], function(){ closeLayer(); toast('Đã lưu vào sổ'); SLD = undefined; render(); }, function(m){ $('sdE').textContent = m; $('sdOK').textContent = 'Lưu'; });
+  };
+}
+function sldKhai(){
+  var t = D.soLD || {};
+  var x = {ten: D.nv.ten, ngaySinh: t.NgaySinh, sdt: t.SoDienThoai};
+  for (var k in t) x[k] = t[k];
+  $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><h2 style="margin-top:0">Khai thông tin cá nhân</h2>' +
+    '<p class="note" style="margin-top:0">Công ty dùng thông tin này để lập Sổ quản lý lao động, ký hợp đồng, đóng bảo hiểm và thuế. Khai đúng theo căn cước công dân hoặc VNeID. Chỉ Hành chính nhân sự, Kế toán và Ban Giám đốc xem được.</p>' +
+    sldForm(x, false) +
+    '<label style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;color:var(--ink);font-size:14px;line-height:1.5"><input type="checkbox" id="sdDY" style="width:22px;height:22px;flex:none;margin-top:2px"' + (t.DongYDLCN ? ' checked' : '') + '><span>Tôi đồng ý cho Công ty thu thập, lưu trữ và xử lý dữ liệu cá nhân của tôi (thông tin căn cước, hồ sơ nhân sự, hình ảnh và vị trí khi chấm công) để quản lý lao động, tính lương, đóng bảo hiểm, thuế, theo Điều 30 Nội quy lao động.</span></label>' +
+    '<p id="sdE" class="err"></p><div class="grid2"><button onclick="closeLayer()">Để sau</button><button class="main" id="sdOK">Gửi</button></div></div></div>';
+  $('sdOK').onclick = function(){
+    var f = sldDoc(false); f.dongY = $('sdDY').checked;
+    if (!f.dongY) { $('sdE').textContent = 'Bấm tích vào ô đồng ý ở trên rồi gửi.'; return; }
+    $('sdOK').textContent = 'Đang gửi…';
+    call('khaiSoLaoDong', [TK, f], function(){ closeLayer(); toast('Đã ghi vào sổ. Cảm ơn bạn.'); refresh(); }, function(m){ $('sdE').textContent = m; $('sdOK').textContent = 'Gửi'; });
+  };
+}
+function canhBaoSLD(){
+  var t = D && D.soLD; if (!t || t.da) return '';
+  return '<div class="box" style="border:2px solid #D98200;cursor:pointer" onclick="sldKhai()"><b style="color:#D98200">Bạn chưa khai thông tin cá nhân cho Sổ quản lý lao động.</b><div class="muted" style="font-size:13px;margin-top:2px">Mất khoảng 3 phút, chuẩn bị sẵn căn cước công dân. Bấm vào đây để khai.</div></div>';
+}
+function hopSLDToi(){
+  var t = D && D.soLD; if (!t) return '';
+  return '<section class="box"><div class="row" style="align-items:center"><b>Thông tin cá nhân cho Sổ quản lý lao động</b>' + (t.da ? '<span class="pill p-ok">Đã khai</span>' : '<span class="pill p-bad">Chưa khai</span>') + '</div>' +
+    '<p class="note">' + (t.da ? 'Cập nhật lần cuối: ' + esc(t.CapNhat || '') + '. Đổi số điện thoại, nơi ở, căn cước thì bấm cập nhật.' : 'Khai theo căn cước công dân hoặc VNeID, mất khoảng 3 phút.') + '</p>' +
+    '<button class="small main" style="margin-top:8px" onclick="sldKhai()">' + (t.da ? 'Xem, cập nhật' : 'Khai ngay') + '</button></section>';
+}
+
 /* ---------- THÔNG BÁO CÔNG TY ---------- */
 var TBCT = null, TBCT_MO = {};
 function tbctDuocDang(){ return !!D && ['GD', 'HCNS', 'TP'].indexOf(D.nv.vaiTro) >= 0; }
@@ -3418,6 +3604,7 @@ function vToi(){
     '<li><b>Bảo hiểm:</b> tham gia BHXH, BHYT, BHTN bắt buộc khi có hợp đồng lao động; người lao động đóng 10,5%, công ty đóng 21,5% trên lương đóng bảo hiểm.</li>' +
     '<li><b>Lương, thưởng:</b> trả theo Quy chế Lương – Thưởng – Phụ cấp của công ty; phiếu lương gửi riêng, có quyền phản hồi trong 3 ngày làm việc.</li>' +
     '</ul><button class="linkbtn" style="margin-top:8px" onclick="go(\'quyche\')"><span>Xem nội quy, quy chế đầy đủ</span><span class="muted">›</span></button>');
+  s += hopSLDToi();
   s += the('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>', 'Hồ sơ cá nhân và quyền riêng tư',
     '<p style="margin:0 0 8px;font-size:14px">Hồ sơ lưu tại HCNS: hợp đồng lao động và phụ lục, căn cước công dân, sơ yếu lý lịch, bằng cấp, giấy khám sức khỏe, đăng ký người phụ thuộc, biên bản bàn giao tài sản.</p>' +
     '<p class="note" style="margin:0 0 8px">Dữ liệu cá nhân của bạn được bảo vệ theo Luật Bảo vệ dữ liệu cá nhân (hiệu lực 01/01/2026) và Điều 30 Nội quy: chỉ HCNS, kế toán tiền lương và Ban Giám đốc được xem. Bạn có quyền xem và yêu cầu chỉnh sửa thông tin của mình.</p>' +
