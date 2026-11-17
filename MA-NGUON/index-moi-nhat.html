@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 91, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 92, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -438,7 +438,7 @@ function go(t){ TAB = t; window.TAB_LUOT = (window.TAB_LUOT || 0) + 1; if (t ===
 
 function render(){
   if (!D) return;
-  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan, hosotoi:vHoSoToi, solaodong:vSoLD}[TAB]() + tuiTheoTab();
+  var body = {cong:vCong, viec:vViec, tangca:vTangCa, vipham:vViPham, donhang:vDonHang, quantri:vQuanTri, hoso:vHoSo, huongdan:vHuongDan, lichsu:vLichSu, solieu:vSoLieu, bangluong:vBangLuong, don:vDon, homnay:vHomNay, kpi:vKpi, vaitro:vVaiTro, quyche:vQuyChe, luong:vLuong, toi:vToi, daotao:vDaoTao, lichviec:vLichViec, vanban:vVanBan, hosotoi:vHoSoToi, solaodong:vSoLD, mauhd:vMauHD}[TAB]() + tuiTheoTab();
   body = segBar() + ((TAB === 'cong' || TAB === 'quantri' || TAB === 'homnay') ? thanhTBCT() : '') + body;
   var TT = laQL() ? TAB_QL : TEN_TAB;
   if (TAB === 'homnay' && !laQL()) TAB = 'cong';
@@ -446,6 +446,7 @@ function render(){
   if (TAB === 'solieu' && !(laLuong() || D.nv.vaiTro === 'TP')) TAB = 'cong';
   if (TAB === 'quantri' && !laQT()) TAB = 'cong';
   if (TAB === 'solaodong' && !laLuong()) TAB = 'cong';
+  if (TAB === 'mauhd' && !mhdDuoc()) TAB = 'cong';
   if (TAB === 'hoso' && !laQT()) TAB = 'cong'; if (TAB === 'lichviec' && !laQT() && !(D && D.lvGiao)) TAB = 'cong';
   var NGAN = {quantri:'Quản trị', cong:'Công', don:'Đơn từ', luong:'Lương', homnay:'Hôm nay', solieu:laLuong() ? 'Tiền lương' : 'Giao việc', kpi:'KPI', vaitro:'Quy định', donhang:'Đơn hàng', toi:'Tôi', huongdan:'Hướng dẫn'};
   var dauTien = ['cong', 'quantri', 'don', 'luong', 'homnay'];
@@ -1015,6 +1016,7 @@ function menuNhom(){
   if (laQL()) ql.push(['homnay','Hôm nay']);
   if (laQT() || D.lvGiao) ql.push(['lichviec','Lịch việc nhân sự']);
   if (laLuong()) ql.push(['solaodong','Sổ quản lý lao động']);
+  if (mhdDuoc()) ql.push(['mauhd','Mẫu hợp đồng, biểu mẫu']);
   if (laLuong() || D.nv.vaiTro === 'TP') ql.push(['solieu', laLuong() ? 'Tiền lương, KPI, thưởng' : 'KPI, giao việc']);
   if (ql.length) g.push(['Quản lý', ql]);
   g.push(['Công việc, quy định', [['donhang','Đơn hàng bị trả, treo, lỗi'], ['vaitro','Vai trò, nội quy, vi phạm']]]);
@@ -2026,6 +2028,30 @@ function xemTep(ma){
     $('layer').innerHTML = '<div class="veil"><div class="sheet center">' + noi + '<p class="muted">' + esc(r.ten) + '</p><button class="dong" onclick="closeLayer()">Đóng</button></div></div>';
   }).withFailureHandler(function(e){ closeLayer(); toast((e && e.message) || String(e), true); }).xemTep(TK, ma);
 }
+/* ---------- MẪU HỢP ĐỒNG, BIỂU MẪU ---------- */
+var MHD = undefined, MHD_LOI = '';
+function mhdDuoc(){ return !!D && ['GD', 'HCNS', 'KT', 'TP'].indexOf(D.nv.vaiTro) >= 0; }
+function vMauHD(){
+  if (!mhdDuoc()) return '<div class="box muted">Chỉ cấp quản lý xem mẫu hợp đồng.</div>';
+  if (window.__mhdTab !== window.TAB_LUOT) { window.__mhdTab = window.TAB_LUOT; MHD = undefined; }
+  if (MHD === undefined) { MHD = null; MHD_LOI = ''; google.script.run.withSuccessHandler(function(r){ MHD = (r && r.ds) || []; if (TAB === 'mauhd') render(); }).withFailureHandler(function(e){ MHD = []; MHD_LOI = (e && e.message) || String(e); if (TAB === 'mauhd') render(); }).taiDaoTao(TK); }
+  var s = '<h2 style="margin-top:0">Mẫu hợp đồng, biểu mẫu nhân sự</h2><p class="note" style="margin:-4px 0 10px">Bấm <b>Tải về</b>, điền thông tin người lao động vào các chỗ chấm, in 2 bản rồi ký. Không sửa các điều khoản.</p>';
+  if (!MHD) return s + '<div class="box muted">Đang tải danh sách mẫu…</div>';
+  if (MHD_LOI) return s + '<div class="box" style="border:2px solid var(--bad);color:var(--bad)">Chưa tải được: ' + esc(MHD_LOI) + '<br><button class="small main" style="margin-top:8px" onclick="MHD = undefined; render()">Tải lại</button></div>';
+  var nhom = [['Hợp đồng thử việc', /^HỢP ĐỒNG THỬ VIỆC/i], ['Hợp đồng lao động', /^HỢP ĐỒNG LAO ĐỘNG/i], ['Phụ lục hợp đồng', /^PHỤ LỤC/i], ['Nghỉ việc, bàn giao, quyết toán', /NGHỈ VIỆC|BÀN GIAO|QUYẾT TOÁN/i]];
+  var co = 0;
+  nhom.forEach(function(n){
+    var ds = MHD.filter(function(x){ return x.coTep && n[1].test(String(x.tieuDe).trim()); });
+    if (!ds.length) return;
+    co += ds.length;
+    s += '<div class="box"><b>' + n[0] + '</b>' + ds.map(function(x){
+      return '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:200px"><div style="font-weight:600;font-size:14px">' + esc(x.tieuDe) + '</div><div class="muted" style="font-size:12px">' + esc(String(x.noiDung || '').slice(0, 220)) + '</div></div>' +
+        '<button class="small main" style="font-weight:700" onclick="xemTepDT(\'' + esc(x.ma) + '\', \'\', 0)">Tải về</button></div>'; }).join('') + '</div>';
+  });
+  if (!co) s += '<div class="box muted">Chưa có mẫu nào được đưa lên.</div>';
+  return s;
+}
+
 /* ---------- SỔ QUẢN LÝ LAO ĐỘNG ---------- */
 var SLD = undefined, SLD_LOI = '', SLD_TT = 'dang', SLD_CTY = '', SLD_TIM = '', SLD_FULL = false, SLD_CHUA = false;
 var SLD_COTS = [
