@@ -195,7 +195,7 @@ function CAI_DAT_LAN_DAU() {
 
   const coSan = ts.getRange(1, 1, ts.getLastRow(), 1).getValues().map(function (r) { return String(r[0]); });
   [['GioRaThu7VP', '12:00', 'Giờ kết thúc thứ Bảy khối văn phòng'],
-   ['GioRaThu7Kho', '16:00', 'Giờ kết thúc thứ Bảy bộ phận kho'],
+   ['GioRaThu7Kho', '17:00', 'Giờ kết thúc thứ Bảy bộ phận kho'],
    ['GioBaoCaoSang', '08:15', 'Giờ gửi báo cáo chấm công buổi sáng'],
    ['GmailNhanBaoCao', '', 'Gmail nhận báo cáo sáng; để trống thì gửi Gmail giám đốc'],
    ['TyLeBHNLD', '10.5', 'Tỷ lệ % BHXH, BHYT, BHTN người lao động đóng trên lương cơ bản'],
@@ -2677,7 +2677,7 @@ function phut_(hhmm) { const p = String(hhmm || '0:0').split(':').map(Number); r
 function nowMin_(d) { return Number(Utilities.formatDate(d, TZ, 'H')) * 60 + Number(Utilities.formatDate(d, TZ, 'm')); }
 function thu_(d) { return Number(Utilities.formatDate(d, TZ, 'u')); }
 function gioKetThuc_(nv, d, t) {
-  if (thu_(d) === 6) return khoi_(nv) === 'KHO' ? (t.GioRaThu7Kho || '16:00') : (t.GioRaThu7VP || '12:00');
+  if (thu_(d) === 6) return khoi_(nv) === 'KHO' ? (t.GioRaThu7Kho || '17:00') : (t.GioRaThu7VP || '12:00');
   return t.GioRa || '17:00';
 }
 function laQuanLy_(nv) { const v = String(nv.VaiTro).trim(); return v === 'TP' || v === 'GD' || v === 'HCNS'; }
