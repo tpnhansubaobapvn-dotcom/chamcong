@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 92, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 93, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1822,7 +1822,7 @@ function onLoai(){
     hint = 'Theo nội quy, đơn phải nộp trước ít nhất ' + D.baoTruoc + ' ngày. Sớm nhất được nghỉ từ ' + vn(min) + '.' +
       (l === 'Nghỉ phép năm' ? ' Bạn còn ' + D.phep.conLai + ' ngày phép.' : '');
   } else if (l === 'Nghỉ đột xuất') {
-    hint = 'Dùng khi ốm đau, tai nạn, việc tang hoặc việc khẩn cấp. Đơn được đánh dấu đột xuất, trưởng phòng quyết định có tính phép hay không.';
+    hint = 'Dùng khi ốm đau, tai nạn, việc tang hoặc việc khẩn cấp. Đơn được đánh dấu đột xuất, trưởng phòng quyết định có tính phép hay không.' + (D.hoSo && D.hoSo.thuViec ? ' Bạn đang thử việc: ngày nghỉ là nghỉ không lương.' : '');
   } else if (nvc) {
     hint = 'Theo Điều 35 Bộ luật Lao động 2019: báo trước ít nhất 45 ngày (hợp đồng không xác định thời hạn), 30 ngày (hợp đồng 12–36 tháng), 3 ngày làm việc (hợp đồng dưới 12 tháng); đang thử việc thì không cần báo trước. Duyệt 2 bước: quản lý trực tiếp, rồi Giám đốc. Sau khi gửi, bấm "In đơn" để in ra ký và lưu hồ sơ.';
   } else if (td) {
