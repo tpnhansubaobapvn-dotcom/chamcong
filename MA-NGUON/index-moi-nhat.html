@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 98, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 99, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1325,7 +1325,7 @@ function vDonHang(){
       .withFailureHandler(function(e){ DHDS = {quanLy:false, tongHop:[], ds:[]}; toast((e && e.message) || String(e), true); }).dsDonHangLoi(TK, DHT);
   }
   var loai = ['Khách trả hàng', 'Đơn treo, chưa giao được', 'Treo công nợ quá hạn', 'Đơn lỗi (sai hàng, sai giá, sai số lượng)', 'Hàng về kho không đúng đơn (kho từ chối nhận)', 'Đơn treo tại kho, kinh doanh chưa cho lấy hàng', 'Phòng khác làm chậm, làm sai ảnh hưởng công việc'];
-  var s = '<h2>Báo sự cố: đơn trả, treo, lỗi, hàng sai, phòng khác làm chậm</h2><p class="note" style="margin-top:0">Ai thấy sự cố thì ghi ngay tại đây. Chọn đúng người chịu trách nhiệm: người đó, quản lý của họ, Giám đốc, Kế toán và Hành chính nhân sự thấy ngay trên trang đầu. Mọi báo cáo được lưu lại để đưa ra cuộc họp.</p><div class="box">' +
+  var s = '<h2>Báo sự cố: đơn trả, treo, lỗi, hàng sai, phòng khác làm chậm</h2><p class="note" style="margin-top:0">Ai thấy sự cố thì ghi ngay tại đây. Chọn đúng người chịu trách nhiệm: người đó và Giám đốc thấy ngay trên trang đầu. Sự cố của Kinh doanh chỉ Phòng Kinh doanh thấy; sự cố của Vật tư, Kho, Kế toán chỉ ba phòng này thấy. Mọi báo cáo được lưu lại để đưa ra cuộc họp.</p><div class="box">' +
     '<div class="grid2"><div><label for="dhS">Số đơn hàng, số hóa đơn, báo giá hoặc việc liên quan</label><input type="text" id="dhS"></div>' +
     '<div><label for="dhG">Giá trị đơn (đồng)</label><input type="number" id="dhG" min="0" step="1000"></div></div>' +
     '<label for="dhK">Khách hàng</label><input type="text" id="dhK">' +
