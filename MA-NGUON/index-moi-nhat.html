@@ -194,14 +194,14 @@ button:disabled{opacity:.6}
 .hdn{border:1px solid var(--line,#e3e6e8);border-radius:10px;margin:8px 0;padding:0 12px;text-align:left}.hdn summary{cursor:pointer;font-weight:700;padding:10px 0}.hdn div{padding:0 0 10px;font-size:14px;line-height:1.55}.hdn ol,.hdn ul{margin:0;padding-left:20px}.hdn p{margin:6px 0 0}
 .matmk{position:relative;display:block}.matmk input{padding-right:46px!important}.matbt{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:auto!important;margin:0!important;padding:4px 8px!important;background:transparent!important;border:0!important;font-size:18px;cursor:pointer;line-height:1;box-shadow:none!important}
 </style>
-<style id="sv-mau">.sv-cau{margin:10px 0}.sv-hoi{font-size:12.5px;color:var(--steel,#6b7780);line-height:1.4}.sv-tl{margin-top:4px;padding:7px 11px;border-left:4px solid #1d6fd8;border-radius:8px;background:rgba(29,111,216,.10);font-weight:700;font-size:15px;line-height:1.45;color:#1557b0;white-space:pre-line}.sv-tl.rong{font-weight:400;font-style:italic;color:#8a969c;border-left-color:#8a969c;background:rgba(138,150,156,.10)}@media (prefers-color-scheme:dark){.sv-tl{color:#8cc4ff;background:rgba(80,160,255,.14);border-left-color:#4da3ff}.sv-hoi{color:#9aa7ae}}</style></head>
+<style id="sv-mau">.trang-sv{z-index:90;padding:0}body:has(#trangSV) #layer .veil{z-index:95}.tsv-dau{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid var(--line,#e3e6e8);background:var(--card);flex:none}.tsv-than{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 16px calc(24px + env(safe-area-inset-bottom))}.tsv-cot{width:100%;max-width:1100px;margin:0 auto}.trang-sv .sv-hoi{font-size:15px;font-weight:700;color:var(--ink,inherit)}.trang-sv .sv-tl{font-size:16px;font-weight:500}.trang-sv .sv-cau{margin:16px 0}.sv-cau{margin:10px 0}.sv-hoi{font-size:12.5px;color:var(--steel,#6b7780);line-height:1.4}.sv-tl{margin-top:4px;padding:7px 11px;border-left:4px solid #1d6fd8;border-radius:8px;background:rgba(29,111,216,.10);font-weight:700;font-size:15px;line-height:1.45;color:#1557b0;white-space:pre-line}.sv-tl.rong{font-weight:400;font-style:italic;color:#8a969c;border-left-color:#8a969c;background:rgba(138,150,156,.10)}@media (prefers-color-scheme:dark){.sv-tl{color:#8cc4ff;background:rgba(80,160,255,.14);border-left-color:#4da3ff}.sv-hoi{color:#9aa7ae}}</style></head>
 <body>
 <div id="app"><p class="center muted" style="margin-top:40vh">Đang mở…</p></div>
 <div id="layer"></div>
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 95, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 96, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2644,7 +2644,7 @@ function theUV(x, k){
     '<div class="muted" style="font-size:13px">' + esc(x.viTri) + ' · nộp ' + esc(x.tg) + (x.nguon ? ' · nguồn ' + esc(x.nguon.slice(0, 40)) : '') + '</div>' +
     (x.nhanSV ? '<div style="margin-top:4px"><span class="pill" style="color:#fff;background:' + ({'Đạt sơ vấn': '#2e7d32', 'Cần xem': '#b7791f', 'Chưa đạt': '#8a969c'}[x.nhanSV] || '#8a969c') + '">' + esc(x.nhanSV) + ' · ' + esc(x.diemSV) + '</span></div>' : '') +
     (x.kn ? '<div style="font-size:14px;margin-top:2px">' + esc(x.kn.slice(0, 220)) + (x.kn.length > 220 ? '…' : '') + '</div>' : '') +
-    (x.sv && x.sv.length ? '<details style="margin-top:4px"><summary style="cursor:pointer;font-weight:700;font-size:14px">Xem sơ vấn online (' + x.sv.length + ' câu)</summary>' + x.sv.map(function(q, i){ var co = String(q.t || '').trim(); return '<div class="sv-cau"><div class="sv-hoi">' + (i + 1) + '. ' + esc(q.h) + '</div><div class="sv-tl' + (co ? '' : ' rong') + '">' + esc(co || '(không trả lời)') + '</div></div>'; }).join('') + '</details>' : '') +
+    (x.sv && x.sv.length ? '<div style="margin-top:6px"><button class="small" style="border:1.5px solid #1d6fd8;color:#1d6fd8;font-weight:700" onclick="xemSV(\'' + x.ma + '\')">Đọc sơ vấn online (' + x.sv.length + ' câu) · mở toàn màn hình</button></div>' : '') +
     (x.ghiChu ? '<div class="muted" style="font-size:12.5px;white-space:pre-line">' + esc(x.ghiChu) + '</div>' : '') +
     '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" style="border-color:#2e7d32;color:#2e7d32" onclick="ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E" onclick="ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div></div>';
 }
@@ -2667,13 +2667,34 @@ function hopUV(){
         '<div class="muted" style="font-size:13px">Nộp ' + esc(x.tg) + (x.nguon ? ' · nguồn ' + esc(x.nguon.slice(0, 40)) : '') + '</div>' +
         (x.nhanSV ? '<div style="margin-top:4px"><span class="pill" style="color:#fff;background:' + ({'Đạt sơ vấn': '#2e7d32', 'Cần xem': '#b7791f', 'Chưa đạt': '#8a969c'}[x.nhanSV] || '#8a969c') + '">' + esc(x.nhanSV) + ' · ' + esc(x.diemSV) + '</span></div>' : '') +
     (x.kn ? '<div style="font-size:14px;margin-top:2px">' + esc(x.kn.slice(0, 220)) + (x.kn.length > 220 ? '…' : '') + '</div>' : '') +
-    (x.sv && x.sv.length ? '<details style="margin-top:4px"><summary style="cursor:pointer;font-weight:700;font-size:14px">Xem sơ vấn online (' + x.sv.length + ' câu)</summary>' + x.sv.map(function(q, i){ return '<div style="font-size:13.5px;margin:6px 0"><b>' + (i + 1) + '. ' + esc(q.h) + '</b><br>' + esc(q.t || '(không trả lời)') + '</div>'; }).join('') + '</details>' : '') +
+    (x.sv && x.sv.length ? '<div style="margin-top:6px"><button class="small" style="border:1.5px solid #1d6fd8;color:#1d6fd8;font-weight:700" onclick="xemSV(\'' + x.ma + '\')">Đọc sơ vấn online (' + x.sv.length + ' câu) · mở toàn màn hình</button></div>' : '') +
         (x.ghiChu ? '<div class="muted" style="font-size:12.5px;white-space:pre-line">' + esc(x.ghiChu) + '</div>' : '') +
         '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" style="border-color:#2e7d32;color:#2e7d32" onclick="ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E" onclick="ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div></div>';
     });
   });
   return s + '</div>';
 }
+function xemSV(ma){
+  var x = (UV || []).filter(function(u){ return u.ma === ma; })[0]; if (!x) return;
+  dongSV();
+  var w = document.createElement('div'); w.className = 'toantrang trang-sv'; w.id = 'trangSV';
+  var mau = {'Đạt sơ vấn': '#2e7d32', 'Cần xem': '#b7791f', 'Chưa đạt': '#8a969c'}[x.nhanSV] || '#8a969c';
+  w.innerHTML = '<div class="tsv-dau"><button class="small" onclick="dongSV()">← Quay lại</button><b>Sơ vấn online</b></div>' +
+    '<div class="tsv-than"><div class="tsv-cot">' +
+    '<h2 style="margin:0 0 4px">' + esc(x.ten) + '</h2>' +
+    '<p class="muted" style="margin:0 0 6px">' + esc(x.viTri) + (x.namSinh ? ' · sinh ' + esc(x.namSinh) : '') + (x.khuVuc ? ' · ' + esc(x.khuVuc) : '') + ' · nộp ' + esc(x.tg) + ' · ' + esc(x.sdt) + '</p>' +
+    '<p style="margin:0 0 14px"><span class="pill">' + esc(x.trangThai) + '</span>' + (x.nhanSV ? ' <span class="pill" style="color:#fff;background:' + mau + '">' + esc(x.nhanSV) + ' · ' + esc(x.diemSV) + '</span>' : '') + '</p>' +
+    (x.kn ? '<div class="sv-cau"><div class="sv-hoi">Kinh nghiệm ghi trong hồ sơ</div><div class="sv-tl">' + esc(x.kn) + '</div></div>' : '') +
+    x.sv.map(function(q, i){ var co = String(q.t || '').trim(); return '<div class="sv-cau"><div class="sv-hoi">' + (i + 1) + '. ' + esc(q.h) + '</div><div class="sv-tl' + (co ? '' : ' rong') + '">' + esc(co || '(không trả lời)') + '</div></div>'; }).join('') +
+    (x.ghiChu ? '<div class="muted" style="font-size:13px;white-space:pre-line;margin-top:10px">' + esc(x.ghiChu) + '</div>' : '') +
+    '<h3 style="margin:22px 0 8px">Đánh giá sau khi đọc</h3>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button>' +
+    '<button class="small" style="border-color:#2e7d32;color:#2e7d32;font-weight:700" onclick="dongSV(); ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="dongSV(); ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E;font-weight:700" onclick="dongSV(); ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div>' +
+    '<div style="margin:22px 0 8px"><button onclick="dongSV()" style="width:100%">← Quay lại</button></div>' +
+    '</div></div>';
+  document.body.appendChild(w);
+}
+function dongSV(){ var w = $('trangSV'); if (w) w.remove(); }
 function ttUV(ma, tt){
   var gc = prompt(tt + ' · ghi chú (không bắt buộc):', '');
   if (gc === null) return;
