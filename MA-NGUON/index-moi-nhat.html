@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 94, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 95, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -551,11 +551,12 @@ function vQuanTri(){
     var id = 'khac';
     for (var i = 0; i < THU_TU_KHOP.length; i++) { var p = SO_DO.filter(function(q){ return q.id === THU_TU_KHOP[i]; })[0]; if (p.khop(x)) { id = p.id; break; } }
     nhom[id].push(x);
+    if (id === 'hcns' && /kế toán/i.test(x.chucVu)) { var k2 = {}; for (var kk in x) k2[kk] = x[kk]; k2.kiem = 'Phòng Hành chính nhân sự'; nhom.kt.push(k2); x.kiem = 'Phòng Kế toán'; }
   });
   var theNV = function(x){
     var chu = String(x.ten || '?').trim().split(/\s+/).pop().charAt(0).toUpperCase();
     return '<button class="the-nv" onclick="chiTietNV(\'' + esc(x.ma) + '\')"><div class="ava nho">' + esc(chu) + '</div><div style="min-width:0;flex:1">' +
-      '<div class="ten">' + esc(x.ten) + '</div><div class="cv">' + esc(x.chucVu) + (x.thuViec ? ' · thử việc' : '') + '</div>' +
+      '<div class="ten">' + esc(x.ten) + '</div><div class="cv">' + esc(x.chucVu) + (x.thuViec ? ' · thử việc' : '') + (x.kiem ? ' · <b>kiêm nhiệm, cũng thuộc ' + esc(x.kiem) + '</b>' : '') + '</div>' +
       '<div style="margin-top:4px">' + ttNV(x.tt) + (x.treThang ? ' <span class="muted" style="font-size:12px">trễ ' + x.treThang + ' lần/tháng</span>' : '') + '</div></div></button>';
   };
   s += '<h2>Sơ đồ tổ chức</h2>';
