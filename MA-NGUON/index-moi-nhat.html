@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 97, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 98, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -488,7 +488,7 @@ function vCong(){
   var label = !h.vao ? 'Chấm công vào' : 'Chấm công ra';
   var sub = !h.vao ? 'Giờ vào ' + D.gioVao : (h.ra ? 'Bấm lại nếu về muộn hơn' : 'Đã vào lúc ' + h.vao);
   var duyet = D.choDuyet.length ? '<div class="box" style="background:var(--waitbg);border-color:var(--waitbg);color:var(--wait);cursor:pointer" onclick="go(\'don\')">' + D.choDuyet.length + ' đơn đang chờ bạn duyệt</div>' : '';
-  return canhBaoTBCT() + canhBaoNghi() + canhBaoSLD() + canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
+  return canhBaoTBCT() + canhBaoSuCo() + canhBaoNghi() + canhBaoSLD() + canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
     '<button class="punch' + (done ? ' done' : '') + '" id="pb" onclick="punch()"><b>' + label + '</b><span>' + esc(sub) + '</span></button>' +
     '<div class="box"><div class="row"><span>Giờ vào</span><b>' + (h.vao || '--:--') + '</b></div>' +
     '<div class="row"><span>Giờ ra</span><b>' + (h.ra || '--:--') + '</b></div>' +
@@ -1020,7 +1020,7 @@ function menuNhom(){
   if (mhdDuoc()) ql.push(['mauhd','Mẫu hợp đồng, biểu mẫu']);
   if (laLuong() || D.nv.vaiTro === 'TP') ql.push(['solieu', laLuong() ? 'Tiền lương, KPI, thưởng' : 'KPI, giao việc']);
   if (ql.length) g.push(['Quản lý', ql]);
-  g.push(['Công việc, quy định', [['donhang','Đơn hàng bị trả, treo, lỗi'], ['vaitro','Vai trò, nội quy, vi phạm']]]);
+  g.push(['Công việc, quy định', [['donhang','Báo sự cố: đơn trả, treo, lỗi, hàng sai'], ['vaitro','Vai trò, nội quy, vi phạm']]]);
   return g;
 }
 function menuItems(){
@@ -1324,17 +1324,17 @@ function vDonHang(){
     google.script.run.withSuccessHandler(function(r){ DHDS = r; if (TAB === 'donhang') render(); })
       .withFailureHandler(function(e){ DHDS = {quanLy:false, tongHop:[], ds:[]}; toast((e && e.message) || String(e), true); }).dsDonHangLoi(TK, DHT);
   }
-  var loai = ['Khách trả hàng', 'Đơn treo, chưa giao được', 'Treo công nợ quá hạn', 'Đơn lỗi (sai hàng, sai giá, sai số lượng)', 'Hàng về kho không đúng đơn (kho từ chối nhận)'];
-  var s = '<h2>Ghi đơn hàng bị trả, treo, lỗi</h2><div class="box">' +
-    '<div class="grid2"><div><label for="dhS">Số đơn hàng, số hóa đơn MISA</label><input type="text" id="dhS"></div>' +
+  var loai = ['Khách trả hàng', 'Đơn treo, chưa giao được', 'Treo công nợ quá hạn', 'Đơn lỗi (sai hàng, sai giá, sai số lượng)', 'Hàng về kho không đúng đơn (kho từ chối nhận)', 'Đơn treo tại kho, kinh doanh chưa cho lấy hàng', 'Phòng khác làm chậm, làm sai ảnh hưởng công việc'];
+  var s = '<h2>Báo sự cố: đơn trả, treo, lỗi, hàng sai, phòng khác làm chậm</h2><p class="note" style="margin-top:0">Ai thấy sự cố thì ghi ngay tại đây. Chọn đúng người chịu trách nhiệm: người đó, quản lý của họ, Giám đốc, Kế toán và Hành chính nhân sự thấy ngay trên trang đầu. Mọi báo cáo được lưu lại để đưa ra cuộc họp.</p><div class="box">' +
+    '<div class="grid2"><div><label for="dhS">Số đơn hàng, số hóa đơn, báo giá hoặc việc liên quan</label><input type="text" id="dhS"></div>' +
     '<div><label for="dhG">Giá trị đơn (đồng)</label><input type="number" id="dhG" min="0" step="1000"></div></div>' +
     '<label for="dhK">Khách hàng</label><input type="text" id="dhK">' +
     '<label for="dhL">Loại</label><select id="dhL">' + loai.map(function(x){ return '<option>' + x + '</option>'; }).join('') + '</select>' +
-    '<label for="dhN">Nhân viên phụ trách đơn</label><select id="dhN">' + (NVALL || []).map(function(x){ return '<option value="' + esc(x.ma) + '"' + (x.ma === D.nv.ma ? ' selected' : '') + '>' + esc(x.ten) + ' · ' + esc(x.phong) + '</option>'; }).join('') + '</select>' +
-    '<label for="dhC">Nguyên nhân</label><textarea id="dhC" placeholder="Ví dụ: giao sai quy cách cáp 10 ly, khách không nhận"></textarea>' +
+    '<label for="dhN">Người chịu trách nhiệm (đơn của ai, lỗi của ai thì chọn người đó)</label><select id="dhN">' + (NVALL || []).map(function(x){ return '<option value="' + esc(x.ma) + '"' + (x.ma === D.nv.ma ? ' selected' : '') + '>' + esc(x.ten) + ' · ' + esc(x.phong) + '</option>'; }).join('') + '</select>' +
+    '<label for="dhC">Sự việc, nguyên nhân</label><textarea id="dhC" placeholder="Nói thẳng sự việc. Ví dụ: cáp về có mỡ, đơn ghi cáp khô, kho không nhận. Hoặc: hỏi giá từ 9 giờ, đến 15 giờ chưa có trả lời, khách đã mua chỗ khác"></textarea>' +
     '<label for="dhB">Lỗi thuộc bộ phận</label><select id="dhB"><option>Kinh doanh</option><option>Kho</option><option>Vật tư</option><option>Kế toán</option><option>Giao nhận</option><option>Khách hàng</option><option>Chưa xác định</option></select>' +
     '<label for="dhH">Hướng xử lý</label><input type="text" id="dhH" placeholder="Đổi hàng, thu hồi, nhắc nợ…">' +
-    '<label for="dhF">Chứng từ (ảnh phiếu trả hàng, biên bản, PDF)</label><input type="file" id="dhF" accept="image/*,application/pdf">' +
+    '<label for="dhF">Hình bằng chứng: hàng, phiếu, tin nhắn (bắt buộc với hàng về sai, đơn treo tại kho, phòng khác làm chậm)</label><input type="file" id="dhF" accept="image/*,application/pdf">' +
     '<p id="dhE" class="err"></p><button class="main" style="margin-top:8px" onclick="nopDH()">Lưu</button></div>' +
     '<p class="note">Đơn bị trả hoặc treo không tính vào doanh số thực thu để trả hoa hồng (Điều 11 Quy chế lương). Kế toán đối chiếu danh sách này khi chốt doanh số tháng.</p>';
   s += '<div class="row" style="margin-top:20px"><h2 style="margin:0">Tháng</h2><input type="month" id="dhT" value="' + DHT + '" onchange="DHT = this.value; DHDS = undefined; render();" style="max-width:200px"></div>';
@@ -1347,7 +1347,7 @@ function vDonHang(){
   s += '<h2>Danh sách</h2>' + (DHDS.ds.length ? DHDS.ds.map(function(x){
     return '<div class="box"><div class="row"><b>' + esc(x.soDon) + ' · ' + esc(x.loai) + '</b><span class="pill ' + (x.trangThai === 'Đã xử lý' ? 'p-ok' : 'p-wait') + '">' + esc(x.trangThai) + '</span></div>' +
       '<div class="row"><span class="muted">' + esc(x.khach) + '</span><b>' + tien(x.giaTri) + ' đ</b></div>' +
-      '<div>Phụ trách: ' + esc(x.ten) + (x.loiCua ? ' · Lỗi: ' + esc(x.loiCua) : '') + '</div>' +
+      '<div>Chịu trách nhiệm: ' + esc(x.ten) + (x.loiCua ? ' · Lỗi: ' + esc(x.loiCua) : '') + '</div>' +
       '<div class="muted" style="white-space:pre-wrap">' + esc(x.nguyenNhan) + '</div>' +
       (x.huong ? '<div class="muted">Hướng xử lý: ' + esc(x.huong) + '</div>' : '') +
       '<div class="muted" style="font-size:12px">' + esc(x.gio) + ' · ' + esc(x.nguoiLap) + (x.capNhat ? ' · cập nhật: ' + esc(x.capNhat) : '') + '</div>' +
@@ -1361,7 +1361,8 @@ function nopDH(){
     nguyenNhan:$('dhC').value.trim(), loiCua:$('dhB').value, huongXuLy:$('dhH').value.trim(), thang: thangNay()}, e = $('dhE');
   if (!f.soDon) { e.textContent = 'Nhập số đơn hàng.'; return; }
   if (!f.ma) { e.textContent = 'Chọn nhân viên phụ trách.'; return; }
-  if (!f.nguyenNhan) { e.textContent = 'Ghi nguyên nhân.'; return; }
+  if (!f.nguyenNhan) { e.textContent = 'Ghi sự việc, nguyên nhân.'; return; }
+  if (/kho không đúng đơn|treo tại kho|Phòng khác/.test(f.loai) && !($('dhF').files && $('dhF').files[0])) { e.textContent = 'Loại này bắt buộc chụp hình làm bằng chứng. Bạn chụp hàng, phiếu hoặc tin nhắn rồi đính kèm.'; return; }
   var gui = function(){ call('lapDonHangLoi', [TK, f], function(){ toast('Đã lưu đơn ' + f.soDon); DHT = thangNay(); DHDS = undefined; render(); }, function(m){ e.textContent = m; }); };
   var fl = $('dhF').files && $('dhF').files[0];
   if (!fl) { gui(); return; }
@@ -1823,6 +1824,15 @@ function nopGT(ma){
     docTep(fl, function(tep){ call('nopGiayToDon', [TK, ma, tep], function(){ toast('Đã nộp giấy tờ'); refresh(); }, function(m){ toast(m, true); }); }, function(m){ toast(m, true); });
   };
   i.click();
+}
+function canhBaoSuCo(){
+  if (!D || !D.suCo || !D.suCo.length) return '';
+  return D.suCo.map(function(x){
+    return '<div class="box" style="border:2px solid var(--bad)"><b style="color:var(--bad)">' + (x.toi ? 'Bạn đang bị báo sự cố: ' : 'Sự cố chờ xử lý: ') + esc(x.loai) + '</b>' +
+      '<div style="margin:2px 0">' + esc(x.soDon) + ' · chịu trách nhiệm: ' + esc(x.ten) + '</div>' +
+      '<div class="muted" style="font-size:13px;white-space:pre-wrap">' + esc(x.noiDung) + '</div>' +
+      '<div class="muted" style="font-size:12px;margin:2px 0 8px">Báo bởi ' + esc(x.nguoiLap) + ' lúc ' + esc(x.gio) + '</div><button class="small main" onclick="go(\'donhang\')">Xem và xử lý</button></div>';
+  }).join('');
 }
 function canhBaoNghi(){
   if (!D) return '';
