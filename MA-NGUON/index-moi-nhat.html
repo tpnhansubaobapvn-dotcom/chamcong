@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 101, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 102, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2290,6 +2290,12 @@ function hopSLDToi(){
 
 /* ---------- THÔNG BÁO CÔNG TY ---------- */
 var TBCT = null, TBCT_MO = {};
+var TBCT_XEM_AN = false;
+function tbctKhoaAn(){ return 'tbct_an_' + ((D && D.nv && D.nv.ma) || ''); }
+function tbctDsAn(){ try { return JSON.parse(localStorage.getItem(tbctKhoaAn()) || '[]') || []; } catch (e) { return []; } }
+function tbctLuuAn(ds){ try { localStorage.setItem(tbctKhoaAn(), JSON.stringify(ds.slice(-300))); } catch (e) { toast('Máy này không lưu được danh sách ẩn', true); } }
+function tbctAn(ma){ var ds = tbctDsAn(); if (ds.indexOf(ma) < 0) ds.push(ma); tbctLuuAn(ds); toast('Đã ẩn. Bấm "Xem thông báo đã ẩn" ở cuối danh sách để xem lại'); veTBCT(); }
+function tbctHien(ma){ tbctLuuAn(tbctDsAn().filter(function(m){ return m !== ma; })); toast('Đã hiện lại'); veTBCT(); }
 function tbctDuocDang(){ return !!D && ['GD', 'HCNS', 'TP'].indexOf(D.nv.vaiTro) >= 0; }
 function tbctThe(x, home){
   var nd = String(x.noiDung || ''), dai = home && nd.length > 600, mau = x.quanTrong ? 'var(--bad)' : 'var(--steel)';
@@ -2301,7 +2307,8 @@ function tbctThe(x, home){
     '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">' +
     (dai ? '<button class="small" onclick="moTBCT()">Đọc hết</button>' : '') +
     (x.tep ? '<button class="small" onclick="xemTepTBCT(\'' + x.ma + '\')">Xem tệp đính kèm</button>' : '') +
-    (x.daDoc ? '<span class="pill p-ok">Bạn đã đọc</span>' : (home || x.toiNhan ? '<button class="small main" onclick="docTBCT(\'' + x.ma + '\')">Tôi đã đọc</button>' : '')) + '</div>';
+    (x.daDoc ? '<span class="pill p-ok">Bạn đã đọc</span>' : (home || x.toiNhan ? '<button class="small main" onclick="docTBCT(\'' + x.ma + '\')">Tôi đã đọc</button>' : '')) +
+    (!home && (x.daDoc || !x.toiNhan) ? (tbctDsAn().indexOf(x.ma) >= 0 ? '<button class="small" onclick="tbctHien(\'' + x.ma + '\')">Hiện lại</button>' : '<button class="small" onclick="tbctAn(\'' + x.ma + '\')">Ẩn cho gọn</button>') : '') + '</div>';
   if (!home && x.quyen) {
     s += '<div style="border-top:1px solid var(--line);margin-top:10px;padding-top:8px"><div class="row" style="align-items:center"><b>Đã đọc ' + x.soDoc + '/' + x.tong + ' người</b>' +
       '<span style="display:flex;gap:6px">' + (x.chua.length ? '<button class="small" onclick="TBCT_MO[\'' + x.ma + '\'] = !TBCT_MO[\'' + x.ma + '\']; veTBCT()">' + (TBCT_MO[x.ma] ? 'Ẩn danh sách' : 'Ai chưa đọc') + '</button>' : '') +
@@ -2343,7 +2350,14 @@ function veTBCT(){
   if (!TBCT) return;
   $('layer').innerHTML = '<div class="veil"><div class="sheet" style="max-height:92vh;overflow:auto"><div class="row" style="align-items:center"><h2 style="margin:0">Thông báo công ty</h2>' +
     (TBCT.duocDang ? '<button class="small main" onclick="moDangTBCT()">+ Đăng thông báo</button>' : '') + '</div>' +
-    (TBCT.ds.length ? TBCT.ds.map(function(x){ return tbctThe(x, false); }).join('') : '<p class="muted">Chưa có thông báo nào.</p>') +
+    (function(){
+      var an = tbctDsAn(), dsAn = TBCT.ds.filter(function(x){ return an.indexOf(x.ma) >= 0 && (x.daDoc || !x.toiNhan); }), dsHien = TBCT.ds.filter(function(x){ return dsAn.indexOf(x) < 0; });
+      if (!dsAn.length) TBCT_XEM_AN = false;
+      var ds = TBCT_XEM_AN ? dsAn : dsHien;
+      return (TBCT_XEM_AN ? '<p class="note" style="margin:8px 0">Đang xem ' + dsAn.length + ' thông báo đã ẩn. Việc ẩn chỉ áp dụng trên máy này của bạn, người khác vẫn thấy bình thường.</p>' : '') +
+        (ds.length ? ds.map(function(x){ return tbctThe(x, false); }).join('') : '<p class="muted">' + (TBCT.ds.length ? 'Bạn đã ẩn hết thông báo đã đọc.' : 'Chưa có thông báo nào.') + '</p>') +
+        (dsAn.length ? '<button class="small" style="width:100%;margin-top:8px;font-weight:700" onclick="TBCT_XEM_AN = !TBCT_XEM_AN; veTBCT()">' + (TBCT_XEM_AN ? '← Quay lại thông báo đang hiện' : 'Xem thông báo đã ẩn (' + dsAn.length + ')') + '</button>' : '');
+    })() +
     '<button class="dong" onclick="closeLayer()">Đóng</button></div></div>';
 }
 function docTBCT(ma){
