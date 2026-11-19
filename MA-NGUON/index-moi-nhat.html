@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 102, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 103, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -794,7 +794,7 @@ function dsTSan(a, ma, cuaToi){
     return '<div style="border-top:1px solid var(--line);padding:8px 0' + ((t.thieu || []).length ? ';background:color-mix(in srgb,var(--bad) 6%,transparent)' : '') + '"><div class="row"><b style="font-weight:600">' + esc((t.loai ? t.loai + ' · ' : '') + t.ten) + '</b>' + pillTS(t.tinhTrang) + '</div>' +
       (ct ? '<div style="font-size:13px">' + ct + '</div>' : '') +
       '<div class="muted" style="font-size:13px">' + (t.ngayCap ? 'cấp ' + esc(t.ngayCap.split('-').reverse().join('/')) + ' · ' : '') + (t.capNhat ? 'cập nhật ' + esc(t.capNhat) + ' bởi ' + esc(t.nguoi) : '') + '</div>' +
-      (t.tenDN ? '<div style="font-size:14px">Đăng nhập: <b>' + esc(t.tenDN) + '</b>' + (t.coMK ? ' · Mật khẩu: <span id="mk-' + t.ma + '">••••••</span>' + (t.mk ? ' <button class="small" onclick="hienMK(\'' + ma + '\',\'' + t.ma + '\')">Hiện</button>' : '') : '') + '</div>' : '') +
+      (t.tenDN ? '<div style="font-size:14px">Đăng nhập: <b>' + esc(t.tenDN) + '</b>' + (t.coMK ? ' · Mật khẩu: <span id="mk-' + t.ma + '">••••••</span>' + (t.mk ? (TS_MK[t.ma] = t.mk, ' <button class="small" id="mkn-' + t.ma + '" onclick="hienMK(\'' + ma + '\',\'' + t.ma + '\')">Hiện</button>') : '') : '') + '</div>' : '') +
       (t.ghiChu ? '<div class="muted" style="font-size:13px">' + esc(t.ghiChu) + '</div>' : '') + th + ky +
       (t.loai === 'Không được cấp' ? '' : '<div style="display:flex;gap:6px;margin-top:6px"><button class="small" onclick="suaTS(\'' + ma + '\',\'' + t.ma + '\')">Cập nhật</button><button class="small" onclick="lsTS(\'' + t.ma + '\')">Lịch sử thay đổi</button></div>') + '</div>';
   }).join('') : '';
@@ -2289,6 +2289,8 @@ function hopSLDToi(){
 }
 
 /* ---------- THÔNG BÁO CÔNG TY ---------- */
+var TS_MK = {};
+function hienMK(maNV, maTS){ var o = $('mk-' + maTS), n = $('mkn-' + maTS); if (!o) return; var dang = o.getAttribute('data-hien') === '1'; o.textContent = dang ? '••••••' : String(TS_MK[maTS] || ''); o.setAttribute('data-hien', dang ? '0' : '1'); if (n) n.textContent = dang ? 'Hiện' : 'Ẩn'; }
 var TBCT = null, TBCT_MO = {};
 var TBCT_XEM_AN = false;
 function tbctKhoaAn(){ return 'tbct_an_' + ((D && D.nv && D.nv.ma) || ''); }
