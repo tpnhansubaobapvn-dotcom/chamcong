@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 93, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 94, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -488,7 +488,7 @@ function vCong(){
   var label = !h.vao ? 'Chấm công vào' : 'Chấm công ra';
   var sub = !h.vao ? 'Giờ vào ' + D.gioVao : (h.ra ? 'Bấm lại nếu về muộn hơn' : 'Đã vào lúc ' + h.vao);
   var duyet = D.choDuyet.length ? '<div class="box" style="background:var(--waitbg);border-color:var(--waitbg);color:var(--wait);cursor:pointer" onclick="go(\'don\')">' + D.choDuyet.length + ' đơn đang chờ bạn duyệt</div>' : '';
-  return canhBaoTBCT() + canhBaoSLD() + canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
+  return canhBaoTBCT() + canhBaoNghi() + canhBaoSLD() + canhBaoVBHome() + canhBaoLVHome() + canhBaoTSHome() + viecCanLam() + bannerTB() + hdNhanh() +
     '<button class="punch' + (done ? ' done' : '') + '" id="pb" onclick="punch()"><b>' + label + '</b><span>' + esc(sub) + '</span></button>' +
     '<div class="box"><div class="row"><span>Giờ vào</span><b>' + (h.vao || '--:--') + '</b></div>' +
     '<div class="row"><span>Giờ ra</span><b>' + (h.ra || '--:--') + '</b></div>' +
@@ -1769,7 +1769,7 @@ function vDon(){
   if (D.choDuyet.length) {
     s += '<h2>Chờ bạn duyệt</h2>' + D.choDuyet.map(function(d){
       return '<div class="box"><div class="row"><b>' + esc(d.ten) + '</b>' + (d.dotXuat ? '<span class="pill p-bad">Đột xuất</span>' : '') + '</div>' +
-        (d.tep ? '<button class="small" style="margin:4px 0" onclick="xemTep(\'' + d.ma + '\')">Xem bản đã ký</button>' : '') +
+        (d.tep ? '<button class="small" style="margin:4px 0" onclick="xemTep(\'' + d.ma + '\')">' + (d.gt ? 'Xem giấy tờ' : 'Xem bản đã ký') + '</button>' : '') + (d.gt && !d.gt.co ? '<div>' + pillGT(d) + '</div>' : '') +
         '<div>' + esc(d.loai) + ': ' + esc(moTa(d)) + '</div><div class="muted">' + (d.loai === 'Trình duyệt' ? 'Nội dung: ' : 'Lý do: ') + esc(d.lyDo) + '</div>' +
         '<button class="small" style="margin-top:6px" onclick="inDon(\'' + d.ma + '\')">In đơn</button>' +
         '<div class="grid2" style="margin-top:10px"><button class="small" onclick="tuChoi(\'' + d.ma + '\')">Trả lại</button>' +
@@ -1778,7 +1778,7 @@ function vDon(){
   }
   s += '<h2>Tạo đơn</h2><div class="box">' +
     '<label for="loai">Loại đơn</label><select id="loai" onchange="onLoai()">' +
-    '<option>Nghỉ phép năm</option><option>Nghỉ không lương</option><option>Nghỉ đột xuất</option><option>Tăng ca</option><option>Tạm ứng lương</option><option>Trình duyệt</option><option>Xin nghỉ việc</option></select>' +
+    '<option>Nghỉ phép năm</option><option>Nghỉ không lương</option><option>Nghỉ đột xuất</option><option>Nghỉ ốm đau</option><option>Nghỉ thai sản, khám thai</option><option>Nghỉ việc riêng có lương</option><option>Tăng ca</option><option>Tạm ứng lương</option><option>Trình duyệt</option><option>Xin nghỉ việc</option></select>' +
     '<div class="grid2"><div><label for="tu" id="lbTu">Từ ngày</label><input type="date" id="tu" oninput="clrErr()"></div>' +
     '<div id="wDen"><label for="den">Đến ngày</label><input type="date" id="den" oninput="clrErr()"></div>' +
     '<div id="wGio" style="display:none"><label for="gio">Số giờ</label><input type="number" id="gio" min="0.5" max="12" step="0.5" oninput="clrErr()"></div></div>' +
@@ -1789,14 +1789,51 @@ function vDon(){
     '<div id="wBG" style="display:none"><label for="bg">Bàn giao công việc cho (họ tên, nội dung bàn giao)</label><input type="text" id="bg"></div>' +
     '<label id="wNua" style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="checkbox" id="nua" style="width:auto"> Chỉ nghỉ nửa ngày</label>' +
     '<label for="ly" id="lyL">Lý do</label><textarea id="ly" oninput="clrErr()"></textarea>' +
+    '<div id="wGT" style="display:none"><label for="gtF">Giấy tờ kèm theo (giấy khám bệnh, giấy ra viện, giấy báo…). Chưa có thì nộp sau.</label><input type="file" id="gtF" accept="image/*,application/pdf"></div>' +
     '<p id="hint" class="note"></p><p id="eDon" class="err"></p>' +
     '<button class="main" style="margin-top:8px" onclick="nopDon()">Ký và gửi</button></div>';
   s += '<h2>Đơn của tôi</h2>' + (D.dons.length ? D.dons.map(function(d){
     return '<div class="box"><div class="row"><b>' + esc(d.loai) + '</b>' + pillOf(d.trangThai) + '</div>' +
-      '<div class="muted">' + esc(moTa(d)) + '</div>' +
+      '<div class="muted">' + esc(moTa(d)) + (d.loai === 'Nghỉ ốm đau' && d.tinhPhep ? ' · trừ ' + String(d.tinhPhep).replace('.', ',') + ' ngày phép năm' : '') + '</div>' + hangGT(d) +
       (d.trangThai !== 'Chờ duyệt' ? '<div class="muted">' + esc(d.nguoiDuyet) + ' lúc ' + esc(d.thoiGianDuyet) + (d.ghiChu ? '. Ghi chú: ' + esc(d.ghiChu) : '') + '</div>' : '') +
       '<div style="display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap">' + (d.pdf ? '<a class="link" href="' + esc(d.pdf) + '" target="_blank">Xem bản PDF</a>' : '') + '<button class="small" onclick="inDon(\'' + d.ma + '\')">In đơn</button>' + (d.loai === 'Xin nghỉ việc' ? nutBG(d.ma) : '') + '</div></div>';
   }).join('') : '<div class="box muted">Bạn chưa có đơn nào.</div>');
+  return s;
+}
+
+var NGHI_BS = ['Nghỉ đột xuất', 'Nghỉ ốm đau', 'Nghỉ thai sản, khám thai', 'Nghỉ việc riêng có lương'];
+function pillGT(d){
+  var g = d.gt; if (!g) return '';
+  if (g.co) return '<span class="pill p-ok">Đã có giấy tờ</span>';
+  if (!g.tinh) return '<span class="pill">Chưa có giấy tờ</span>';
+  return g.qua ? '<span class="pill p-bad">Quá hạn nộp giấy tờ (' + esc(g.han) + ')</span>' : '<span class="pill p-wait">Chờ giấy tờ, hạn ' + esc(g.han) + '</span>';
+}
+function hangGT(d){
+  if (!d.gt || d.trangThai === 'Từ chối' || d.trangThai === 'Đã hủy') return '';
+  return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px">' + pillGT(d) +
+    (d.gt.co ? '<button class="small" onclick="xemTep(\'' + d.ma + '\')">Xem giấy tờ</button>' : '') +
+    '<button class="small' + (d.gt.co ? '' : ' main') + '" onclick="nopGT(\'' + d.ma + '\')">' + (d.gt.co ? 'Nộp lại' : 'Nộp giấy tờ') + '</button></div>';
+}
+function nopGT(ma){
+  var i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*,application/pdf';
+  i.onchange = function(){
+    var fl = i.files && i.files[0]; if (!fl) return;
+    toast('Đang chuẩn bị tệp…');
+    docTep(fl, function(tep){ call('nopGiayToDon', [TK, ma, tep], function(){ toast('Đã nộp giấy tờ'); refresh(); }, function(m){ toast(m, true); }); }, function(m){ toast(m, true); });
+  };
+  i.click();
+}
+function canhBaoNghi(){
+  if (!D) return '';
+  var s = '';
+  (D.dons || []).forEach(function(d){
+    if (d.gt && d.gt.tinh && !d.gt.co && (d.trangThai === 'Chờ duyệt' || d.trangThai === 'Đã duyệt'))
+      s += '<div class="box" style="border:2px solid ' + (d.gt.qua ? 'var(--bad)' : '#D98200') + '"><b style="color:' + (d.gt.qua ? 'var(--bad)' : '#D98200') + '">Đơn ' + esc(d.loai.toLowerCase()) + ' ' + esc(d.tu) + (d.gt.qua ? ' đã quá hạn nộp giấy tờ.' : ' chưa có giấy tờ, hạn nộp ' + esc(d.gt.han) + '.') + '</b>' +
+        '<div class="muted" style="font-size:13px;margin:2px 0 8px">' + (d.gt.qua ? 'Đang bị tính điểm chuyên cần. Có giấy tờ thì nộp ngay để Hành chính nhân sự xem lại.' : 'Có giấy tờ thì không bị tính điểm chuyên cần.') + '</div><button class="small main" onclick="nopGT(\'' + d.ma + '\')">Nộp giấy tờ</button></div>';
+  });
+  var v = ((D.chuyenCan && D.chuyenCan.suKien) || []).filter(function(k){ return k.vang; });
+  if (v.length) s += '<div class="box" style="border:2px solid var(--bad)"><b style="color:var(--bad)">Bạn không chấm công và chưa có đơn ngày ' + v.map(function(k){ return esc(k.ngay); }).join(', ') + '.</b>' +
+    '<div class="muted" style="font-size:13px;margin:2px 0 8px">Mỗi ngày đang bị tính 7 điểm chuyên cần. Nếu bạn nghỉ có lý do, nộp đơn nghỉ đột xuất hoặc nghỉ ốm đau (được nộp bổ sung trong 7 ngày).</div><button class="small main" onclick="go(\'don\')">Nộp đơn</button></div>';
   return s;
 }
 
@@ -1811,6 +1848,7 @@ function onLoai(){
   $('wTien').style.display = tu ? 'block' : 'none';
   $('wTrinh').style.display = td ? 'block' : 'none';
   $('wBG').style.display = nvc ? 'block' : 'none';
+  if ($('wGT')) $('wGT').style.display = NGHI_BS.indexOf(l) >= 0 ? 'block' : 'none';
   $('lyL').textContent = td ? 'Ghi chú trình' : 'Lý do';
   $('wDen').style.display = (tc || tu || td || nvc) ? 'none' : 'block';
   $('wGio').style.display = tc ? 'block' : 'none';
@@ -1822,7 +1860,13 @@ function onLoai(){
     hint = 'Theo nội quy, đơn phải nộp trước ít nhất ' + D.baoTruoc + ' ngày. Sớm nhất được nghỉ từ ' + vn(min) + '.' +
       (l === 'Nghỉ phép năm' ? ' Bạn còn ' + D.phep.conLai + ' ngày phép.' : '');
   } else if (l === 'Nghỉ đột xuất') {
-    hint = 'Dùng khi ốm đau, tai nạn, việc tang hoặc việc khẩn cấp. Đơn được đánh dấu đột xuất, trưởng phòng quyết định có tính phép hay không.' + (D.hoSo && D.hoSo.thuViec ? ' Bạn đang thử việc: ngày nghỉ là nghỉ không lương.' : '');
+    hint = 'Dùng khi có việc khẩn cấp không báo trước được. Nộp giấy tờ chứng minh ngay hoặc trong 3 ngày làm việc sau khi đi làm lại; có giấy tờ thì không bị tính điểm chuyên cần. Không có giấy tờ: nghỉ một buổi tính 4 điểm, nghỉ cả ngày tính 5 điểm. Ốm đau thì chọn loại "Nghỉ ốm đau".' + (D.hoSo && D.hoSo.thuViec ? ' Bạn đang thử việc: ngày nghỉ là nghỉ không lương.' : '');
+  } else if (l === 'Nghỉ ốm đau') {
+    hint = 'Dùng khi ốm đau, đi khám, nằm viện. Nộp giấy khám bệnh hoặc giấy ra viện ngay hoặc trong 3 ngày làm việc sau khi đi làm lại; có giấy tờ thì không bị tính điểm chuyên cần. Người đã tham gia bảo hiểm xã hội: ngày nghỉ do bảo hiểm chi trả. Người chưa tham gia: trừ vào phép năm' + (D.phep ? ' (bạn còn ' + D.phep.conLai + ' ngày)' : '') + ', hết phép thì nghỉ không lương.' + (D.hoSo && D.hoSo.thuViec ? ' Bạn đang thử việc: ngày nghỉ là nghỉ không lương.' : '');
+  } else if (l === 'Nghỉ thai sản, khám thai') {
+    hint = 'Nghỉ khám thai, nghỉ thai sản theo Luật Bảo hiểm xã hội; chế độ do bảo hiểm xã hội chi trả, Công ty không trả lương cho những ngày này. Nộp giấy khám thai, giấy chứng sinh kèm đơn hoặc nộp sau.';
+  } else if (l === 'Nghỉ việc riêng có lương') {
+    hint = 'Theo Điều 115 Bộ luật Lao động: bản thân kết hôn nghỉ 3 ngày; con kết hôn nghỉ 1 ngày; cha, mẹ (kể cả bên vợ, bên chồng), vợ, chồng, con mất nghỉ 3 ngày. Hưởng nguyên lương, không trừ phép năm.' + (D.hoSo && D.hoSo.thuViec ? ' Bạn đang thử việc: ngày nghỉ là nghỉ không lương.' : '');
   } else if (nvc) {
     hint = 'Theo Điều 35 Bộ luật Lao động 2019: báo trước ít nhất 45 ngày (hợp đồng không xác định thời hạn), 30 ngày (hợp đồng 12–36 tháng), 3 ngày làm việc (hợp đồng dưới 12 tháng); đang thử việc thì không cần báo trước. Duyệt 2 bước: quản lý trực tiếp, rồi Giám đốc. Sau khi gửi, bấm "In đơn" để in ra ký và lưu hồ sơ.';
   } else if (td) {
@@ -1861,6 +1905,17 @@ function nopDon(){
   if (f.loai !== 'Tăng ca' && f.den && f.den < f.tu) { e.textContent = 'Ngày kết thúc phải sau ngày bắt đầu.'; return; }
   if (f.loai === 'Tăng ca' && !(Number(f.soGio) > 0)) { e.textContent = 'Nhập số giờ tăng ca.'; return; }
   if (!f.lyDo) { e.textContent = 'Nhập lý do.'; return; }
+  var gtf = NGHI_BS.indexOf(f.loai) >= 0 && $('gtF') && $('gtF').files && $('gtF').files[0];
+  if (gtf) {
+    e.textContent = 'Đang chuẩn bị tệp…';
+    docTep(gtf, function(tep){
+      e.textContent = ''; f.file = tep;
+      askPin('Nhập mật khẩu đăng nhập app để ký và gửi đơn.', function(pin){
+        call('guiDon', [TK, f, pin], function(){ closeLayer(); toast('Đã gửi đơn kèm giấy tờ, chờ duyệt'); refresh(); }, function(m){ pinErr(m); });
+      });
+    }, function(m){ e.textContent = m; });
+    return;
+  }
   askPin('Nhập mật khẩu đăng nhập app để ký và gửi đơn.', function(pin){
     call('guiDon', [TK, f, pin], function(){ closeLayer(); toast('Đã gửi đơn, chờ duyệt'); refresh(); },
       function(m){ pinErr(m); });
@@ -1868,7 +1923,7 @@ function nopDon(){
 }
 
 var TIEU_DE_DON = {'Xin nghỉ việc': 'ĐƠN XIN NGHỈ VIỆC', 'Nghỉ phép năm': 'ĐƠN XIN NGHỈ PHÉP NĂM', 'Nghỉ không lương': 'ĐƠN XIN NGHỈ KHÔNG HƯỞNG LƯƠNG',
-  'Nghỉ đột xuất': 'ĐƠN XIN NGHỈ ĐỘT XUẤT', 'Tăng ca': 'PHIẾU ĐỀ NGHỊ LÀM THÊM GIỜ', 'Tạm ứng lương': 'GIẤY ĐỀ NGHỊ TẠM ỨNG LƯƠNG', 'Trình duyệt': 'TỜ TRÌNH',
+  'Nghỉ đột xuất': 'ĐƠN XIN NGHỈ ĐỘT XUẤT', 'Nghỉ ốm đau': 'ĐƠN XIN NGHỈ ỐM ĐAU', 'Nghỉ thai sản, khám thai': 'ĐƠN XIN NGHỈ THAI SẢN, KHÁM THAI', 'Nghỉ việc riêng có lương': 'ĐƠN XIN NGHỈ VIỆC RIÊNG CÓ HƯỞNG LƯƠNG', 'Tăng ca': 'PHIẾU ĐỀ NGHỊ LÀM THÊM GIỜ', 'Tạm ứng lương': 'GIẤY ĐỀ NGHỊ TẠM ỨNG LƯƠNG', 'Trình duyệt': 'TỜ TRÌNH',
   'Cập nhật hồ sơ': 'ĐỀ NGHỊ CẬP NHẬT HỒ SƠ', 'Đánh giá KPI': 'PHIẾU TỰ ĐÁNH GIÁ KPI'};
 function inDon(ma){
   var tim = [].concat(D.dons || [], D.choDuyet || [], (QT && QT.nghiViec) || [], (QT && QT.choDuyet) || []);

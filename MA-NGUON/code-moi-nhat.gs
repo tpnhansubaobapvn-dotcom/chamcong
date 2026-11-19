@@ -1,19 +1,19 @@
 /**
- * APP CHẤM CÔNG VÀ ĐƠN TỪ - GIAI ĐOẠN 1 - PHIÊN BẢN SỬA LẦN 73 (thử việc: ngày nghỉ là nghỉ không lương, chưa dùng phép năm; phép tính từ tháng vào làm; Sổ quản lý lao động tự lập từ dữ liệu app, mỗi người tự khai và bấm đồng ý xử lý dữ liệu cá nhân; kho thứ Bảy 17:00; điểm sơ vấn không bị Trang tính đổi thành ngày; sơ vấn mua hàng nhận đủ 15 câu, không tự chấm đạt/không đạt; đăng ký Lịch việc nhân sự, Hồ sơ ký điện tử vào danh sách chức năng của app; tài liệu đào tạo xem theo vai trò VT:; bỏ hẳn mã PIN 4 số, mọi chỗ ký dùng mật khẩu đăng nhập; Hồ sơ ký điện tử: tải văn bản lên, chọn người ký, ký hoặc từ chối bằng mật khẩu, lưu tên người ký, ngày giờ, mã xác thực SHA-256 của tệp, cảnh báo văn bản chờ ký trên trang đầu, trang xác nhận chữ ký in được; Lịch việc nhân sự: danh mục việc HCNS có hạn, chu kỳ, người phụ trách, cảnh báo quá hạn và sắp đến hạn trên trang đầu, tự tạo kỳ tiếp theo; người duyệt chi lương, kế toán xem chi tiết từng người: ngày công, hoa hồng, doanh số, BHXH, thuế, tạm ứng, in phiếu; danh sách nhân viên đã nghỉ việc trong Quản trị nhân sự, vẫn mở được hồ sơ, phiếu lương; in phiếu lương từng người; khai báo tài sản bắt buộc: hãng, đời máy, số seri, IMEI, số SIM, phụ kiện theo từng loại; cảnh báo đỏ khi chưa khai, thiếu, chưa ký; ký xác nhận bằng mật khẩu; tổng hợp cho Giám đốc, HCNS; xem bảng lương từng người ngay trong app cho Giám đốc, HCNS, kế toán; khóa bảng lương có số nhập tay để không bị lập lại ghi đè; bảng chốt tháng kinh doanh theo ngành: từng người, từng đơn, ngày giao, hạn thanh toán, nợ xấu; nhân viên sales admin không tự vào nhóm lương kinh doanh; ký bằng mật khẩu đăng nhập thay mã PIN; báo rõ lý do khi không duyệt được báo cáo doanh số, PIN; phiếu lương 12 tháng gần nhất; quản lý thấy doanh số từng phòng kinh doanh và tổng; nhân viên phòng kinh doanh chưa xếp nhóm được tự gán nhóm tạm để nhập doanh số ngay, chốt tháng có tổng chiết khấu; sơ vấn bỏ câu thứ 7, thêm lương cứng mong muốn; sơ vấn online khi nộp CV, tự chấm điểm và gắn nhãn; phiếu doanh số kinh doanh gọn theo quy chế, thêm vi phạm khác; trưởng phòng xem sơ đồ phòng mình, ô CV ứng tuyển nhấp nháy theo phòng; nhận CV từ tuyendung.capvina.vn, khung CV mới cho trưởng phòng; giao việc đính kèm hình ảnh, tài liệu; báo xong kèm tệp kết quả; sửa bài đào tạo, gỡ hoặc thêm tệp; đào tạo: nhiều tệp ảnh, video, tài liệu mỗi bài, nhiều link, đánh giá sao và bình luận; đào tạo gom theo khối: Kho, Kế toán, Vật tư mua hàng, Kinh doanh, Hành chính nhân sự; toàn công ty là nội quy, quy chế lương, thông báo; lương thỏa thuận tự gợi ý bậc, thử việc 1 hoặc 2 tháng tự hết hạn và tự tính 85% theo ngày; chỉ chấm công thành công trong phạm vi 30 m của điểm chấm công, ngoài phạm vi báo không thành công; chỉ Gmail công ty cấp mới có tài khoản; đào tạo theo sơ đồ chủ đề từng phòng ban, bài kiểm tra, nộp bài, chấm điểm, đề xuất đào tạo; đào tạo chuyên môn: bài học, tài liệu theo phòng ban, người học xác nhận đã học; nội quy, quy chế lương cho toàn công ty, quy chế bán hàng cho Phòng Kinh doanh; vai trò, mô tả công việc, trách nhiệm, quyền hạn trong hồ sơ từng người: quản trị ghi, nhân viên chỉ xem; công nợ từng đơn: còn phải thu, quá hạn, nợ xấu theo Điều 14; báo cáo doanh số kinh doanh theo Quy chế bán hàng 04/2026 và Phụ lục 01: nhân viên nạp, trưởng phòng, kế toán, giám đốc duyệt; vi phạm quy chế bán hàng; tự tính hoa hồng, thưởng hiệu quả vào bảng lương; việc giao đột xuất: giao bằng giọng nói, nhận việc ký PIN, tóm tắt bên phải; đăng nhập bằng tên đăng nhập và mật khẩu, nút đăng xuất; tài sản, công cụ, tài khoản được cấp có ký PIN và lịch sử thay đổi; tạm ẩn cơ cấu lương bậc mới; tăng tốc tải dữ liệu, thông báo trên máy; sao lưu dữ liệu tự động hằng đêm; HCNS trình duyệt bảng lương trước khi Giám đốc duyệt; số điện thoại trong hồ sơ; tài khoản phụ không hiện trên sơ đồ, nhiều người duyệt cùng lúc; thêm người ngay trên sơ đồ tổ chức; trang hồ sơ riêng từng nhân viên, nạp hồ sơ, sửa thông tin; biên bản bàn giao khi nghỉ việc, in và nạp bản đã ký; đơn xin nghỉ việc duyệt 2 bước, in đơn lưu hồ sơ; duyệt chi lương và tạm ứng 2 cấp theo từng công ty; lưu hợp đồng thử việc, hợp đồng lao động từng người, cảnh báo hết hạn; sinh nhật sắp tới, vinh danh nhân viên xuất sắc tháng; trang quản trị nhân sự toàn công ty theo sơ đồ tổ chức; bắt buộc định vị chính xác khi chấm công; nạp bản mô tả công việc theo chức danh, nhận file Word; trang tài khoản chuyên nghiệp, túi lịch sử mọi mục, đề nghị cập nhật hồ sơ; cơ cấu lương theo bậc hiện trong app; đơn hàng bị trả, treo, lỗi trong tháng; kế thừa phép tồn từ bảng lương tháng 9, công ty trả lương; giao việc tháng có nạp tài liệu, lịch sử, ảnh chấm công đóng dấu giờ và vị trí; nộp và đánh giá KPI hằng tháng, vi phạm nhắc nhở và văn bản; trình duyệt có tệp đã ký, ghi chú duyệt, tiền tăng ca tạm tính; bậc lương, tạm ứng, thưởng, KPI, doanh số, lập bảng lương, phiếu lương; ảnh đại diện, menu trái, tăng ca, chuyên cần, vai trò; giao diện web riêng qua GitHub, chấm công chụp ảnh trên máy tính/điện thoại, bảng theo dõi hôm nay, báo cáo sáng)
+ * APP CHẤM CÔNG VÀ ĐƠN TỪ - GIAI ĐOẠN 1 - PHIÊN BẢN SỬA LẦN 74 (đơn nghỉ ốm đau, thai sản khám thai, việc riêng có lương; nộp giấy tờ cho đơn nghỉ; chuyên cần tự tính điểm vắng mặt; phiếu lương ghi rõ từng dòng điểm; thử việc: ngày nghỉ là nghỉ không lương, chưa dùng phép năm; phép tính từ tháng vào làm; Sổ quản lý lao động tự lập từ dữ liệu app, mỗi người tự khai và bấm đồng ý xử lý dữ liệu cá nhân; kho thứ Bảy 17:00; điểm sơ vấn không bị Trang tính đổi thành ngày; sơ vấn mua hàng nhận đủ 15 câu, không tự chấm đạt/không đạt; đăng ký Lịch việc nhân sự, Hồ sơ ký điện tử vào danh sách chức năng của app; tài liệu đào tạo xem theo vai trò VT:; bỏ hẳn mã PIN 4 số, mọi chỗ ký dùng mật khẩu đăng nhập; Hồ sơ ký điện tử: tải văn bản lên, chọn người ký, ký hoặc từ chối bằng mật khẩu, lưu tên người ký, ngày giờ, mã xác thực SHA-256 của tệp, cảnh báo văn bản chờ ký trên trang đầu, trang xác nhận chữ ký in được; Lịch việc nhân sự: danh mục việc HCNS có hạn, chu kỳ, người phụ trách, cảnh báo quá hạn và sắp đến hạn trên trang đầu, tự tạo kỳ tiếp theo; người duyệt chi lương, kế toán xem chi tiết từng người: ngày công, hoa hồng, doanh số, BHXH, thuế, tạm ứng, in phiếu; danh sách nhân viên đã nghỉ việc trong Quản trị nhân sự, vẫn mở được hồ sơ, phiếu lương; in phiếu lương từng người; khai báo tài sản bắt buộc: hãng, đời máy, số seri, IMEI, số SIM, phụ kiện theo từng loại; cảnh báo đỏ khi chưa khai, thiếu, chưa ký; ký xác nhận bằng mật khẩu; tổng hợp cho Giám đốc, HCNS; xem bảng lương từng người ngay trong app cho Giám đốc, HCNS, kế toán; khóa bảng lương có số nhập tay để không bị lập lại ghi đè; bảng chốt tháng kinh doanh theo ngành: từng người, từng đơn, ngày giao, hạn thanh toán, nợ xấu; nhân viên sales admin không tự vào nhóm lương kinh doanh; ký bằng mật khẩu đăng nhập thay mã PIN; báo rõ lý do khi không duyệt được báo cáo doanh số, PIN; phiếu lương 12 tháng gần nhất; quản lý thấy doanh số từng phòng kinh doanh và tổng; nhân viên phòng kinh doanh chưa xếp nhóm được tự gán nhóm tạm để nhập doanh số ngay, chốt tháng có tổng chiết khấu; sơ vấn bỏ câu thứ 7, thêm lương cứng mong muốn; sơ vấn online khi nộp CV, tự chấm điểm và gắn nhãn; phiếu doanh số kinh doanh gọn theo quy chế, thêm vi phạm khác; trưởng phòng xem sơ đồ phòng mình, ô CV ứng tuyển nhấp nháy theo phòng; nhận CV từ tuyendung.capvina.vn, khung CV mới cho trưởng phòng; giao việc đính kèm hình ảnh, tài liệu; báo xong kèm tệp kết quả; sửa bài đào tạo, gỡ hoặc thêm tệp; đào tạo: nhiều tệp ảnh, video, tài liệu mỗi bài, nhiều link, đánh giá sao và bình luận; đào tạo gom theo khối: Kho, Kế toán, Vật tư mua hàng, Kinh doanh, Hành chính nhân sự; toàn công ty là nội quy, quy chế lương, thông báo; lương thỏa thuận tự gợi ý bậc, thử việc 1 hoặc 2 tháng tự hết hạn và tự tính 85% theo ngày; chỉ chấm công thành công trong phạm vi 30 m của điểm chấm công, ngoài phạm vi báo không thành công; chỉ Gmail công ty cấp mới có tài khoản; đào tạo theo sơ đồ chủ đề từng phòng ban, bài kiểm tra, nộp bài, chấm điểm, đề xuất đào tạo; đào tạo chuyên môn: bài học, tài liệu theo phòng ban, người học xác nhận đã học; nội quy, quy chế lương cho toàn công ty, quy chế bán hàng cho Phòng Kinh doanh; vai trò, mô tả công việc, trách nhiệm, quyền hạn trong hồ sơ từng người: quản trị ghi, nhân viên chỉ xem; công nợ từng đơn: còn phải thu, quá hạn, nợ xấu theo Điều 14; báo cáo doanh số kinh doanh theo Quy chế bán hàng 04/2026 và Phụ lục 01: nhân viên nạp, trưởng phòng, kế toán, giám đốc duyệt; vi phạm quy chế bán hàng; tự tính hoa hồng, thưởng hiệu quả vào bảng lương; việc giao đột xuất: giao bằng giọng nói, nhận việc ký PIN, tóm tắt bên phải; đăng nhập bằng tên đăng nhập và mật khẩu, nút đăng xuất; tài sản, công cụ, tài khoản được cấp có ký PIN và lịch sử thay đổi; tạm ẩn cơ cấu lương bậc mới; tăng tốc tải dữ liệu, thông báo trên máy; sao lưu dữ liệu tự động hằng đêm; HCNS trình duyệt bảng lương trước khi Giám đốc duyệt; số điện thoại trong hồ sơ; tài khoản phụ không hiện trên sơ đồ, nhiều người duyệt cùng lúc; thêm người ngay trên sơ đồ tổ chức; trang hồ sơ riêng từng nhân viên, nạp hồ sơ, sửa thông tin; biên bản bàn giao khi nghỉ việc, in và nạp bản đã ký; đơn xin nghỉ việc duyệt 2 bước, in đơn lưu hồ sơ; duyệt chi lương và tạm ứng 2 cấp theo từng công ty; lưu hợp đồng thử việc, hợp đồng lao động từng người, cảnh báo hết hạn; sinh nhật sắp tới, vinh danh nhân viên xuất sắc tháng; trang quản trị nhân sự toàn công ty theo sơ đồ tổ chức; bắt buộc định vị chính xác khi chấm công; nạp bản mô tả công việc theo chức danh, nhận file Word; trang tài khoản chuyên nghiệp, túi lịch sử mọi mục, đề nghị cập nhật hồ sơ; cơ cấu lương theo bậc hiện trong app; đơn hàng bị trả, treo, lỗi trong tháng; kế thừa phép tồn từ bảng lương tháng 9, công ty trả lương; giao việc tháng có nạp tài liệu, lịch sử, ảnh chấm công đóng dấu giờ và vị trí; nộp và đánh giá KPI hằng tháng, vi phạm nhắc nhở và văn bản; trình duyệt có tệp đã ký, ghi chú duyệt, tiền tăng ca tạm tính; bậc lương, tạm ứng, thưởng, KPI, doanh số, lập bảng lương, phiếu lương; ảnh đại diện, menu trái, tăng ca, chuyên cần, vai trò; giao diện web riêng qua GitHub, chấm công chụp ảnh trên máy tính/điện thoại, bảng theo dõi hôm nay, báo cáo sáng)
  * Dán toàn bộ nội dung này vào file Code.gs trong Apps Script.
  * Lần đầu: chọn hàm CAI_DAT_LAN_DAU rồi bấm Chạy.
  */
 
 const SH = { NV: 'NhanVien', DIEM: 'DiemChamCong', TS: 'ThamSo', CC: 'ChamCong', DON: 'DonTu', LOG: 'NhatKy', QC: 'QuyChe', MT: 'MoTaCongViec', BL: 'BacLuong', SL: 'SoLieuThang', LE: 'NgayLe', VP: 'ViPham', GV: 'GiaoViec', DH: 'DonHangLoi', VD: 'VinhDanh', HD: 'HopDong', BG: 'BanGiao', HS: 'HoSoNV', TSAN: 'TaiSan', TSLOG: 'TaiSanLog', VX: 'ViecDotXuat', BCKD: 'BaoCaoKD', VPKD: 'ViPhamKD', DT: 'DaoTao', DTH: 'DaoTaoHoc', DXDT: 'DeXuatDaoTao', DTBL: 'DaoTaoBinhLuan', UV: 'UngVien', LV: 'LichViecHCNS', VB: 'VanBanKy' };
 const TZ = 'Asia/Ho_Chi_Minh';
-const LOAI_DON = ['Nghỉ phép năm', 'Nghỉ không lương', 'Nghỉ đột xuất', 'Tăng ca', 'Tạm ứng lương', 'Trình duyệt', 'Đánh giá KPI', 'Xin nghỉ việc'];
+const LOAI_DON = ['Nghỉ phép năm', 'Nghỉ không lương', 'Nghỉ đột xuất', 'Nghỉ ốm đau', 'Nghỉ thai sản, khám thai', 'Nghỉ việc riêng có lương', 'Tăng ca', 'Tạm ứng lương', 'Trình duyệt', 'Đánh giá KPI', 'Xin nghỉ việc'];
 
 const HEADERS = {
   NhanVien: ['MaNV', 'HoTen', 'Gmail', 'PhongBan', 'ChucVu', 'VaiTro', 'GmailDuyet', 'DiemChamCong', 'PhepNam', 'TrangThai', 'PinHash', 'Khoi', 'AnhDaiDien', 'Bac', 'NgayVaoLam', 'ThuViec', 'SoTaiKhoan', 'NganHang', 'PhepTon', 'CongTy', 'NgaySinh', 'SoDienThoai', 'MatKhauHash', 'NhomKD', 'HoaHongQuy', 'LuongThoaThuan', 'NgayHetThuViec'],
   DiemChamCong: ['TenDiem', 'ViDo', 'KinhDo', 'BanKinh_m'],
   ThamSo: ['ThamSo', 'GiaTri', 'GhiChu'],
   ChamCong: ['ThoiGian', 'MaNV', 'HoTen', 'PhongBan', 'Loai', 'ViDo', 'KinhDo', 'DoChinhXac_m', 'KhoangCach_m', 'Diem', 'DiTre_phut', 'HinhThuc', 'AnhID', 'VeSom_phut'],
-  DonTu: ['MaDon', 'NgayTao', 'MaNV', 'HoTen', 'PhongBan', 'LoaiDon', 'TuNgay', 'DenNgay', 'NuaNgay', 'SoNgay', 'SoGio', 'LyDo', 'DotXuat', 'GmailDuyet', 'TrangThai', 'NguoiDuyet', 'ThoiGianDuyet', 'GhiChuDuyet', 'LinkPDF', 'SoTien', 'TepDinhKem', 'ThangKPI', 'DiemTuCham', 'DiemDuyet', 'BuocDuyet', 'LichSuDuyet'],
+  DonTu: ['MaDon', 'NgayTao', 'MaNV', 'HoTen', 'PhongBan', 'LoaiDon', 'TuNgay', 'DenNgay', 'NuaNgay', 'SoNgay', 'SoGio', 'LyDo', 'DotXuat', 'GmailDuyet', 'TrangThai', 'NguoiDuyet', 'ThoiGianDuyet', 'GhiChuDuyet', 'LinkPDF', 'SoTien', 'TepDinhKem', 'ThangKPI', 'DiemTuCham', 'DiemDuyet', 'BuocDuyet', 'LichSuDuyet', 'TinhPhep'],
   NhatKy: ['ThoiGian', 'Gmail', 'HanhDong', 'ChiTiet'],
   QuyChe: ['PhongBan', 'LoaiVanBan', 'TieuDe', 'NoiDung', 'TuKhoa', 'HinhThucKyLuat'],
   MoTaCongViec: ['ChucVu', 'VaiTro', 'TrachNhiem', 'QuyenHan', 'MaNV', 'TepDinhKem', 'MaMT', 'NgayHieuLuc', 'NguoiCapNhat', 'ThoiGianCapNhat', 'MoTaCV'],
@@ -53,7 +53,7 @@ const WEB_SHIM = "var API_URL='%URL%';" +
 const API_FN = {
   nopUngVien: nopUngVien, dsUngVien: dsUngVien, capNhatUngVien: capNhatUngVien, xemCVUngVien: xemCVUngVien,
   guiMaOTP: guiMaOTP, xacNhanOTP: xacNhanOTP, dangNhapMK: dangNhapMK, datMatKhau: datMatKhau, dangXuat: dangXuat, datPIN: datPIN, taiDuLieu: taiDuLieu,
-  chamCong: chamCong, chamCongAnh: chamCongAnh, guiDon: guiDon, duyetDon: duyetDon, taiQuyChe: taiQuyChe,
+  chamCong: chamCong, chamCongAnh: chamCongAnh, guiDon: guiDon, nopGiayToDon: nopGiayToDon, duyetDon: duyetDon, taiQuyChe: taiQuyChe,
   hoiNoiQuy: hoiNoiQuy, baoCaoHomNay: baoCaoHomNay, xemAnh: xemAnh, datAnhDaiDien: datAnhDaiDien, taiMoTa: taiMoTa, xemTep: xemTep, lapViPham: lapViPham, dsViPham: dsViPham,
   giaoViec: giaoViec, dsGiaoViec: dsGiaoViec, lichSuSoLieu: lichSuSoLieu, dsBangLuong: dsBangLuong,
   dsNhanVienTatCa: dsNhanVienTatCa, lichSu: lichSu, deNghiCapNhat: deNghiCapNhat, duyetBangLuong: duyetBangLuong, tomTatBangLuong: tomTatBangLuong, thongBao: thongBao, soLaoDong: soLaoDong, luuSoLaoDong: luuSoLaoDong, khaiSoLaoDong: khaiSoLaoDong, dsThongBaoCT: dsThongBaoCT, dangThongBaoCT: dangThongBaoCT, docThongBaoCT: docThongBaoCT, anThongBaoCT: anThongBaoCT, xemTepTBCT: xemTepTBCT, trinhDuyetLuong: trinhDuyetLuong, khoaBangLuong: khoaBangLuong, tongHopTaiSan: tongHopTaiSan, xacNhanTaiSan: xacNhanTaiSan, xemBangLuong: xemBangLuong, dsLichViec: dsLichViec, luuLichViec: luuLichViec, xongLichViec: xongLichViec, dsVanBan: dsVanBan, taoVanBan: taoVanBan, kyVanBan: kyVanBan, xemVanBan: xemVanBan, napMoTa: napMoTa, luuMoTaNV: luuMoTaNV, quanTriCongTy: quanTriCongTy, datNgaySinh: datNgaySinh, luuVinhDanh: luuVinhDanh, napHopDong: napHopDong, luuBanGiao: luuBanGiao, hoSoNhanVien: hoSoNhanVien, capNhatHoSoNV: capNhatHoSoNV, napHoSo: napHoSo, themNhanVien: themNhanVien, luuTaiSan: luuTaiSan, lichSuTaiSan: lichSuTaiSan, taiBaoCaoKD: taiBaoCaoKD, luuDonKD: luuDonKD, xoaDonKD: xoaDonKD, nopBaoCaoKD: nopBaoCaoKD, dsBaoCaoKD: dsBaoCaoKD, duyetBaoCaoKD: duyetBaoCaoKD, ghiViPhamKD: ghiViPhamKD, goViPhamKD: goViPhamKD, datNhomKD: datNhomKD, xemTepKD: xemTepKD, taiDaoTao: taiDaoTao, luuDaoTao: luuDaoTao, anDaoTao: anDaoTao, hocXongDT: hocXongDT, xemTepDT: xemTepDT, nopBaiDT: nopBaiDT, chamBaiDT: chamBaiDT, guiDeXuatDT: guiDeXuatDT, phanHoiDeXuatDT: phanHoiDeXuatDT, themTepDT: themTepDT, binhLuanDT: binhLuanDT, suaDaoTao: suaDaoTao, goTepDT: goTepDT, giaoViecDX: giaoViecDX, capNhatViecDX: capNhatViecDX, themTepVX: themTepVX, xemTepVX: xemTepVX, lapDonHangLoi: lapDonHangLoi, dsDonHangLoi: dsDonHangLoi, capNhatDonHangLoi: capNhatDonHangLoi,
@@ -517,6 +517,46 @@ function datPIN(token, pinCu, pinMoi) {
   return { ok: true };
 }
 
+/* ================= ĐƠN NGHỈ CÓ GIẤY TỜ, NGHỈ ỐM, ĐIỂM VẮNG MẶT ================= */
+const NGHI_BS = ['Nghỉ đột xuất', 'Nghỉ ốm đau', 'Nghỉ thai sản, khám thai', 'Nghỉ việc riêng có lương']; // được nộp bổ sung, có chỗ nộp giấy tờ
+const NGHI_GT = ['Nghỉ đột xuất', 'Nghỉ ốm đau']; // không có giấy tờ thì tính điểm chuyên cần
+const NGHI_MOI = ['Nghỉ phép năm', 'Nghỉ không lương', 'Nghỉ đột xuất', 'Nghỉ ốm đau', 'Nghỉ thai sản, khám thai', 'Nghỉ việc riêng có lương'];
+var LE_C_ = null;
+function leC_() { if (!LE_C_) LE_C_ = ngayLe_(); return LE_C_; }
+function donCotTP_() {
+  const hd = header_(SH.DON);
+  if (hd.indexOf('TinhPhep') >= 0) return;
+  const s = sh_(SH.DON); s.getRange(1, s.getLastColumn() + 1).setValue('TinhPhep');
+  if (MEMO_) delete MEMO_[SH.DON];
+}
+// Hạn nộp giấy tờ: hết ngày làm việc thứ 3 sau ngày nghỉ cuối (thứ Hai đến thứ Bảy, không tính lễ)
+function hanGiayTo_(den) {
+  const le = leC_(); let iso = den, n = 0, guard = 0;
+  while (n < 3 && guard++ < 30) { iso = addDays_(iso, 1); if (heSoNgay_(iso, 'KHO') > 0 && !le[iso]) n++; }
+  return iso;
+}
+function thamGiaBH_(maNV) {
+  try { const r = sldRows_().find(function (x) { return String(x.MaNV) === String(maNV); }); return !!r && /^\s*có/i.test(String(r.ThamGiaBH || '')); } catch (e) { return false; }
+}
+function gtDon_(d, today) {
+  if (NGHI_BS.indexOf(d.LoaiDon) < 0 || !d.DenNgay) return null;
+  const co = !!String(d.TepDinhKem || '').trim(), han = hanGiayTo_(ymd_(d.DenNgay));
+  let moi = true; try { moi = ymd_(d.NgayTao) >= String(ts_().CC_VangTu || '2026-11-19'); } catch (e) {}
+  return { co: co, han: ymdToVN_(han), qua: !co && today > han, tinh: moi && NGHI_GT.indexOf(d.LoaiDon) >= 0 };
+}
+function nopGiayToDon(token, ma, tep) {
+  const nv = auth_(token);
+  const d = rows_(SH.DON).find(function (x) { return String(x.MaDon) === String(ma); });
+  if (!d) throw new Error('Không tìm thấy đơn.');
+  if (String(d.MaNV) !== String(nv.MaNV) && ['GD', 'HCNS'].indexOf(String(nv.VaiTro).trim()) < 0) throw new Error('Chỉ người làm đơn hoặc Hành chính nhân sự được nộp giấy tờ cho đơn này.');
+  if (NGHI_BS.indexOf(d.LoaiDon) < 0) throw new Error('Loại đơn này không cần nộp giấy tờ.');
+  if (d.TrangThai === 'Từ chối' || d.TrangThai === 'Đã hủy') throw new Error('Đơn này đã bị trả lại.');
+  const file = luuTep_('DON_FOLDER', 'HỆ THỐNG CHẤM CÔNG - GIẤY TỜ ĐƠN NGHỈ', tep, String(d.MaDon) + ' - ' + String(d.HoTen) + ' - giấy tờ');
+  setCell_(SH.DON, d._row, 'TepDinhKem', file.getId());
+  log_(nv.Gmail, 'Nộp giấy tờ đơn nghỉ', String(d.MaDon) + ' ' + String(d.LoaiDon));
+  return { ok: true };
+}
+
 /* ================= DỮ LIỆU MÀN HÌNH ================= */
 
 function donView_(d) {
@@ -525,7 +565,8 @@ function donView_(d) {
     tu: fmtD_(d.TuNgay), den: fmtD_(d.DenNgay), nuaNgay: d.NuaNgay === 'Có',
     soNgay: Number(d.SoNgay || 0), soGio: Number(d.SoGio || 0), soTien: Number(d.SoTien || 0), lyDo: d.LyDo,
     dotXuat: d.DotXuat === 'Có', trangThai: d.TrangThai, nguoiDuyet: d.NguoiDuyet,
-    thoiGianDuyet: fmtDT_(d.ThoiGianDuyet), ghiChu: d.GhiChuDuyet, pdf: d.LinkPDF, ngayTao: fmtDT_(d.NgayTao), tep: String(d.TepDinhKem || ''), thangKPI: thangCua_(d.ThangKPI), diemTu: d.DiemTuCham === '' ? '' : Number(d.DiemTuCham), diemDuyet: d.DiemDuyet === '' ? '' : Number(d.DiemDuyet), buoc: String(d.BuocDuyet || ''), lichSuDuyet: String(d.LichSuDuyet || '')
+    thoiGianDuyet: fmtDT_(d.ThoiGianDuyet), ghiChu: d.GhiChuDuyet, pdf: d.LinkPDF, ngayTao: fmtDT_(d.NgayTao), tep: String(d.TepDinhKem || ''), thangKPI: thangCua_(d.ThangKPI), diemTu: d.DiemTuCham === '' ? '' : Number(d.DiemTuCham), diemDuyet: d.DiemDuyet === '' ? '' : Number(d.DiemDuyet), buoc: String(d.BuocDuyet || ''), lichSuDuyet: String(d.LichSuDuyet || ''),
+    gt: gtDon_(d, ymd_(new Date())), tinhPhep: Number(d.TinhPhep || 0)
   };
 }
 
@@ -543,9 +584,9 @@ const TEN_CTY = { BB: 'Công ty TNHH Bao Báp Việt Nam', CAP: 'Công ty CP SX 
 
 function phepDaDung_(maNV, year, dons) {
   return dons.filter(function (d) {
-    return String(d.MaNV) === String(maNV) && d.LoaiDon === 'Nghỉ phép năm' &&
+    return String(d.MaNV) === String(maNV) && (d.LoaiDon === 'Nghỉ phép năm' || d.LoaiDon === 'Nghỉ ốm đau') &&
       (d.TrangThai === 'Đã duyệt' || d.TrangThai === 'Chờ duyệt') && ymd_(d.TuNgay).slice(0, 4) === year;
-  }).reduce(function (s, d) { return s + Number(d.SoNgay || 0); }, 0);
+  }).reduce(function (s, d) { return s + (d.LoaiDon === 'Nghỉ ốm đau' ? Number(d.TinhPhep || 0) : Number(d.SoNgay || 0)); }, 0);
 }
 
 function hsTV_(nv, thang) {
@@ -746,7 +787,7 @@ function guiDon(token, f, pin) {
   if (loai === 'Nghỉ phép năm' || loai === 'Nghỉ không lương') {
     if (diff < bt) throw new Error(loai + ' phải nộp trước ít nhất ' + bt + ' ngày, sớm nhất là ngày ' + ymdToVN_(addDays_(today, bt)) + '. Trường hợp khẩn cấp hãy chọn "Nghỉ đột xuất".');
   }
-  if (loai === 'Nghỉ đột xuất' && diff < -7) throw new Error('Đơn nghỉ đột xuất chỉ được nộp bổ sung trong vòng 7 ngày.');
+  if (NGHI_BS.indexOf(loai) >= 0 && diff < -7) throw new Error('Đơn ' + loai.toLowerCase() + ' chỉ được nộp bổ sung trong vòng 7 ngày.');
 
   let soNgay = 0, soGio = 0;
   const nua = !!f.nuaNgay && f.tu === den && loai !== 'Tăng ca';
@@ -756,6 +797,7 @@ function guiDon(token, f, pin) {
   } else {
     soNgay = nua ? 0.5 : demNgay_(f.tu, den, Number(t.NgayCongThu7 || 0.5));
     if (soNgay <= 0) throw new Error('Khoảng ngày này không có ngày làm việc.');
+    if (loai === 'Nghỉ việc riêng có lương' && soNgay > 3) throw new Error('Nghỉ việc riêng có lương tối đa 3 ngày (bản thân kết hôn 3 ngày; con kết hôn 1 ngày; cha, mẹ, vợ, chồng, con mất 3 ngày). Phần vượt hãy nộp đơn nghỉ phép năm hoặc nghỉ không lương.');
   }
 
   const lock = LockService.getScriptLock();
@@ -777,10 +819,18 @@ function guiDon(token, f, pin) {
     if (!gmailDuyet) throw new Error('Chưa cài người duyệt cho bạn. Báo HCNS.');
 
     const ma = 'DT' + Utilities.formatDate(new Date(), TZ, 'yyMMddHHmmss') + Math.floor(Math.random() * 90 + 10);
+    // Nghỉ ốm: đang thử việc thì không lương; đã tham gia BHXH thì bảo hiểm chi trả; chưa tham gia thì trừ phép năm, hết phép nghỉ không lương
+    let tinhPhep = '';
+    if (loai === 'Nghỉ ốm đau') {
+      donCotTP_();
+      tinhPhep = (String(nv.ThuViec || '').trim() === 'Có' || thamGiaBH_(nv.MaNV)) ? 0 : Math.min(soNgay, phepConLai_(nv, dons, today).conLai);
+    }
+    let tepGT = '';
+    if (NGHI_BS.indexOf(loai) >= 0 && f.file && f.file.data) tepGT = luuTep_('DON_FOLDER', 'HỆ THỐNG CHẤM CÔNG - GIẤY TỜ ĐƠN NGHỈ', f.file, ma + ' - ' + nv.HoTen + ' - giấy tờ').getId();
     append_(SH.DON, {
       MaDon: ma, NgayTao: new Date(), MaNV: nv.MaNV, HoTen: nv.HoTen, PhongBan: nv.PhongBan, LoaiDon: loai,
       TuNgay: f.tu, DenNgay: den, NuaNgay: nua ? 'Có' : '', SoNgay: soNgay, SoGio: soGio, LyDo: lyDo,
-      DotXuat: loai === 'Nghỉ đột xuất' ? 'Có' : '', GmailDuyet: gmailDuyet, TrangThai: 'Chờ duyệt'
+      DotXuat: loai === 'Nghỉ đột xuất' ? 'Có' : '', GmailDuyet: gmailDuyet, TrangThai: 'Chờ duyệt', TepDinhKem: tepGT, TinhPhep: tinhPhep
     });
     log_(nv.Gmail, 'Ký và gửi đơn', ma + ' ' + loai);
 
@@ -2381,7 +2431,7 @@ function lapBangLuong_(token, thang) {
   const nd = soNgayThang_(thang), lastDay = thang + '-' + String(nd).padStart(2, '0');
   const today = ymd_(new Date());
   const tyLeBH = Number(t.TyLeBHNLD || 10.5) / 100, lttv = Number(t.LuongToiThieuVung || 5310000), pcTN = Number(t.PhuCapThamNien || 100000);
-  const nghiCoLuong = ['Nghỉ phép năm', 'Nghỉ đột xuất'];
+  const nghiCoLuong = ['Nghỉ phép năm', 'Nghỉ đột xuất', 'Nghỉ việc riêng có lương'];
   const dsNVAll = rows_(SH.NV), kdTu = String(t.KD_ApDungTu || '2026-11');
   const out = [], canhBao = [];
   let tong = 0;
@@ -2403,6 +2453,16 @@ function lapBangLuong_(token, thang) {
     const daLam = {};
     mine.forEach(function (r) { if (r.Loai === 'VAO') daLam[ymd_(r.ThoiGian)] = 1; });
     const donNV = dons.filter(function (d) { return String(d.MaNV) === String(nv.MaNV) && d.TrangThai === 'Đã duyệt'; });
+    // Nghỉ ốm của người chưa tham gia BHXH: các ngày đầu của đơn được trả lương bằng phép năm (cột TinhPhep), phần còn lại không lương
+    const omTL = {};
+    donNV.filter(function (x) { return x.LoaiDon === 'Nghỉ ốm đau' && Number(x.TinhPhep || 0) > 0; }).forEach(function (x) {
+      let con = Number(x.TinhPhep), iso2 = ymd_(x.TuNgay), g2 = 0; const den2 = ymd_(x.DenNgay);
+      while (iso2 <= den2 && con > 0 && g2++ < 400) {
+        const h2 = le[iso2] ? 0 : heSoNgay_(iso2, khoi);
+        if (h2) { const p2 = Math.min(x.NuaNgay === 'Có' ? h2 * 0.5 : h2, con); omTL[iso2] = (omTL[iso2] || 0) + p2; con -= p2; }
+        iso2 = addDays_(iso2, 1);
+      }
+    });
     let ngayTT = 0, ngayTL = 0;
     for (let d = 1; d <= nd; d++) {
       const iso = thang + '-' + String(d).padStart(2, '0');
@@ -2414,6 +2474,7 @@ function lapBangLuong_(token, thang) {
       if (hetTVn ? iso <= hetTVn : tv) continue; // đang thử việc: ngày nghỉ là nghỉ không lương
       const don = donNV.find(function (x) { return nghiCoLuong.indexOf(x.LoaiDon) >= 0 && ymd_(x.TuNgay) <= iso && ymd_(x.DenNgay) >= iso; });
       if (don) ngayTL += don.NuaNgay === 'Có' ? h * 0.5 : h;
+      else if (omTL[iso]) ngayTL += Math.min(omTL[iso], h);
     }
     const slNV = sl.filter(function (r) { return String(r.MaNV) === String(nv.MaNV); });
     const slLast = function (loai) { const a = slNV.filter(function (r) { return r.Loai === loai; }); return a.length ? a[a.length - 1].GiaTri : ''; };
@@ -2421,10 +2482,11 @@ function lapBangLuong_(token, thang) {
     const r2 = Math.round(lcbHD / chuan * ngayTL);
     const r3a = Math.round(Number(b.AnTrua) * hs / chuan * ngayTT);
     const r3b = nhom === 'C' ? 0 : Math.round(Number(b.XangXe) * hs / chuan * ngayTT);
-    const cc = chuyenCan_(nv, mine, thang, today);
+    const cc = chuyenCan_(nv, mine, thang, today, dons);
     const r5 = Math.round(Number(b.CCToiDa) * hs * cc.tyLe / 100);
     const r5b = (cc.diem === 0 && ngayTT > 0) ? Math.round(Number(b.CCToiDa) * hs * 0.4) : 0;
-    const ghi = ['Chuyên cần ' + cc.diem + ' điểm, ' + cc.tyLe + '%'];
+    const ccCT = cc.suKien.filter(function (k) { return k.diem > 0; }).map(function (k) { return String(k.ngay).slice(0, 5) + ' ' + String(k.loai).toLowerCase() + (k.phut ? ' ' + k.phut + ' phút' : '') + ': ' + String(k.diem).replace('.', ',') + ' điểm'; }).join('; ');
+    const ghi = ['Chuyên cần ' + cc.diem + ' điểm, ' + cc.tyLe + '%' + (ccCT ? ' (' + ccCT.slice(0, 700) + ')' : '')];
     let r4 = 0;
     const kd = kdNhom ? tinhKD_(nv, thang, true, dsNVAll) : null;
     if (kd) { r4 = Math.round(kd.thuongHQ * hs); kd.ghi.forEach(function (g) { ghi.push(g); }); if (kd.phongToa || kd.tamGiu) canhBao.push(nv.HoTen + ': đang phong tỏa thu nhập có điều kiện'); }
@@ -2645,7 +2707,7 @@ function napMoTa(token, f) {
   return { ok: true };
 }
 
-function chuyenCan_(nv, cc, month, today) {
+function chuyenCan_(nv, cc, month, today, dons) {
   const days = {};
   cc.forEach(function (r) {
     const d = ymd_(r.ThoiGian);
@@ -2671,6 +2733,37 @@ function chuyenCan_(nv, cc, month, today) {
     });
     if (vao && !ra && d < today) { diem += 4; sk.push({ ngay: ymdToVN_(d), loai: 'Thiếu giờ ra', phut: 0, diem: 4 }); }
   });
+  // Điểm vắng mặt (Điều 7 Quy chế lương), áp dụng từ ngày CC_VangTu
+  try {
+    const vangTu = String(ts_().CC_VangTu || '2026-11-19'), le = leC_(), khoi = khoi_(nv);
+    const cuaToi = (dons || rows_(SH.DON)).filter(function (x) { return String(x.MaNV) === String(nv.MaNV) && (x.TrangThai === 'Chờ duyệt' || x.TrangThai === 'Đã duyệt') && NGHI_MOI.indexOf(x.LoaiDon) >= 0 && x.TuNgay && x.DenNgay; });
+    const coDon = {};
+    cuaToi.forEach(function (x) {
+      const tu = ymd_(x.TuNgay), den = ymd_(x.DenNgay), tinh = NGHI_GT.indexOf(x.LoaiDon) >= 0 && ymd_(x.NgayTao) >= vangTu && !String(x.TepDinhKem || '').trim();
+      const han = tinh ? hanGiayTo_(den) : '';
+      let iso = tu, gd = 0;
+      while (iso <= den && gd++ < 400) {
+        coDon[iso] = 1;
+        if (tinh && iso.slice(0, 7) === month && !le[iso] && heSoNgay_(iso, khoi) > 0) {
+          if (today > han) { const p = x.NuaNgay === 'Có' ? 4 : 5; diem += p; sk.push({ ngay: ymdToVN_(iso), loai: x.LoaiDon + ' không có giấy tờ', phut: 0, diem: p }); }
+          else sk.push({ ngay: ymdToVN_(iso), loai: x.LoaiDon + ', chờ giấy tờ đến ' + ymdToVN_(han), phut: 0, diem: 0, cho: true });
+        }
+        iso = addDays_(iso, 1);
+      }
+    });
+    const coCham = Object.keys(days).some(function (d) { return days[d].some(function (r) { return r.Loai === 'VAO'; }); });
+    if (coCham) {
+      const vao = nv.NgayVaoLam ? ymd_(nv.NgayVaoLam) : '';
+      const nd = soNgayThang_(month);
+      for (let i = 1; i <= nd; i++) {
+        const iso = month + '-' + String(i).padStart(2, '0');
+        if (iso >= today || iso < vangTu || (vao && iso < vao)) continue;
+        if (le[iso] || !(heSoNgay_(iso, khoi) > 0) || days[iso] || coDon[iso]) continue;
+        diem += 7; sk.push({ ngay: ymdToVN_(iso), loai: 'Không chấm công, không có đơn', phut: 0, diem: 7, vang: true });
+      }
+    }
+  } catch (e) {}
+  sk.sort(function (a, b) { const x = String(a.ngay).split('/').reverse().join(''), y = String(b.ngay).split('/').reverse().join(''); return x < y ? -1 : x > y ? 1 : 0; });
   const tyLe = diem <= 2 ? 100 : (diem >= 7 ? 0 : 100 - Math.ceil((diem - 2) / 0.5) * 10);
   return { diem: diem, tyLe: tyLe, xuatSac: diem === 0, suKien: sk };
 }
