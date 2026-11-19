@@ -9,7 +9,7 @@ Ngày chốt: 19/11/2026 (tối). Dùng để sao chép sang mua.capvina.vn.
 
 ## Dữ liệu
 Toàn bộ dữ liệu nằm trong một Google Sheet, mỗi trang tính là một bảng. Tên bảng khai trong hằng `SH`, tên cột khai trong hằng `HEADERS` ở đầu `code-moi-nhat.gs`:
-NhanVien, DiemChamCong, ThamSo, ChamCong, DonTu, NhatKy, QuyChe, MoTaCongViec, BacLuong, SoLieuThang, NgayLe, ViPham, GiaoViec, DonHangLoi, VinhDanh, HopDong, BanGiao, HoSoNV, TaiSan, TaiSanLog, ViecDotXuat, BaoCaoKD, ViPhamKD, DaoTao, DaoTaoHoc, DeXuatDaoTao, DaoTaoBinhLuan, UngVien, LichViecHCNS, VanBanKy, ThongBaoCT, DaoTaoMo.
+NhanVien, DiemChamCong, ThamSo, ChamCong, DonTu, NhatKy, QuyChe, MoTaCongViec, BacLuong, SoLieuThang, NgayLe, ViPham, GiaoViec, DonHangLoi, VinhDanh, HopDong, BanGiao, HoSoNV, TaiSan, TaiSanLog, ViecDotXuat, BaoCaoKD, ViPhamKD, DaoTao, DaoTaoHoc, DeXuatDaoTao, DaoTaoBinhLuan, UngVien, LichViecHCNS, VanBanKy, ThongBaoCT, ThongBaoDoc, DaoTaoMo.
 Tệp đính kèm (ảnh chấm công, chứng từ, tài liệu đào tạo) nằm trong các thư mục Google Drive, mã thư mục lưu ở Script Properties.
 
 ## Phân quyền
