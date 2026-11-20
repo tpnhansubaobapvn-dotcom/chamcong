@@ -66,12 +66,7 @@ Với mỗi nhân viên chưa nghỉ việc:
 ## 8. Kinh doanh theo quy chế mới (`tinhKD_`, áp dụng từ tháng `KD_ApDungTu`, mặc định 2026-11)
 Nhóm kinh doanh (cột `NhomKD`), mỗi tháng:
 
-| Nhóm | Lương | Phụ cấp | Thưởng hiệu quả tối đa | Chuyên cần tối đa |
-|---|---|---|---|---|
-| KD_CAO, kinh nghiệm cao | 6.000.000 | 1.200.000 | 1.400.000 | 400.000 |
-| KD_MOI, dưới 3 năm | 5.700.000 | 1.200.000 | 1.400.000 | 200.000 |
-| QL45, quản lý 4 đến 5 người | 7.000.000 | 1.200.000 | 5.500.000 | 750.000 |
-| QL6, quản lý trên 6 người | 7.000.000 | 1.200.000 | 7.500.000 | 750.000 |
+Mức lương, phụ cấp, thưởng hiệu quả tối đa, chuyên cần tối đa của 4 nhóm (KD_CAO, KD_MOI, QL45, QL6): xem hằng `NHOM_KD` trong mã máy chủ ở dự án Apps Script. Không ghi con số vào tài liệu này vì kho đang công khai.
 
 - Doanh số ghi nhận của một đơn (`dsDon_`): phải đủ 6 chứng từ (đơn đặt hàng ký đóng dấu, biên bản giao nhận, biên bản nghiệm thu, ảnh giao nhận, ảnh hàng đã giao, bản gốc nộp Kế toán); thiếu thì đơn bị treo, ghi nhận 0. Giá trị ghi nhận = (giá trị đơn − chiết khấu × `HeSoChietKhau` 8,67) × tỷ lệ theo mức bán dưới giá sàn: không dưới sàn 100%; dưới 5% còn 70%; dưới 10% còn 60%; dưới 15% còn 50%; từ 15% còn 40%.
 - Quản lý tính theo doanh số đội: của mình cộng các nhân viên kinh doanh có người duyệt là mình.
