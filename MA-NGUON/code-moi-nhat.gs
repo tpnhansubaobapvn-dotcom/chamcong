@@ -66,7 +66,8 @@ function uvXem_(nv, r) {
   if (dtQL_(nv)) return true;
   if (String(nv.VaiTro).trim() !== 'TP') return false;
   if (nhomDT_(nv.PhongBan) !== (KHOI_UV[String(r.Khoi)] || '')) return false;
-  return String(r.Khoi) !== 'kd' || /xích/i.test(String(r.ViTri)) === /xích/i.test(String(nv.PhongBan));
+  // 21/11/2026: trưởng phòng Kinh doanh Xích neo xem được mọi ứng viên khối kinh doanh (anh Phát duyệt); trưởng phòng Kinh doanh cáp thép vẫn chỉ xem vị trí không phải xích.
+  return String(r.Khoi) !== 'kd' || /xích/i.test(String(nv.PhongBan)) || !/xích/i.test(String(r.ViTri));
 }
 function themCot_(n, cols) {
   const sh = sh_(n), h = header_(n);

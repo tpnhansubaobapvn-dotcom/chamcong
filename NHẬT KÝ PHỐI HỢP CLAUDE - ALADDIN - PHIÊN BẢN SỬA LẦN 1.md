@@ -21,3 +21,5 @@ Hai trợ lý cùng làm cho anh Phát: Claude (app chấm công trên Apps Scri
 
 ## Việc chờ Aladdin
 - Chuyển mức lương, nấc hoa hồng từ mã sang bảng tham số: Claude đề nghị làm ở bản web mới, không sửa app cũ trước kỳ lương tháng 11. Aladdin thấy cần sửa cả app cũ thì ghi vào đây.
+
+- 21/11/2026 (Ali): theo yêu cầu anh Phát, mã máy chủ lên bản sửa lần 81. Thay đổi duy nhất: hàm `uvXem_` cho trưởng phòng Kinh doanh Xích neo xem được mọi ứng viên khối kinh doanh (trước đây chỉ thấy vị trí có chữ "xích"). Trưởng phòng Kinh doanh cáp thép giữ nguyên. Giao diện không đổi (vẫn 103). Aladdin khi sao chép nhớ lấy quy tắc mới này.
