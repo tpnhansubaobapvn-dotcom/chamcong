@@ -95,33 +95,43 @@ function nopUngVien(d) {
   const lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
     const now = new Date();
-    if (rows_(SH.UV).some(function (r) { return String(r.SDT) === sdt && String(r.ViTri) === viTri && (now - new Date(r.ThoiGian)) < 30 * 864e5; })) throw new Error('Số điện thoại này đã nộp hồ sơ vị trí này trong 30 ngày qua. Công ty sẽ liên hệ bạn sớm.');
+    if (rows_(SH.UV).some(function (r) { return sdtUV_(r.SDT) === sdtUV_(sdt) && String(r.ViTri) === viTri && (now - new Date(r.ThoiGian)) < 30 * 864e5; })) throw new Error('Số điện thoại này đã nộp hồ sơ vị trí này trong 30 ngày qua. Công ty sẽ liên hệ bạn sớm.');
     const f = luuTep_('UV_FOLDER', 'HỆ THỐNG CHẤM CÔNG - HỒ SƠ ỨNG VIÊN', d.cv, 'CV ' + ten + ' - ' + viTri);
     const ma = 'UV' + Utilities.formatDate(now, TZ, 'yyMMddHHmmss') + Math.floor(Math.random() * 90 + 10);
     const sv = (Array.isArray(d.sv) ? d.sv : []).slice(0, 45).map(function (x) { return { id: String(x.id || '').slice(0, 12), h: String(x.h || '').slice(0, 1500), t: String(x.t || '').slice(0, 4000) }; });
     for (var gh = 4000; JSON.stringify(sv).length > 45000 && gh > 300; gh = Math.floor(gh * 0.8)) sv.forEach(function (x) { if (x.t.length > gh) x.t = x.t.slice(0, gh) + '…'; });
     themCot_(SH.UV, ['SoVan', 'DiemSV', 'NhanSV']);
     const cs = sv.length ? chamSoVan_(String(d.khoi), sv) : { diem: '', nhan: '' };
-    append_(SH.UV, { MaUV: ma, ThoiGian: now, ViTri: viTri, Khoi: KHOI_UV[String(d.khoi)] ? String(d.khoi) : '', HoTen: ten, SDT: sdt, NamSinh: String(d.namSinh || '').slice(0, 4), KhuVuc: String(d.khuVuc || '').slice(0, 120), KinhNghiem: String(d.kinhNghiem || '').slice(0, 2000), CVId: f.getId(), Nguon: String(d.nguon || '').slice(0, 200), TrangThai: 'Mới', GhiChu: '', SoVan: sv.length ? JSON.stringify(sv) : '', DiemSV: cs.diem ? "'" + cs.diem : '', NhanSV: cs.nhan });
+    append_(SH.UV, { MaUV: ma, ThoiGian: now, ViTri: viTri, Khoi: KHOI_UV[String(d.khoi)] ? String(d.khoi) : '', HoTen: ten, SDT: "'" + sdt, NamSinh: String(d.namSinh || '').slice(0, 4), KhuVuc: String(d.khuVuc || '').slice(0, 120), KinhNghiem: String(d.kinhNghiem || '').slice(0, 2000), CVId: f.getId(), Nguon: String(d.nguon || '').slice(0, 200), TrangThai: 'Mới', GhiChu: '', SoVan: sv.length ? JSON.stringify(sv) : '', DiemSV: cs.diem ? "'" + cs.diem : '', NhanSV: cs.nhan });
     return { ok: true, ma: ma };
   } finally { lock.releaseLock(); }
+}
+// 21/11/2026 (code 83): số điện thoại ứng viên bị Sheet lưu thành số nên mất số 0 đầu → nút Gọi, Zalo sai số. Chuẩn hóa lại khi đọc và lưu dạng chữ khi ghi.
+function sdtUV_(s) {
+  var d = String(s == null ? '' : s).replace(/[^0-9]/g, '');
+  if (d.length === 11 && d.indexOf('84') === 0) d = '0' + d.slice(2);
+  if (d.length === 9 && d.charAt(0) !== '0') d = '0' + d;
+  return d;
 }
 function dsUngVien(token) {
   const nv = auth_(token);
   let all = []; try { all = rows_(SH.UV); } catch (e) { return { ds: [] }; }
   const ds = all.filter(function (r) { return uvXem_(nv, r) && ['Không phù hợp', 'Nhận việc'].indexOf(String(r.TrangThai)) < 0; })
     .sort(function (a, b) { return new Date(b.ThoiGian) - new Date(a.ThoiGian); }).slice(0, 150)
-    .map(function (r) { return { ma: String(r.MaUV), khoi: String(r.Khoi || ''), tg: Utilities.formatDate(new Date(r.ThoiGian), TZ, 'dd/MM HH:mm'), viTri: String(r.ViTri), ten: String(r.HoTen), sdt: String(r.SDT), namSinh: String(r.NamSinh || ''), khuVuc: String(r.KhuVuc || ''), kn: String(r.KinhNghiem || ''), nguon: String(r.Nguon || ''), trangThai: String(r.TrangThai || 'Mới'), ghiChu: String(r.GhiChu || ''), sv: (function () { try { return r.SoVan ? JSON.parse(r.SoVan) : []; } catch (e) { return []; } })(), diemSV: (r.DiemSV instanceof Date) ? (r.DiemSV.getDate() + '/' + (r.DiemSV.getMonth() + 1)) : String(r.DiemSV || ''), nhanSV: String(r.NhanSV || '') }; });
+    .map(function (r) { return { ma: String(r.MaUV), khoi: String(r.Khoi || ''), tg: Utilities.formatDate(new Date(r.ThoiGian), TZ, 'dd/MM HH:mm'), viTri: String(r.ViTri), ten: String(r.HoTen), sdt: sdtUV_(r.SDT), namSinh: String(r.NamSinh || ''), khuVuc: String(r.KhuVuc || ''), kn: String(r.KinhNghiem || ''), nguon: String(r.Nguon || ''), trangThai: String(r.TrangThai || 'Mới'), ghiChu: String(r.GhiChu || ''), sv: (function () { try { return r.SoVan ? JSON.parse(r.SoVan) : []; } catch (e) { return []; } })(), diemSV: (r.DiemSV instanceof Date) ? (r.DiemSV.getDate() + '/' + (r.DiemSV.getMonth() + 1)) : String(r.DiemSV || ''), nhanSV: String(r.NhanSV || '') }; });
   return { ds: ds };
 }
 function capNhatUngVien(token, ma, tt, gc) {
   const nv = auth_(token);
-  if (['Mời phỏng vấn', 'Đã phỏng vấn', 'Không phù hợp', 'Nhận việc'].indexOf(tt) < 0) throw new Error('Trạng thái không hợp lệ.');
+  // 21/11/2026 (code 83): 'Ghi chú' = chỉ ghi lại nội dung trao đổi (Zalo, điện thoại) vào hồ sơ ứng viên, không đổi trạng thái (anh Phát yêu cầu).
+  const chiGhi = tt === 'Ghi chú';
+  if (!chiGhi && ['Mời phỏng vấn', 'Đã phỏng vấn', 'Không phù hợp', 'Nhận việc'].indexOf(tt) < 0) throw new Error('Trạng thái không hợp lệ.');
+  if (chiGhi && !String(gc || '').trim()) throw new Error('Chưa có nội dung ghi chú.');
   const r = rows_(SH.UV).find(function (x) { return String(x.MaUV) === String(ma); });
   if (!r || !uvXem_(nv, r)) throw new Error('Không tìm thấy hồ sơ.');
-  setCell_(SH.UV, r._row, 'TrangThai', tt);
-  const ghi = String(gc || '').trim().slice(0, 500);
-  setCell_(SH.UV, r._row, 'GhiChu', (String(r.GhiChu || '') + '\n' + Utilities.formatDate(new Date(), TZ, 'dd/MM HH:mm') + ' ' + nv.HoTen + ': ' + tt + (ghi ? ' · ' + ghi : '')).trim());
+  if (!chiGhi) setCell_(SH.UV, r._row, 'TrangThai', tt);
+  const ghi = String(gc || '').trim().slice(0, chiGhi ? 2000 : 500);
+  setCell_(SH.UV, r._row, 'GhiChu', (String(r.GhiChu || '') + '\n' + Utilities.formatDate(new Date(), TZ, 'dd/MM HH:mm') + ' ' + nv.HoTen + ': ' + (chiGhi ? ghi : tt + (ghi ? ' · ' + ghi : ''))).trim());
   log_(nv.Gmail, 'Cập nhật ứng viên', r.MaUV + ' ' + r.HoTen + ' → ' + tt);
   return { ok: true };
 }

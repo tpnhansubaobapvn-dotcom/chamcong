@@ -201,7 +201,7 @@ button:disabled{opacity:.6}
 
 <script>
 var TK = null, D = null, TAB = 'cong', BUSY = false, QC = null;
-var PB_GD = 103, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
+var PB_GD = 104, EXEC_URL = 'https://script.google.com/macros/s/AKfycbxKzN3Fk3AMthno2tv7C864qoI4_cw6Wf85DNpqWgg8s9N7gU0pH0_FpMVo2Qs-rLM/exec?src=web';
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -2672,7 +2672,7 @@ function theUV(x, k){
     (x.kn ? '<div style="font-size:14px;margin-top:2px">' + esc(x.kn.slice(0, 220)) + (x.kn.length > 220 ? '…' : '') + '</div>' : '') +
     (x.sv && x.sv.length ? '<div style="margin-top:6px"><button class="small" style="border:1.5px solid #1d6fd8;color:#1d6fd8;font-weight:700" onclick="xemSV(\'' + x.ma + '\')">Đọc sơ vấn online (' + x.sv.length + ' câu) · mở toàn màn hình</button></div>' : '') +
     (x.ghiChu ? '<div class="muted" style="font-size:12.5px;white-space:pre-line">' + esc(x.ghiChu) + '</div>' : '') +
-    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" style="border-color:#2e7d32;color:#2e7d32" onclick="ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E" onclick="ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div></div>';
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Ghi chú\')">Ghi lại trao đổi</button>' + (x.ghiChu ? '<div class="muted" style="flex-basis:100%;font-size:12px;white-space:pre-line;border-left:3px solid #2e7d32;padding-left:8px">' + esc(x.ghiChu) + '</div>' : '') + '<button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" style="border-color:#2e7d32;color:#2e7d32" onclick="ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E" onclick="ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div></div>';
 }
 function moCVPhong(id){
   var o = (UV || []).filter(function(x){ return uvPhong(x) === id; });
@@ -2695,7 +2695,7 @@ function hopUV(){
     (x.kn ? '<div style="font-size:14px;margin-top:2px">' + esc(x.kn.slice(0, 220)) + (x.kn.length > 220 ? '…' : '') + '</div>' : '') +
     (x.sv && x.sv.length ? '<div style="margin-top:6px"><button class="small" style="border:1.5px solid #1d6fd8;color:#1d6fd8;font-weight:700" onclick="xemSV(\'' + x.ma + '\')">Đọc sơ vấn online (' + x.sv.length + ' câu) · mở toàn màn hình</button></div>' : '') +
         (x.ghiChu ? '<div class="muted" style="font-size:12.5px;white-space:pre-line">' + esc(x.ghiChu) + '</div>' : '') +
-        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" style="border-color:#2e7d32;color:#2e7d32" onclick="ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E" onclick="ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div></div>';
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Ghi chú\')">Ghi lại trao đổi</button>' + (x.ghiChu ? '<div class="muted" style="flex-basis:100%;font-size:12px;white-space:pre-line;border-left:3px solid #2e7d32;padding-left:8px">' + esc(x.ghiChu) + '</div>' : '') + '<button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" style="border-color:#2e7d32;color:#2e7d32" onclick="ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E" onclick="ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div></div>';
     });
   });
   return s + '</div>';
@@ -2714,7 +2714,7 @@ function xemSV(ma){
     x.sv.map(function(q, i){ var co = String(q.t || '').trim(); return '<div class="sv-cau"><div class="sv-hoi">' + (i + 1) + '. ' + esc(q.h) + '</div><div class="sv-tl' + (co ? '' : ' rong') + '">' + esc(co || '(không trả lời)') + '</div></div>'; }).join('') +
     (x.ghiChu ? '<div class="muted" style="font-size:13px;white-space:pre-line;margin-top:10px">' + esc(x.ghiChu) + '</div>' : '') +
     '<h3 style="margin:22px 0 8px">Đánh giá sau khi đọc</h3>' +
-    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="small" onclick="xemCVUV(\'' + x.ma + '\')">Xem CV</button><button class="small" onclick="location.href=\'tel:' + esc(x.sdt) + '\'">Gọi ' + esc(x.sdt) + '</button><button class="small" onclick="window.open(\'https://zalo.me/' + esc(x.sdt) + '\')">Zalo</button><button class="small" onclick="ttUV(\'' + x.ma + '\',\'Ghi chú\')">Ghi lại trao đổi</button>' + (x.ghiChu ? '<div class="muted" style="flex-basis:100%;font-size:12px;white-space:pre-line;border-left:3px solid #2e7d32;padding-left:8px">' + esc(x.ghiChu) + '</div>' : '') + '' +
     '<button class="small" style="border-color:#2e7d32;color:#2e7d32;font-weight:700" onclick="dongSV(); ttUV(\'' + x.ma + '\',\'Mời phỏng vấn\')">Mời phỏng vấn</button><button class="small" onclick="dongSV(); ttUV(\'' + x.ma + '\',\'Đã phỏng vấn\')">Đã phỏng vấn</button><button class="small" style="border-color:#D7262E;color:#D7262E;font-weight:700" onclick="dongSV(); ttUV(\'' + x.ma + '\',\'Không phù hợp\')">Không phù hợp</button></div>' +
     '<div style="margin:22px 0 8px"><button onclick="dongSV()" style="width:100%">← Quay lại</button></div>' +
     '</div></div>';
@@ -2722,9 +2722,11 @@ function xemSV(ma){
 }
 function dongSV(){ var w = $('trangSV'); if (w) w.remove(); }
 function ttUV(ma, tt){
-  var gc = prompt(tt + ' · ghi chú (không bắt buộc):', '');
+  var laGC = tt === 'Ghi chú';
+  var gc = prompt(laGC ? 'Ghi lại nội dung đã trao đổi với ứng viên (Zalo, điện thoại, phỏng vấn):' : tt + ' · ghi chú (không bắt buộc):', '');
   if (gc === null) return;
-  call('capNhatUngVien', [TK, ma, tt, gc], function(){ toast('Đã lưu: ' + tt); UV = undefined; render(); });
+  if (laGC && !gc.trim()) { toast('Chưa có nội dung để lưu'); return; }
+  call('capNhatUngVien', [TK, ma, tt, gc], function(){ toast(laGC ? 'Đã lưu vào hồ sơ ứng viên' : 'Đã lưu: ' + tt); UV = undefined; render(); });
 }
 function xemCVUV(ma){
   $('layer').innerHTML = '<div class="veil" onclick="closeLayer()"><div class="sheet center"><p class="muted">Đang tải CV…</p></div></div>';
