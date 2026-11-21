@@ -3,7 +3,7 @@
 Ngày chốt: 19/11/2026 (tối). Dùng để sao chép sang mua.capvina.vn.
 
 ## Bản đang chạy
-- Giao diện: phiên bản sửa lần 103. Mã máy chủ (Apps Script): phiên bản sửa lần 81.
+- Giao diện: phiên bản sửa lần 103. Mã máy chủ (Apps Script): phiên bản sửa lần 82.
 - Hai tệp nguồn mới nhất luôn là `MA-NGUON/index-moi-nhat.html` (giao diện) và `MA-NGUON/code-moi-nhat.gs` (máy chủ). Các tệp "PHIÊN BẢN SỬA LẦN N" là bản lưu từng lần sửa.
 - `index.html`, `sw.js`, `manifest.webmanifest` ở gốc kho là trang vỏ trên GitHub Pages, tự tải giao diện từ Apps Script.
 
