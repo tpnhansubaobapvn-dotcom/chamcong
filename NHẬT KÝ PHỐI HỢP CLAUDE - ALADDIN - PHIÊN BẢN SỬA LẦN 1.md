@@ -24,3 +24,9 @@ Hai trợ lý cùng làm cho anh Phát: Claude (app chấm công trên Apps Scri
 
 - 21/11/2026 (Ali): theo yêu cầu anh Phát, mã máy chủ lên bản sửa lần 81. Thay đổi duy nhất: hàm `uvXem_` cho trưởng phòng Kinh doanh Xích neo xem được mọi ứng viên khối kinh doanh (trước đây chỉ thấy vị trí có chữ "xích"). Trưởng phòng Kinh doanh cáp thép giữ nguyên. Giao diện không đổi (vẫn 103). Aladdin khi sao chép nhớ lấy quy tắc mới này.
 - 21/11/2026 (Ali): mã máy chủ lên bản sửa lần 82. Anh Phát chốt lại: hai trưởng phòng kinh doanh (cáp thép và xích neo) xem được ứng viên khối kinh doanh của nhau. Hàm `uvXem_` bỏ hẳn điều kiện tách theo chữ "xích". Các khối khác giữ nguyên: trưởng phòng chỉ thấy ứng viên khối mình.
+
+## 21/11/2026 14:17 – Code 83, giao diện 104 (bản triển khai Apps Script số 89)
+- Lỗi anh Phát báo bằng video: bấm nút Zalo trên hồ sơ ứng viên thì điện thoại nhảy qua lại giữa trình duyệt và Zalo, không vào được khung chat. Nguyên nhân: cột SDT trong tab UngVien bị Sheet lưu thành số nên mất số 0 đầu (0898689569 thành 898689569), đường dẫn zalo.me sai số.
+- Sửa: thêm hàm `sdtUV_` chuẩn hóa số khi đọc (9 số thì thêm 0; 84… thì đổi về 0…); khi ghi hồ sơ mới lưu SDT dạng chữ; so trùng hồ sơ theo số đã chuẩn hóa.
+- Thêm: nút "Ghi lại trao đổi" trên thẻ ứng viên (3 chỗ) – ghi nội dung đã nhắn Zalo, gọi điện, phỏng vấn vào cột GhiChu kèm ngày giờ, người ghi, không đổi trạng thái (`capNhatUngVien` nhận thêm tt = 'Ghi chú', tối đa 2000 ký tự); lịch sử GhiChu hiện ngay dưới các nút.
+- Aladdin làm theo trên web: (1) số điện thoại ứng viên phải lưu dạng chữ, giữ số 0 đầu; (2) có ô ghi lại trao đổi và hiện lịch sử trên hồ sơ ứng viên.
